@@ -5,6 +5,7 @@ import validate from "../../utils/validate"
 import prisma from "../../prisma"
 import CreateInsuranceRequest from "./types/create.dto"
 import UpdateInsuranceRequest from "./types/update.dto"
+import BatchInsuranceRequest from "./types/batch.dto"
 
 const router = express.Router()
 
@@ -76,6 +77,24 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
   if (entry) { res.status(StatusCodes.OK) }
   else { res.status(StatusCodes.NOT_FOUND) }
+  res.send(entry)
+})
+
+router.post('/batch', async (req: Request, res: Response, next: NextFunction) => {
+  let body: BatchInsuranceRequest
+  try { body = await validate(BatchInsuranceRequest, req.body) }
+  catch (error) { return next(error) }
+
+  const args: Prisma.InsuranceUpdateArgs = {
+    where: { id: Number(req.params.id) },
+    data: { name: body.name },
+  }
+
+  let entry: Insurance
+  try { entry = await prisma.insurance.update(args) }
+  catch (error) { return next(error) }
+
+  res.status(StatusCodes.OK)
   res.send(entry)
 })
 

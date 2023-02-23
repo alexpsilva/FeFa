@@ -22,11 +22,11 @@
    - [x] Permitir a deleção de `Pacient`
    - [ ] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
     - [x] Extrair hook `useCreatingRow` do componente `EditableTable` para facilitar composição/reutilização
-    - [ ] Adicionar endpoint `/batch` para realizar update, create e delete em uma só request à API de `Pacient`
+    - [ ] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API
    - [ ] Adicionar manipulação de `Phone`s à tela de `Pacient`
 
- - [ ] Organizar multiplos perfis git
- - [ ] passar este projeto para um repositório
+ - [x] Organizar multiplos perfis git
+ - [x] passar este projeto para um repositório
 
  - [ ] Criar modelo de `Appointment` no banco.
  - [ ] Criar rotas para operações CRUD de `Appointment`.
