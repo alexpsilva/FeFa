@@ -1,0 +1,5 @@
+export { default as listPacients } from './list'
+export { default as getPacient } from './get'
+export { default as updatePacient } from './update'
+export { default as createPacient } from './create'
+export { default as deletePacient } from './delete'

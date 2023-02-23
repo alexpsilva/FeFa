@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - ./client/src:/app/src
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_EXPENSE_API_URL=http://localhost:3001
+    depends_on:
+      - expense-api
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api/src:/app/src
+    ports:
+      - "3001:3000"
+    environment:
+      - PORT=3000
+      - LOG_LEVEL=debug
+      - DATABASE_URL=postgresql://username:password@db:5432/fefa-db?schema=public
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=username
+      - POSTGRES_DB=fefa-db
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
