@@ -22,11 +22,12 @@
    - [x] Permitir a deleção de `Pacient`
    - [ ] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
     - [x] Extrair hook `useCreatingRow` do componente `EditableTable` para facilitar composição/reutilização
+    - [ ] Mover requisições de dados iniciais para `getServerSideProps`
     - [ ] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API
    - [ ] Adicionar manipulação de `Phone`s à tela de `Pacient`
 
  - [x] Organizar multiplos perfis git
- - [x] passar este projeto para um repositório
+ - [x] Passar este projeto para um repositório
 
  - [ ] Criar modelo de `Appointment` no banco.
  - [ ] Criar rotas para operações CRUD de `Appointment`.
@@ -38,7 +39,8 @@
  - [ ] Adicionar token de autenticação ao estado da aplicação (evitar cookies).
  - [ ] Adicionar autenticação a todas as demais rotas.
  
- - [ ] Adicionar `TailwindCSS` ao projeto.
+ - [ ] Entender a diferença entre `SCSS` e `SASS`
+ - [ ] Decidir entre usar `PicoCSS` ou `TailwindCSS`
  - [ ] Estilizar componente `EditableTable`.
  - [ ] Estilizar componente `RedirectTable`.
  - [ ] Estilizar componente `MultiTabFrame`.
