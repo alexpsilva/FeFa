@@ -25,9 +25,9 @@ const errorMiddleware = (
   }
 
   if (status) {
+    logger.error(message)
     res.status(status)
     res.send(message)
-    logger.error(message)
     return next()
   }
   return next(error)

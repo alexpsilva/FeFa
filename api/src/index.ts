@@ -19,8 +19,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send(ReasonPhrases.OK)
 })
 
-app.use('/pacient', Pacient)
-app.use('/insurance', Insurance)
+app.use('/pacients', Pacient)
+app.use('/insurances', Insurance)
 
 app.use((req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND)
