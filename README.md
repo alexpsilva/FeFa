@@ -22,8 +22,11 @@
    - [x] Permitir a deleção de `Pacient`
    - [ ] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
     - [x] Extrair hook `useCreatingRow` do componente `EditableTable` para facilitar composição/reutilização
-    - [ ] Mover requisições de dados iniciais para `getServerSideProps`
-    - [ ] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API
+    - [ ] Se utilizarmos o valor atual de algum estado, devemos utilizar uma função de `setState` ao invés de utilizar a variavel diretamente
+    - [x] Mover requisições de dados iniciais para `getInitialProps`
+    - [x] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API (rodar as 3 operações em paralelo no servidor)
+    - [ ] Atualizar `EditableTable` para só enviar linhas alteradas para update (hoje enviamos todas sempre)
+    - [ ] Limpar estado e recarregar a página após salvar alterações na `EditableTable`
    - [ ] Adicionar manipulação de `Phone`s à tela de `Pacient`
 
  - [x] Organizar multiplos perfis git
@@ -35,7 +38,7 @@
  - [ ] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `RedirectTable`.
 
  - [ ] Segregar base entre `User`s.
- - [ ] Criar tela de login.
+ - [ ] Criar tela de `Login`.
  - [ ] Adicionar token de autenticação ao estado da aplicação (evitar cookies).
  - [ ] Adicionar autenticação a todas as demais rotas.
  
@@ -62,6 +65,8 @@
    - [ ] Linkando para o histórico daquele paciente.
    - [ ] Permitindo imprimir a receita atual.
 
+ - [ ] Adicionar pedido de acesso à tela de `Login`
+ - [ ] Criar tela para manipular pedidos de acesso (acessível apenas para Admin)
 
  - [ ] Criar modelo de `Condition` para padronizar dados de `PacientCondition`.
  - [ ] Criar modelo de `PacientCondition`, permitindo anotações para cada `Condition` que um paciente possui.
@@ -71,6 +76,8 @@
  - [ ] Adicionar busca a `RedirectTable` e `EditableTable`
  - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
 
+ - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
+ - [ ] Avaliar se vale a pena trocar `useState` por `useReducer` ou uma `Redux Store` em algum lugar
  - [ ] Testar interface mobile
  - [ ] Pedir confirmação antes de sair da tela de `Pacient` sem salvar alterações
  - [ ] Transformar `SideMenu` em `SandwichMenu`, permitindo que ele seja colapsado
