@@ -10,7 +10,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_EXPENSE_API_URL=http://localhost:3001
+      - EXPENSE_API_URL=api:3000
+      - NEXT_PUBLIC_EXPENSE_API_URL=localhost:3001
     depends_on:
       - expense-api
   api:

@@ -2,8 +2,10 @@ import ColumnSpecification from "@/components/editable-table/types/column"
 import Insurance from "@/types/model/insurance"
 import stringifyDate from "@/utils/stringify-date"
 import Head from "next/head"
-import { createInsurance, deleteInsurance, listInsurances, updateInsurance } from "./api"
 import EditableTable from "@/components/editable-table"
+import fetchAPI from "@/utils/fetch-api"
+import requestExpenseAPI from "@/utils/fetch-expense-api"
+import { NextPage } from "next/types"
 
 const insuranceFields: ColumnSpecification<Insurance>[] = [
   { title: 'Id', key: 'id' },
@@ -12,7 +14,32 @@ const insuranceFields: ColumnSpecification<Insurance>[] = [
   { title: 'Created', key: 'createdAt', stringify: stringifyDate },
 ]
 
-export default function ListInsurances() {
+const onSave = (
+  creating: Partial<Insurance>[],
+  deleting: Insurance['id'][],
+  updating: Insurance[]
+) => {
+  console.log(JSON.stringify({
+    create: creating,
+    update: updating,
+    delete: deleting,
+  }))
+  requestExpenseAPI('/insurances/batch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      create: creating,
+      update: updating,
+      delete: deleting,
+    }),
+  })
+}
+
+type Props = { data?: Insurance[], error?: string }
+const ListInsurances: NextPage<Props> = ({ data, error }) => {
+  if (error) { return <h3>Error: {error}</h3> }
+  if (!data) { return <h3>Loading...</h3> }
+
   return (
     <>
       <Head>
@@ -21,8 +48,16 @@ export default function ListInsurances() {
       <h1>Insurances</h1>
       <EditableTable
         columns={insuranceFields}
-        listItems={listInsurances}
+        initialData={data}
+        onSave={onSave}
       />
     </>
   )
 }
+
+ListInsurances.getInitialProps = async () => {
+  const [data, error] = await fetchAPI('/insurances', { method: 'GET' })
+  return { data, error }
+}
+
+export default ListInsurances
