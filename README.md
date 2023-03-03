@@ -22,11 +22,10 @@
    - [x] Permitir a deleção de `Pacient`
    - [ ] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
     - [x] Extrair hook `useCreatingRow` do componente `EditableTable` para facilitar composição/reutilização
-    - [ ] Se utilizarmos o valor atual de algum estado, devemos utilizar uma função de `setState` ao invés de utilizar a variavel diretamente
     - [x] Mover requisições de dados iniciais para `getInitialProps`
     - [x] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API (rodar as 3 operações em paralelo no servidor)
-    - [ ] Atualizar `EditableTable` para só enviar linhas alteradas para update (hoje enviamos todas sempre)
-    - [ ] Limpar estado e recarregar a página após salvar alterações na `EditableTable`
+    - [x] Atualizar `EditableTable` para só enviar linhas alteradas para update (hoje enviamos todas sempre)
+    - [x] Limpar estado e aplicar alterações após salvar a `EditableTable`
    - [ ] Adicionar manipulação de `Phone`s à tela de `Pacient`
 
  - [x] Organizar multiplos perfis git
@@ -42,7 +41,6 @@
  - [ ] Adicionar token de autenticação ao estado da aplicação (evitar cookies).
  - [ ] Adicionar autenticação a todas as demais rotas.
  
- - [ ] Entender a diferença entre `SCSS` e `SASS`
  - [ ] Decidir entre usar `PicoCSS` ou `TailwindCSS`
  - [ ] Estilizar componente `EditableTable`.
  - [ ] Estilizar componente `RedirectTable`.
@@ -76,6 +74,7 @@
  - [ ] Adicionar busca a `RedirectTable` e `EditableTable`
  - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
 
+ - [ ] Se utilizarmos o valor atual de algum estado, devemos utilizar uma função de `setState` ao invés de utilizar a variavel diretamente
  - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
  - [ ] Avaliar se vale a pena trocar `useState` por `useReducer` ou uma `Redux Store` em algum lugar
  - [ ] Testar interface mobile

@@ -14,26 +14,19 @@ const insuranceFields: ColumnSpecification<Insurance>[] = [
   { title: 'Created', key: 'createdAt', stringify: stringifyDate },
 ]
 
-const onSave = (
+const onSave = async (
   creating: Partial<Insurance>[],
   deleting: Insurance['id'][],
   updating: Insurance[]
-) => {
-  console.log(JSON.stringify({
+): Promise<Insurance[]> => requestExpenseAPI('/insurances/batch', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
     create: creating,
     update: updating,
     delete: deleting,
-  }))
-  requestExpenseAPI('/insurances/batch', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      create: creating,
-      update: updating,
-      delete: deleting,
-    }),
-  })
-}
+  }),
+})
 
 type Props = { data?: Insurance[], error?: string }
 const ListInsurances: NextPage<Props> = ({ data, error }) => {

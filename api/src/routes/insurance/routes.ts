@@ -36,14 +36,14 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
     const args: Prisma.InsuranceDeleteManyArgs = {
       where: { id: { in: body.delete.map(i => Number(i)) } }
     }
-    addOperation(async () => await prisma.insurance.deleteMany(args))
+    addOperation(() => prisma.insurance.deleteMany(args))
   }
 
   if (body.create?.length) {
     const args: Prisma.InsuranceCreateManyArgs = {
       data: body.create.map(i => ({ name: i.name }))
     }
-    addOperation(async () => await prisma.insurance.createMany(args))
+    addOperation(() => prisma.insurance.createMany(args))
   }
 
   body.update?.map(i => {
@@ -51,7 +51,7 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
       where: { id: Number(i.id) },
       data: { name: i.name }
     }
-    addOperation(async () => await prisma.insurance.update(args))
+    addOperation(() => prisma.insurance.update(args))
   })
 
   await Promise.all(operations)
@@ -63,8 +63,12 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
     ))
   }
 
-  res.status(StatusCodes.NO_CONTENT)
-  res.send()
+  let result: Insurance[] | null
+  try { result = await prisma.insurance.findMany() }
+  catch (error) { return next(error) }
+
+  res.status(StatusCodes.OK)
+  res.send(result)
 })
 
 // router.post('/', async (req: Request, res: Response, next: NextFunction) => {

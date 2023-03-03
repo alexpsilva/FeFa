@@ -14,17 +14,26 @@ import useCreatingRow from "@/hooks/useCreatingRow"
 interface Props<T extends BaseModel> {
   columns: ColumnSpecification<T>[]
   initialData: T[]
-  onSave: (creating: Partial<T>[], deleting: T['id'][], updating: T[]) => void
+  onSave: (creating: Partial<T>[], deleting: T['id'][], updating: T[]) => Promise<T[]>
 }
 
 const EditableTable = <T extends BaseModel,>(
   { columns, initialData, onSave }: Props<T>
 ) => {
   const [isDrafting, data, setData, discardDraft] = useDraft<T[]>(initialData)
-  const [deleting, setDeleting] = useState<T['id'][]>([])
+  const [updating, setUpdating] = useState<Set<T['id']>>(new Set())
+  const [deleting, setDeleting] = useState<Set<T['id']>>(new Set())
   const [creating, setCreatingValue, discardCreating] = useCreatingRow<T>()
 
+  const discardAll = () => {
+    discardDraft()
+    discardCreating()
+    setUpdating(new Set())
+    setDeleting(new Set())
+  }
+
   const onDataChange = (index: number, item: T, col: keyof T, newValue: any) => {
+    setUpdating(_updating => new Set(_updating).add(item.id))
     setData(updateArray(
       data,
       i => i.id == item.id,
@@ -32,19 +41,16 @@ const EditableTable = <T extends BaseModel,>(
     ))
   }
 
-  const canSave = isDrafting || deleting.length || creating.length
-  const onDataSave = () => {
-    onSave(
+  const canSave = isDrafting || deleting.size || creating.length
+  const onDataSave = async () => {
+    const newData = await onSave(
       creating.slice(0, -1),
-      deleting,
-      data,
+      [...deleting],
+      data.filter(i => updating.has(i.id)),
     )
-  }
 
-  const onDataCancel = () => {
-    discardDraft()
-    discardCreating()
-    setDeleting([])
+    discardAll()
+    setData(newData, { save: true })
   }
 
   const creatingColumns = [...columns] as ColumnSpecification<Partial<T>>[]
@@ -54,8 +60,8 @@ const EditableTable = <T extends BaseModel,>(
 
   const inlineDelete: InlineActionSpecification<T> = {
     label: 'Delete',
-    onClick: item => setDeleting([...deleting, item.id]),
-    isEligible: item => !deleting.includes(item.id)
+    onClick: item => setDeleting(_deleting => new Set(_deleting).add(item.id)),
+    isEligible: item => !deleting.has(item.id)
   }
 
   return (
@@ -76,7 +82,7 @@ const EditableTable = <T extends BaseModel,>(
       </table>
       <div>
         <Button text="Save" disabled={!canSave} onClick={onDataSave} />
-        <Button text="Cancel" disabled={!canSave} onClick={onDataCancel} />
+        <Button text="Cancel" disabled={!canSave} onClick={discardAll} />
       </div>
     </>
   )
