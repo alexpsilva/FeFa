@@ -1,9 +1,9 @@
 import RedirectTable from "@/components/redirect-table"
-import Pacient from "@/types/pacient"
+import Pacient from "@/types/model/pacient"
+import fetchAPI from "@/utils/fetch-api"
 import stringifyDate from "@/utils/stringify-date"
 import Head from "next/head"
 import Link from "next/link"
-import { deletePacient, listPacients } from "./api"
 
 
 export default function ListPacients() {
@@ -14,10 +14,16 @@ export default function ListPacients() {
       { title: 'Updated', key: 'updatedAt', stringify: stringifyDate },
       { title: 'Created', key: 'createdAt', stringify: stringifyDate },
     ],
-    listItems: listPacients,
-    redirectPath: (itemId: string) => `/pacient/${itemId}`,
+    listItems: async () => (await fetchAPI('/pacients', { method: 'GET' }))[0],
+    redirectPath: (pacientId: string) => `/pacient/${pacientId}`,
     inlineActions: [
-      { label: 'Delete', onClick: (itemId) => deletePacient(itemId) }
+      {
+        label: 'Delete',
+        onClick: async (pacientId) => (await fetchAPI(
+          `/pacients/${pacientId}`,
+          { method: 'DELETE' }
+        ))[0],
+      },
     ]
   })
 

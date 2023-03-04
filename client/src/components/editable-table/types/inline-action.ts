@@ -1,6 +1,6 @@
 export default interface InlineActionSpecification<T> {
   icon?: string
   label: string
-  onClick: (item: T) => void
-  isEligible: (item: T) => boolean
+  onClick: (item: Partial<T>) => void
+  isEligible?: (item: Partial<T>) => boolean
 }

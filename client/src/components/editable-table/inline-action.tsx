@@ -3,18 +3,16 @@ import InlineActionSpecification from "./types/inline-action"
 
 interface Props<T> {
   action: InlineActionSpecification<T>
-  item: T
+  row: Partial<T>
 }
 
 const InlineAction = <T,>(
-  { action, item }: Props<T>
+  { action, row }: Props<T>
 ) => {
-  if (!action.isEligible) { return null }
-
-  return action.isEligible(item) ?
+  return !action.isEligible || action.isEligible(row) ?
     <Button
       text={action.label}
-      onClick={() => action.onClick(item)}
+      onClick={() => action.onClick(row)}
     />
     : null
 }

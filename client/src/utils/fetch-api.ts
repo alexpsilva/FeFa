@@ -1,7 +1,8 @@
 import { StatusCodes } from "http-status-codes"
 
 const fetchAPI = async (path: string, options?: RequestInit | undefined) => {
-  const url = `http://${process.env.EXPENSE_API_URL}${path}`
+  const base = process.env.EXPENSE_API_URL || process.env.NEXT_PUBLIC_EXPENSE_API_URL
+  const url = `http://${base}${path}`
   const response = await fetch(url, options)
 
   if (!response.ok) {

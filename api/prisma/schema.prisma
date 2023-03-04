@@ -28,7 +28,7 @@ model Pacient {
 model Phone {
   id Int @id @default(autoincrement())
 
-  pacient   Pacient @relation(fields: [pacientId], references: [id])
+  pacient   Pacient @relation(fields: [pacientId], references: [id], onDelete: Cascade)
   pacientId Int
 
   label  String?

@@ -1,23 +1,15 @@
-import React from "react"
+import TextInput from "./text-input"
 
-interface Props<Type extends object> {
-  value: Type
-  field: Extract<keyof Type, string>
-  setValue: (state: Type) => void
+interface Props<T> {
+  model: any,
+  field: keyof T
+  setValue: (newModel: T) => void
 }
 
-const ModelTextInput = <Type extends object,>({ value: model, field, setValue: setState }: Props<Type>) => {
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...model,
-      [field]: e.target.value
-    })
-  }
-
-  return <input
-    type="text"
+const ModelTextInput = <T,>({ model, field, setValue }: Props<T>) => {
+  return <TextInput
     value={String(model[field] ?? '')}
-    onChange={onChangeHandler}
+    setValue={(newValue) => setValue({ ...model, [field]: newValue })}
   />
 }
 

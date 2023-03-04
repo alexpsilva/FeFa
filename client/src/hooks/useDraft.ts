@@ -1,35 +1,28 @@
-import { useState } from "react"
+import { Reducer, useReducer } from "react"
 
-type SetDraftOptions = { save?: boolean }
-type Result<T> = [
-  Boolean,
-  T,
-  (newDraft: T, options?: SetDraftOptions) => void,
-  () => void,
-]
+type Action<T> =
+  | { type: 'discard' }
+  | { type: 'draft', payload: T }
+  | { type: 'save', payload: T }
 
-// Given a initial `target`, holds a draft that may be updated without altering the original data
-const useDraft = <T,>(initial: T): Result<T> => {
-  const [saved, setSaved] = useState<T>(initial)
-  const [draft, _setDraft] = useState<T>(initial)
-  const [isDrafting, setIsDrafting] = useState<Boolean>(false)
-
-  const discardDraft = () => {
-    _setDraft(saved)
-    setIsDrafting(false)
-  }
-
-  const setDraft = (newDraft: T, options: SetDraftOptions = {}) => {
-    _setDraft(newDraft)
-    if (options.save) {
-      setSaved(newDraft)
-      setIsDrafting(false)
-    } else {
-      setIsDrafting(true)
-    }
-  }
-
-  return [isDrafting, draft, setDraft, discardDraft]
+interface State<T> {
+  saved: T
+  draft: T
+  isDrafting: boolean
 }
+
+const reducer = <T>(state: State<T>, action: Action<T>): State<T> => {
+  const { type } = action
+  switch (type) {
+    case 'discard': return { ...state, draft: state.saved, isDrafting: false }
+    case 'draft': return { ...state, draft: action.payload, isDrafting: true }
+    case 'save': return { saved: action.payload, draft: action.payload, isDrafting: false }
+  }
+}
+
+const useDraft = <T,>(initial: T) => useReducer<Reducer<State<T>, Action<T>>>(
+  reducer,
+  { saved: initial, draft: initial, isDrafting: false },
+)
 
 export default useDraft

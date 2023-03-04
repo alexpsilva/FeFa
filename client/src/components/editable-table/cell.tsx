@@ -1,27 +1,30 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import ColumnSpecification from "./types/column"
 
 interface Props<T> {
-  item: T
+  value: any
   column: ColumnSpecification<T>
-  onChange: (item: T, col: keyof T, newValue: any) => void
+  onChange: (newValue: any) => void
+  focus?: boolean
 }
 
 const EditableTableCell = <T,>(
-  { item, column, onChange }: Props<T>
+  { value, column, onChange, focus }: Props<T>
 ) => {
+  const input = useRef<HTMLInputElement>(null)
+  useEffect(() => { focus && input.current && input.current.focus() }, [])
 
-  const value = item[column.key]
   const stringify = column.stringify ? column.stringify : String
   const stringValue = value == null ? '' : stringify(value)
-
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onChange(item, column.key, e.target.value)
 
   return (
     <td>
       {column.isEditable ?
-        <input type="text" value={stringValue} onChange={onChangeHandler} />
+        <input
+          type="text"
+          value={stringValue}
+          onChange={(e) => onChange(e.target.value)}
+          ref={input} />
         : <>{stringValue}</>
       }
     </td>

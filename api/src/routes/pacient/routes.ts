@@ -45,7 +45,8 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
       cpf: body.cpf,
       addressStreet: body.addressStreet,
       addressNumber: body.addressNumber,
-    }
+    },
+    include: { phones: true },
   }
 
   const phones = body.phones

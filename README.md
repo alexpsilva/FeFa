@@ -20,13 +20,13 @@
    - [x] Refatorar `PacientSheet` para permitir tanto a edição quanto criação de `Pacient`
    - [x] Permitir a criação de novos `Pacient`
    - [x] Permitir a deleção de `Pacient`
-   - [ ] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
+   - [x] Refatorar `EditableTable` para permitir editar multiplos registros antes de salvar
     - [x] Extrair hook `useCreatingRow` do componente `EditableTable` para facilitar composição/reutilização
     - [x] Mover requisições de dados iniciais para `getInitialProps`
     - [x] Adicionar endpoint `insurance/batch` para realizar update, create e delete em uma só request à API (rodar as 3 operações em paralelo no servidor)
     - [x] Atualizar `EditableTable` para só enviar linhas alteradas para update (hoje enviamos todas sempre)
     - [x] Limpar estado e aplicar alterações após salvar a `EditableTable`
-   - [ ] Adicionar manipulação de `Phone`s à tela de `Pacient`
+   - [x] Adicionar manipulação de `Phone`s à tela de `Pacient`
 
  - [x] Organizar multiplos perfis git
  - [x] Passar este projeto para um repositório
