@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from "react"
 
 interface Props {
   value: any,
-  setValue: (newValue: any) => void
+  setValue: (newValue: string) => void
   type?: InputHTMLAttributes<HTMLInputElement>['type']
 }
 

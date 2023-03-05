@@ -10,8 +10,8 @@ interface Props<T> {
 const ModelDateInput = <T,>({ model, field, setValue }: Props<T>) => {
   return <Input
     type='date'
-    value={stringifyDateISO(model[field] ?? '')}
-    setValue={(newValue) => setValue({ ...model, [field]: newValue })}
+    value={model[field] ? stringifyDateISO(model[field]) : ''}
+    setValue={(newValue) => setValue({ ...model, [field]: new Date(newValue) })}
   />
 }
 

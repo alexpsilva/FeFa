@@ -3,8 +3,9 @@ import SideMenu from '@/components/side-menu'
 
 const routeMapping = [
   { title: 'Home', path: '/' },
-  { title: 'Insurances', path: '/insurance' },
+  { title: 'Appointments', path: '/appointment' },
   { title: 'Pacients', path: '/pacient' },
+  { title: 'Insurances', path: '/insurance' },
 ]
 
 export default function App({ Component, pageProps }) {

@@ -67,7 +67,7 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   let entry: Appointment[] | null
-  try { entry = await prisma.appointment.findMany() }
+  try { entry = await prisma.appointment.findMany({ include: { pacient: true } }) }
   catch (error) { return next(error) }
 
   res.status(StatusCodes.OK)
@@ -77,6 +77,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const args: Prisma.AppointmentFindUniqueArgs = {
     where: { id: Number(req.params.id) },
+    include: { pacient: true },
   }
 
   let entry: Appointment | null

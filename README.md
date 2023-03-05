@@ -14,7 +14,7 @@
 
  - [x] Criar componente `MultiTabFrame`, que permite definir o conteúdo de diferentes abas.
  - [x] Centralizar gerência de entidades em um diretório unico (ja re-definimos `Pacient` 2 vezes)
- - [ ] Criar tela para manipular `Pacient`s individuais via `MultiTabFrame` 
+ - [x] Criar tela para manipular `Pacient`s individuais via `MultiTabFrame` 
    - [x] Acumular alterações e só salvar uma vez ao 'confirmar alterações'
    - [x] Extrair tela de manipulação de `Pacient` em um componente `PacientSheet`
    - [x] Refatorar `PacientSheet` para permitir tanto a edição quanto criação de `Pacient`
@@ -31,9 +31,11 @@
  - [x] Organizar multiplos perfis git
  - [x] Passar este projeto para um repositório
 
- - [ ] Criar modelo de `Appointment` no banco.
- - [ ] Criar rotas para operações CRUD de `Appointment`.
- - [ ] Adicionar tela de `Appointment` ao `SideMenu` via `RedirectTable`
+ - [x] Criar modelo de `Appointment` no banco.
+ - [x] Criar rotas para operações CRUD de `Appointment`.
+ - [x] Adicionar tela de `Appointment` ao `SideMenu` via `RedirectTable`
+ - [ ] Refatorar `RedirectTable` para permitir campos via ForeignKey
+ - [ ] Adicionar nome do `Pacient` à tela `/appointment`
  - [ ] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `RedirectTable`.
 
  - [ ] Segregar base entre `User`s.
@@ -75,11 +77,9 @@
  - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
 
  - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
- - [ ] Se utilizarmos o valor atual de algum estado, devemos utilizar uma função de `setState` ao invés de utilizar a variavel diretamente
  - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
- - [ ] Avaliar se vale a pena trocar `useState` por `useReducer` ou uma `Redux Store` em algum lugar
  - [ ] Testar interface mobile
- - [ ] Pedir confirmação antes de sair da tela de `Pacient` sem salvar alterações
+ - [ ] Pedir confirmação antes de sair da tela com alterações pendentes
  - [ ] Transformar `SideMenu` em `SandwichMenu`, permitindo que ele seja colapsado
  - [ ] Escolher ferramenta que permita estilização do texto de um `Appointment`.
  - [ ] Adicionar suporte a Foreign Keys ao componente `EditableTable`.

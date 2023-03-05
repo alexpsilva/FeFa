@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import BaseModel from "@/types/base"
+import BaseModel from "@/types/model/base"
 import TypeFieldSpecification from "./types/field";
 import Button from "../button";
 import updateArray from "@/utils/update-array";

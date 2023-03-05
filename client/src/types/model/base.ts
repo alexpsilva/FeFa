@@ -1,7 +1,7 @@
-type BaseModelValue = number | string | undefined | null | BaseModel
+type BaseModelValue = number | string | Date | undefined | null | BaseModel
 
 type BaseModel = {
-  id: string
+  id: number
   [key: string]: BaseModelValue | BaseModelValue[]
 }
 

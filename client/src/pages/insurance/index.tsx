@@ -34,7 +34,7 @@ const ListInsurances: NextPage<Props> = ({ data }) => {
       body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
     })
 
-    const sorted = data.sort((a: Insurance, b: Insurance) => Number(a.id) - Number(b.id))
+    const sorted = data.sort((a: Insurance, b: Insurance) => a.id - b.id)
 
     draftDispatch({ type: 'save', payload: sorted })
     toDeleteDispatch({ type: 'clear' })
@@ -70,7 +70,7 @@ ListInsurances.getInitialProps = async () => {
 
   if (error) { throw new Error(error) }
   return {
-    data: data.sort((a: Insurance, b: Insurance) => Number(a.id) - Number(b.id)),
+    data: data.sort((a: Insurance, b: Insurance) => a.id - b.id),
   }
 }
 
