@@ -11,10 +11,10 @@ interface Pacient extends BaseModel {
   id: string,
 
   name: string,
+  birthday: string,
   cpf?: string,
 
-  addressStreet?: string,
-  addressNumber?: string,
+  address?: string,
 
   phones: Phone[]
 

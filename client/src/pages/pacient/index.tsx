@@ -11,6 +11,7 @@ export default function ListPacients() {
     fields: [
       { title: 'Id', key: 'id' },
       { title: 'Name', key: 'name' },
+      { title: 'Nascimento', key: 'birthday', stringify: stringifyDate },
       { title: 'Updated', key: 'updatedAt', stringify: stringifyDate },
       { title: 'Created', key: 'createdAt', stringify: stringifyDate },
     ],

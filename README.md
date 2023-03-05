@@ -74,6 +74,7 @@
  - [ ] Adicionar busca a `RedirectTable` e `EditableTable`
  - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
 
+ - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
  - [ ] Se utilizarmos o valor atual de algum estado, devemos utilizar uma função de `setState` ao invés de utilizar a variavel diretamente
  - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
  - [ ] Avaliar se vale a pena trocar `useState` por `useReducer` ou uma `Redux Store` em algum lugar

@@ -5,6 +5,7 @@ import useInlineImediateDelete from "@/hooks/useInlineImediateDelete"
 import Pacient, { Phone } from "@/types/model/pacient"
 import EditableTable from "../editable-table"
 import ColumnSpecification from "../editable-table/types/column"
+import ModelDateInput from "../model-date-input"
 
 interface Props {
   data: Partial<Pacient>
@@ -26,13 +27,14 @@ function PacientSheet(
 
   return (
     <div>
-      <ModelTextInput model={data} field={'name'} setValue={setData} />
+      <ModelTextInput model={data} field='name' setValue={setData} />
       <MultitabFrame>
         <TabItem tabName="History">
           <h3>First tab!</h3>
         </TabItem>
         <TabItem tabName="Personal">
-          <label> CPF: <ModelTextInput model={data} field={'cpf'} setValue={setData} /> </label>
+          <label> CPF: <ModelTextInput model={data} field='cpf' setValue={setData} /> </label>
+          <label> Nascimento: <ModelDateInput model={data} field='birthday' setValue={setData} /> </label>
           <label> Phones:
             <EditableTable
               columns={phoneColumns}
@@ -43,7 +45,7 @@ function PacientSheet(
           </label>
         </TabItem>
         <TabItem tabName="Contact">
-          <label>Rua <ModelTextInput model={data} field={'addressStreet'} setValue={setData} /></label>
+          <label>Rua <ModelTextInput model={data} field='address' setValue={setData} /></label>
         </TabItem>
       </MultitabFrame>
     </div>

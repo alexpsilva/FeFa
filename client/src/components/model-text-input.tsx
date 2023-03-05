@@ -1,4 +1,4 @@
-import TextInput from "./text-input"
+import Input from "./input"
 
 interface Props<T> {
   model: any,
@@ -7,7 +7,7 @@ interface Props<T> {
 }
 
 const ModelTextInput = <T,>({ model, field, setValue }: Props<T>) => {
-  return <TextInput
+  return <Input
     value={String(model[field] ?? '')}
     setValue={(newValue) => setValue({ ...model, [field]: newValue })}
   />

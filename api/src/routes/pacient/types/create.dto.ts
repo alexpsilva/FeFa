@@ -1,10 +1,13 @@
 import { Type } from "class-transformer"
-import { IsArray, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsArray, IsDateString, IsOptional, IsString, ValidateNested } from "class-validator"
 import 'reflect-metadata'
 
 export default class CreatePacientRequest {
   @IsString()
   name: string
+
+  @IsDateString()
+  birthday: string
 
   @IsString()
   @IsOptional()
@@ -12,11 +15,7 @@ export default class CreatePacientRequest {
 
   @IsString()
   @IsOptional()
-  addressStreet?: string
-
-  @IsString()
-  @IsOptional()
-  addressNumber?: string
+  address?: string
 
   @IsArray()
   @Type(() => CreatePacientRequestPhone)

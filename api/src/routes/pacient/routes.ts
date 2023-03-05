@@ -16,9 +16,9 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const args: Prisma.PacientCreateArgs = {
     data: {
       name: body.name,
+      birthday: new Date(body.birthday),
       cpf: body.cpf,
-      addressStreet: body.addressStreet,
-      addressNumber: body.addressNumber,
+      address: body.address,
     }
   }
 
@@ -42,9 +42,9 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
     where: { id: Number(req.params.id) },
     data: {
       name: body.name,
+      birthday: body.birthday && new Date(body.birthday),
       cpf: body.cpf,
-      addressStreet: body.addressStreet,
-      addressNumber: body.addressNumber,
+      address: body.address,
     },
     include: { phones: true },
   }
