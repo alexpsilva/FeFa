@@ -5,6 +5,7 @@ import errorMiddleware from './middlewares/error'
 import Pacient from './routes/pacient'
 import cors from 'cors'
 import Insurance from './routes/insurance'
+import Appointment from './routes/appointment'
 
 const app: Express = express()
 const port = process.env.PORT
@@ -19,6 +20,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send(ReasonPhrases.OK)
 })
 
+app.use('/appointments', Appointment)
 app.use('/pacients', Pacient)
 app.use('/insurances', Insurance)
 
