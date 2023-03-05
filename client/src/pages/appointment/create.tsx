@@ -1,5 +1,5 @@
-import AppointmentSheet from "@/components/appointment-sheet"
-import Button from "@/components/button"
+import AppointmentSheet from "@/components/features/appointment-sheet"
+import Button from "@/components/ui/button"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
 import fetchAPI from "@/utils/fetch-api"

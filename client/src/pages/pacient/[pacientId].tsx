@@ -1,5 +1,5 @@
-import Button from "@/components/button"
-import PacientSheet from "@/components/pacient-sheet"
+import Button from "@/components/ui/button"
+import PacientSheet from "@/components/features/pacient-sheet"
 import useDraft from "@/hooks/useDraft"
 import Pacient from "@/types/model/pacient"
 import fetchAPI from "@/utils/fetch-api"

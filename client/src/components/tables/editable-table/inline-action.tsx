@@ -1,4 +1,4 @@
-import Button from "../button"
+import Button from "@/components/ui/button"
 import InlineActionSpecification from "./types/inline-action"
 
 interface Props<T> {

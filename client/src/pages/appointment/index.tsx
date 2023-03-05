@@ -1,4 +1,4 @@
-import RedirectTable from "@/components/redirect-table"
+import RedirectTable from "@/components/tables/redirect-table"
 import Appointment from "@/types/model/appointment"
 import fetchAPI from "@/utils/fetch-api"
 import stringifyDate from "@/utils/stringify-date"

@@ -1,11 +1,11 @@
-import ModelTextInput from "@/components/model-text-input"
-import MultitabFrame from "@/components/multitab-frame"
-import TabItem from "@/components/multitab-frame/tab-item"
+import ModelTextInput from "@/components/model/model-text-input"
+import MultitabFrame from "@/components/layout/multitab-frame"
+import TabItem from "@/components/layout/multitab-frame/tab-item"
 import useInlineImediateDelete from "@/hooks/useInlineImediateDelete"
 import Pacient, { Phone } from "@/types/model/pacient"
-import EditableTable from "../editable-table"
-import ColumnSpecification from "../editable-table/types/column"
-import ModelDateInput from "../model-date-input"
+import EditableTable from "@/components/tables/editable-table"
+import ColumnSpecification from "@/components/tables/editable-table/types/column"
+import ModelDateInput from "@/components/model/model-date-input"
 
 interface Props {
   data: Partial<Pacient>

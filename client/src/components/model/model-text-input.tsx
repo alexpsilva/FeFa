@@ -1,4 +1,4 @@
-import TextArea from "./text-area"
+import Input from "@/components/ui/input"
 
 interface Props<T> {
   model: any,
@@ -6,11 +6,11 @@ interface Props<T> {
   setValue: (newModel: T) => void
 }
 
-const ModelTextArea = <T,>({ model, field, setValue }: Props<T>) => {
-  return <TextArea
+const ModelTextInput = <T,>({ model, field, setValue }: Props<T>) => {
+  return <Input
     value={String(model[field] ?? '')}
     setValue={(newValue) => setValue({ ...model, [field]: newValue })}
   />
 }
 
-export default ModelTextArea
+export default ModelTextInput

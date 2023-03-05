@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import BaseModel from "@/types/model/base"
 import TypeFieldSpecification from "./types/field";
-import Button from "../button";
+import Button from "../../ui/button";
 import updateArray from "@/utils/update-array";
 import deleteFromArray from "@/utils/delete-from-array";
 

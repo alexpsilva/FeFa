@@ -1,4 +1,4 @@
-import Dropdown from "./dropdown"
+import Dropdown from "@/components/ui/dropdown"
 
 interface Props<T> {
   model: T,

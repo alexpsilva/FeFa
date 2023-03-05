@@ -1,5 +1,3 @@
-import Head from "next/head"
-import Link from "next/link"
 import { useState } from "react"
 
 interface TabProps {
@@ -30,8 +28,8 @@ function MultitabFrame(
     <>
       <div>
         <div style={{ width: "100%", height: "30px", display: "flex" }}>
-          {childrenArray.map(child => (
-            <div key={child.props.tabName} style={{ paddingLeft: "10px", paddingRight: "10px", border: '1px solid black' }} onClick={() => useSelected(child.props.tabName)}>
+          {childrenArray.map((child, i) => (
+            <div key={i} onClick={() => useSelected(child.props.tabName)} style={{ paddingLeft: "10px", paddingRight: "10px", border: '1px solid black' }}>
               {child.props.tabName}
             </div>
           ))}

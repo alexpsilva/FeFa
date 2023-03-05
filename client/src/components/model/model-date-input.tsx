@@ -1,5 +1,5 @@
 import stringifyDateISO from "@/utils/stringify-date-iso"
-import Input from "./input"
+import Input from "@/components/ui/input"
 
 interface Props<T> {
   model: any,
