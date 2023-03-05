@@ -1,17 +1,15 @@
 import React from "react"
 
-import ColumnSpecification from "./types/column"
-import InlineActionSpecification from "./types/inline-action"
-
 import EditableTableCell from "./cell"
-import InlineAction from "./inline-action"
+import InlineAction, { InlineActionSpecification } from "../inline-action"
+import EditableColumnSpecification from "./column.type"
 
 interface Props<T> {
-  columns: ColumnSpecification<T>[]
+  columns: EditableColumnSpecification<T>[]
   data: Partial<T>
-  onChange: (col: ColumnSpecification<T>['key'], newValue: any) => void
+  onChange: (col: EditableColumnSpecification<T>['key'], newValue: any) => void
   options?: {
-    focus?: ColumnSpecification<T>['key']
+    focus?: EditableColumnSpecification<T>['key']
     inlineActions?: InlineActionSpecification<T>[]
   }
 }

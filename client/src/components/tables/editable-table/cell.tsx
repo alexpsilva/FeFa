@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react"
-import ColumnSpecification from "./types/column"
+import EditableColumnSpecification from "./column.type"
 
 interface Props<T> {
   value: any
-  column: ColumnSpecification<T>
+  column: EditableColumnSpecification<T>
   onChange: (newValue: any) => void
   focus?: boolean
 }

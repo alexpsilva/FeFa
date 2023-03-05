@@ -3,8 +3,7 @@ import MultitabFrame from "@/components/layout/multitab-frame"
 import TabItem from "@/components/layout/multitab-frame/tab-item"
 import useInlineImediateDelete from "@/hooks/useInlineImediateDelete"
 import Pacient, { Phone } from "@/types/model/pacient"
-import EditableTable from "@/components/tables/editable-table"
-import ColumnSpecification from "@/components/tables/editable-table/types/column"
+import EditableTable, { EditableColumnSpecification } from "@/components/tables/editable-table"
 import ModelDateInput from "@/components/model/model-date-input"
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 function PacientSheet(
   { data, setData }: Props
 ) {
-  const phoneColumns: ColumnSpecification<Phone>[] = [
+  const phoneColumns: EditableColumnSpecification<Phone>[] = [
     { key: 'label', title: 'Label', isEditable: true },
     { key: 'number', title: 'Number', isEditable: true },
   ]

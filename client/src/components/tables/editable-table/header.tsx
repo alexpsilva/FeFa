@@ -1,9 +1,8 @@
 import React from "react"
-
-import ColumnSpecification from "./types/column"
+import EditableColumnSpecification from "./column.type"
 
 interface Props<T> {
-  columns: ColumnSpecification<T>[]
+  columns: EditableColumnSpecification<T>[]
 }
 
 const EditableTableHeader = <T,>(

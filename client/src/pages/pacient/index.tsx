@@ -1,32 +1,20 @@
-import RedirectTable from "@/components/tables/redirect-table"
+import SimpleTable, { SimpleColumnSpecification } from "@/components/tables/simple-table"
 import Pacient from "@/types/model/pacient"
 import fetchAPI from "@/utils/fetch-api"
-import stringifyDate from "@/utils/stringify-date"
+import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
+const columns: SimpleColumnSpecification<Pacient>[] = [
+  { title: 'Id', key: 'id' },
+  { title: 'Name', key: 'name' },
+]
 
-export default function ListPacients() {
-  const PacientTable = () => RedirectTable<Pacient>({
-    fields: [
-      { title: 'Id', key: 'id' },
-      { title: 'Name', key: 'name' },
-      { title: 'Nascimento', key: 'birthday', stringify: stringifyDate },
-      { title: 'Updated', key: 'updatedAt', stringify: stringifyDate },
-      { title: 'Created', key: 'createdAt', stringify: stringifyDate },
-    ],
-    listItems: async () => (await fetchAPI('/pacients', { method: 'GET' }))[0],
-    redirectPath: (pacientId: string) => `/pacient/${pacientId}`,
-    inlineActions: [
-      {
-        label: 'Delete',
-        onClick: async (pacientId) => (await fetchAPI(
-          `/pacients/${pacientId}`,
-          { method: 'DELETE' }
-        ))[0],
-      },
-    ]
-  })
+type Props = { pacients: Pacient[] }
+const ListPacients: NextPage<Props> = ({ pacients }) => {
+  const router = useRouter()
+  if (!router.isReady) { return <h3>Loading...</h3> }
 
   return (
     <>
@@ -34,8 +22,23 @@ export default function ListPacients() {
         <title>Pacients</title>
       </Head>
       <h1>Pacients</h1>
-      <PacientTable />
+      <SimpleTable
+        columns={columns}
+        data={pacients}
+        onClick={pacient => router.push(`/pacient/${pacient.id}`)}
+      />
       <Link href='/pacient/create'>Adicionar</Link>
     </>
   )
 }
+
+ListPacients.getInitialProps = async () => {
+  const [pacients, error] = await fetchAPI('/pacients', { method: 'GET' })
+
+  if (error) { throw new Error(error) }
+  return {
+    pacients: pacients.sort((a: Pacient, b: Pacient) => a.id - b.id),
+  }
+}
+
+export default ListPacients

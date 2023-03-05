@@ -1,5 +1,11 @@
 import Button from "@/components/ui/button"
-import InlineActionSpecification from "./types/inline-action"
+
+interface InlineActionSpecification<T> {
+  icon?: string
+  label: string
+  onClick: (item: Partial<T>) => void
+  isEligible?: (item: Partial<T>) => boolean
+}
 
 interface Props<T> {
   action: InlineActionSpecification<T>
@@ -17,4 +23,5 @@ const InlineAction = <T,>(
     : null
 }
 
+export type { InlineActionSpecification }
 export default InlineAction

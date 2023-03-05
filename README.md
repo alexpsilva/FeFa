@@ -34,8 +34,8 @@
  - [x] Criar modelo de `Appointment` no banco.
  - [x] Criar rotas para operações CRUD de `Appointment`.
  - [x] Adicionar tela de `Appointment` ao `SideMenu` via `RedirectTable`
- - [ ] Refatorar `RedirectTable` para permitir campos via ForeignKey
- - [ ] Adicionar nome do `Pacient` à tela `/appointment`
+ - [x] Refatorar `RedirectTable` para permitir campos via ForeignKey
+ - [x] Adicionar nome do `Pacient` à tela `/appointment`
  - [ ] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `RedirectTable`.
 
  - [ ] Segregar base entre `User`s.
@@ -75,6 +75,10 @@
  - [ ] Adicionar ordenação customizavel a `RedirectTable` e `EditableTable`
  - [ ] Adicionar busca a `RedirectTable` e `EditableTable`
  - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
+
+ - [ ] Refatorar `useImediateInlineDelete` para guardar os ids dos elementos deletados
+ - [ ] Substituir todos os usos de `useDeleayedInlineDelete` por `useImediateInlineDelete`
+ - [ ] Renomear `useImediateInlineDelete` para `useInlineDelete`
 
  - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
  - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro

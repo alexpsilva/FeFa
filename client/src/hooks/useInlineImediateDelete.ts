@@ -1,4 +1,4 @@
-import InlineActionSpecification from "@/components/tables/editable-table/types/inline-action"
+import { InlineActionSpecification } from "@/components/tables/inline-action";
 import BaseModel from "@/types/model/base"
 import deleteFromArray from "@/utils/delete-from-array"
 
