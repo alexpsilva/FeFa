@@ -13,13 +13,17 @@ datasource db {
 model Pacient {
   id Int @id @default(autoincrement())
 
-  name String
-  cpf  String?
+  name     String
+  birthday DateTime
+  cpf      String?
 
-  addressStreet String?
-  addressNumber String?
+  country String?
+  city    String?
+  state   String?
+  address String?
 
-  phones Phone[]
+  phones       Phone[]
+  appointments Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -41,6 +45,19 @@ model Phone {
 model Insurance {
   id   Int    @id @default(autoincrement())
   name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+
+  pacient   Pacient @relation(fields: [pacientId], references: [id])
+  pacientId Int
+
+  date        DateTime @default(now())
+  description String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
