@@ -5,6 +5,8 @@ import validate from "../../utils/validate"
 import prisma from "../../prisma"
 import CreateAppointmentRequest from "./types/create.dto"
 import UpdateAppointmentRequest from "./types/update.dto"
+import ListAppointmentRequest from "./types/list.dto"
+import GetAppointmentRequest from "./types/get.dto"
 
 const router = express.Router()
 
@@ -66,8 +68,16 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
 })
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  let query: ListAppointmentRequest
+  try { query = await validate(ListAppointmentRequest, req.query) }
+  catch (error) { return next(error) }
+
+  const args: Prisma.AppointmentFindManyArgs = {}
+  if (query.includePacient == 'true') args.include = { pacient: true }
+  if (query.pacientId) args.where = { pacient: { is: { id: { equals: Number(query.pacientId) } } } }
+
   let entry: Appointment[] | null
-  try { entry = await prisma.appointment.findMany({ include: { pacient: true } }) }
+  try { entry = await prisma.appointment.findMany(args) }
   catch (error) { return next(error) }
 
   res.status(StatusCodes.OK)
@@ -75,13 +85,14 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 })
 
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  const args: Prisma.AppointmentFindUniqueArgs = {
-    where: { id: Number(req.params.id) },
-    include: { pacient: true },
-  }
+  let query: GetAppointmentRequest
+  try { query = await validate(GetAppointmentRequest, req.query) }
+  catch (error) { return next(error) }
+
+  const args: Prisma.AppointmentFindUniqueArgs = { where: { id: Number(req.params.id) } }
+  if (query.includePacient == 'true') args.include = { pacient: true }
 
   let entry: Appointment | null
-
   try { entry = await prisma.appointment.findUnique(args) }
   catch (error) { return next(error) }
 

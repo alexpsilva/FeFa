@@ -5,46 +5,61 @@ import useInlineImediateDelete from "@/hooks/useInlineImediateDelete"
 import Pacient, { Phone } from "@/types/model/pacient"
 import EditableTable, { EditableColumnSpecification } from "@/components/tables/editable-table"
 import ModelDateInput from "@/components/model/model-date-input"
+import Appointment from "@/types/model/appointment"
+import SimpleTable from "../tables/simple-table"
+import stringifyDate from "@/utils/stringify-date"
+import { useRouter } from "next/router"
 
 interface Props {
-  data: Partial<Pacient>
-  setData: (newData: Partial<Pacient>) => void
+  pacient: Partial<Pacient>
+  setPacient: (newData: Partial<Pacient>) => void
+  appointments?: Appointment[]
 }
 
 function PacientSheet(
-  { data, setData }: Props
+  { pacient, setPacient, appointments }: Props
 ) {
+  const router = useRouter()
+
   const phoneColumns: EditableColumnSpecification<Phone>[] = [
     { key: 'label', title: 'Label', isEditable: true },
     { key: 'number', title: 'Number', isEditable: true },
   ]
 
   const phonesInlineDelete = useInlineImediateDelete(
-    data.phones || [],
-    (newPhones) => setData({ ...data, phones: newPhones })
+    pacient.phones || [],
+    (newPhones) => setPacient({ ...pacient, phones: newPhones })
   )
 
   return (
     <div>
-      <ModelTextInput model={data} field='name' setValue={setData} />
+      <ModelTextInput model={pacient} field='name' setValue={setPacient} />
       <MultitabFrame>
         <TabItem tabName="History">
-          <h3>First tab!</h3>
+          <h3>Appointments</h3>
+          <SimpleTable
+            columns={[
+              { title: 'Date', key: 'date', stringify: stringifyDate },
+              { title: 'Summary', key: 'description', stringify: i => `${i.slice(0, 20)}...` },
+            ]}
+            data={appointments || []}
+            onClick={(appointment) => router.push(`/appointment/${appointment.id}`)}
+          />
         </TabItem>
         <TabItem tabName="Personal">
-          <label> CPF: <ModelTextInput model={data} field='cpf' setValue={setData} /> </label>
-          <label> Nascimento: <ModelDateInput model={data} field='birthday' setValue={setData} /> </label>
+          <label> CPF: <ModelTextInput model={pacient} field='cpf' setValue={setPacient} /> </label>
+          <label> Nascimento: <ModelDateInput model={pacient} field='birthday' setValue={setPacient} /> </label>
           <label> Phones:
             <EditableTable
               columns={phoneColumns}
-              data={data.phones || []}
-              setData={(phones) => setData({ ...data, phones: phones } as Partial<Pacient>)}
+              data={pacient.phones || []}
+              setData={(phones) => setPacient({ ...pacient, phones: phones } as Partial<Pacient>)}
               inlineActions={[phonesInlineDelete]}
             />
           </label>
         </TabItem>
         <TabItem tabName="Contact">
-          <label>Rua <ModelTextInput model={data} field='address' setValue={setData} /></label>
+          <label>Rua <ModelTextInput model={pacient} field='address' setValue={setPacient} /></label>
         </TabItem>
       </MultitabFrame>
     </div>

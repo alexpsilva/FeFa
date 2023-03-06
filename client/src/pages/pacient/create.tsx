@@ -29,8 +29,8 @@ function CreatePacient() {
         <title>Pacient</title>
       </Head>
       <PacientSheet
-        data={data}
-        setData={setData}
+        pacient={data}
+        setPacient={setData}
       />
       <div style={{ float: 'right' }}>
         <Button text="Criar" disabled={!data.name} onClick={onCreateHandler} />

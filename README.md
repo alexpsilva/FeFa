@@ -36,28 +36,28 @@
  - [x] Adicionar tela de `Appointment` ao `SideMenu` via `RedirectTable`
  - [x] Refatorar `RedirectTable` para permitir campos via ForeignKey
  - [x] Adicionar nome do `Pacient` à tela `/appointment`
- - [ ] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `RedirectTable`.
+ - [x] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `SimpleTable`.
+   -[x] (bug) Filtro de `pacientId` não está funcionando corretamente
 
  - [ ] Segregar base entre `User`s.
  - [ ] Criar tela de `Login`.
  - [ ] Adicionar token de autenticação ao estado da aplicação (evitar cookies).
  - [ ] Adicionar autenticação a todas as demais rotas.
+
+ - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário no topo da tela com as informações desejadas:
+   - [ ] Acessível em qualquer ponto da aplicação
+   - [ ] Retorna um `NotificationId` para permitir trocar o texto caso desejado (ao salvar um paciente, começa com 'Loading' e depois troca para 'Saved' ou 'Error')
+
+ - [ ] Centralizar tratamento de erros para conseguir reportá-los em qualquer ponto da aplicação (React ErrorBoundry?, Integrar com `NotificationBanner`).
  
  - [ ] Decidir entre usar `PicoCSS` ou `TailwindCSS`
- - [ ] Estilizar componente `EditableTable`.
- - [ ] Estilizar componente `RedirectTable`.
- - [ ] Estilizar componente `MultiTabFrame`.
- - [ ] Estilizar componente `SideMenu`.
+ - [ ] Estilizar componentes...
 
  - [ ] Desenvolver importação de dados (seja via Excell ou direto em base Access)
  
 
 
 # Backlog (not essential)
- - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário no topo da tela com as informações desejadas:
-   - [ ] Acessível em qualquer ponto da aplicação (talvez redux?)
-   - [ ] Retorna um `NotificationId` para permitir trocar o texto caso desejado (ao salvar um paciente, começa com 'Loading' e depois troca para 'Saved' ou 'Error')
-
  - [ ] Criar modelo de `Medicine` para padronizar dados de `Prescription`.
  - [ ] Criar modelo de `Prescription`, tendo em mente que precisamos conseguir montar um histórico de mudanças de remédios (quando doses mudaram, remedios foram interrompidos, etc.).
  - [ ] Adicionar `Prescription` à primeira aba da tela de `Pacient` via `EditableTable`.
@@ -72,14 +72,16 @@
  - [ ] Criar modelo de `PacientCondition`, permitindo anotações para cada `Condition` que um paciente possui.
  - [ ] Adicionar à primeira aba da tela de `Pacient` via `EditableTable` (mostrando apenas os atuais e linkando para o histórico daquele paciente).
 
- - [ ] Adicionar ordenação customizavel a `RedirectTable` e `EditableTable`
- - [ ] Adicionar busca a `RedirectTable` e `EditableTable`
- - [ ] Adicionar paginação a `RedirectTable` e `EditableTable`
+ - [ ] Adicionar ordenação customizavel a `SimpleTable` e `EditableTable`
+ - [ ] Adicionar busca a `SimpleTable` e `EditableTable`
+ - [ ] Adicionar paginação a `SimpleTable` e `EditableTable`
 
  - [ ] Refatorar `useImediateInlineDelete` para guardar os ids dos elementos deletados
  - [ ] Substituir todos os usos de `useDeleayedInlineDelete` por `useImediateInlineDelete`
  - [ ] Renomear `useImediateInlineDelete` para `useInlineDelete`
 
+ - [ ] Omitir a primeira aba da `PacientSheet` durante a criação de `Pacients`
+ - [ ] Adaptar `SimpleTable` para permitir colunas com valores aninhados (ex: `appointment.pacient.name`)
  - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
  - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
  - [ ] Testar interface mobile
@@ -87,4 +89,3 @@
  - [ ] Transformar `SideMenu` em `SandwichMenu`, permitindo que ele seja colapsado
  - [ ] Escolher ferramenta que permita estilização do texto de um `Appointment`.
  - [ ] Adicionar suporte a Foreign Keys ao componente `EditableTable`.
- - [ ] Desenvolver sistema centralizado de gerência de erros que consegue reportá-los independente do ponto da aplicação (seja enviando para o backend ou via console).
