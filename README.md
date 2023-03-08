@@ -39,10 +39,23 @@
  - [x] Adicionar histórico de `Appointment` à primeira tela de `Pacient` via `SimpleTable`.
    -[x] (bug) Filtro de `pacientId` não está funcionando corretamente
 
- - [ ] Segregar base entre `User`s.
- - [ ] Criar tela de `Login`.
- - [ ] Adicionar token de autenticação ao estado da aplicação (evitar cookies).
- - [ ] Adicionar autenticação a todas as demais rotas.
+ - [x] Escolher estratégia de Autenticação: Statefull JWT
+ - [ ] Criar modelo de `User` (com dados de usuário e o hash da senha)
+ - [ ] Criar modelo de `Token` (1 `User` to n `Tokens`, com um campo `ExpiredAt`)
+ - [ ] Criar rota `/signup`, para criar `User`, criar um `Token` e retorna-lo
+ - [ ] Criar rota `/login`, para validar a senha do `User`, criar um `Token` e retorna-lo
+ - [ ] Criar rota `/logout`, para invalidar um `Token`
+ - [ ] Criar lógica de 'limpeza' para deletar `Token`s expirados a muito tempo
+ - [ ] Criar middleware de autenticação que recebe um JWT possuindo um `token_id` e valida de acordo com a tabela `Token`, bloqueando a requisição ou não
+ - [ ] Adicionar middleware de autenticação a todas as rotas
+ - [ ] Criar tela de `Login`
+ - [ ] Guardar token de autenticação na seção do usuário
+ - [ ] Criar botão de `Logout`
+
+Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
+ - [ ] Segregar modelos atuais entre `User`s
+ - [ ] Criar modelo de `Role` (inicialmente só com `admin` e `doctor`)
+ - [ ] Incorporar filtro por `User.id` e `Role` em todas as rotas de CRUD (impedir que um `User` não-admin leia ou altere dados de outro)
 
  - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário no topo da tela com as informações desejadas:
    - [ ] Acessível em qualquer ponto da aplicação
