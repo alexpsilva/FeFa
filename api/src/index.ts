@@ -2,10 +2,11 @@ import express, { Express, Request, Response } from 'express'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import loggerMiddleware from './middlewares/logger'
 import errorMiddleware from './middlewares/error'
-import Pacient from './routes/pacient'
 import cors from 'cors'
-import Insurance from './routes/insurance'
+import Auth from './routes/auth'
 import Appointment from './routes/appointment'
+import Insurance from './routes/insurance'
+import Pacient from './routes/pacient'
 
 const app: Express = express()
 const port = process.env.PORT
@@ -20,6 +21,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send(ReasonPhrases.OK)
 })
 
+app.use('/auth', Auth)
 app.use('/appointments', Appointment)
 app.use('/pacients', Pacient)
 app.use('/insurances', Insurance)
