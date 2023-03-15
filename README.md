@@ -42,6 +42,8 @@
  - [x] Escolher estratégia de Autenticação: Google Login
  - [x] Criar modelo de `User` (com dados de usuário e o hash da senha)
  - [x] Criar modelo de `Token` (1 `User` to n `Tokens`, com um campo `ExpiredAt`)
+ - [x] Criar tela de `Login` (a partir da doc https://developers.google.com/identity/sign-in/web/sign-in?hl=pt-br)
+ - [ ] Avaliar se podemos usar a propriedade `data-login_uri` para configurar nosso botão de login (https://developers.google.com/identity/gsi/web/reference/html-reference#data-login_uri)
  - [ ] Implementar validação de tokens Google no backend (segundo esta doc https://developers.google.com/identity/sign-in/web/backend-auth?hl=pt-br)
  - [ ] Criar rota `/login`, para validar o token Google. Se passar, verificar a existência do `User` correspondente no nosso banco. Se não existir, criar. Por fim, criar um `Token` e retorna-lo
  - [ ] Criar rota `/logout`, para invalidar um `Token`
@@ -49,12 +51,12 @@
  - [ ] Criar middleware de autenticação que recebe um JWT possuindo um `Token.id` e valida de acordo com a tabela `Token`, bloqueando a requisição ou não. Caso o token seja valido, atualizar o campo `expiresAt`
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Adicionar middleware de autenticação a todas as rotas
- - [ ] Criar tela de `Login` (a partir da doc https://developers.google.com/identity/sign-in/web/sign-in?hl=pt-br)
  - [ ] Guardar token de autenticação na seção do usuário
  - [ ] Criar botão de `Logout`
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
 
- - [ ] Segregar modelos atuais entre `User`s
+ - [ ] Segregar modelos base (`Pacient` e `Insurance`) entre `Pacient`s
+ - [ ] Criar modelo de permissionamento: tabela `AllowsUser` que relaciona `User`, um recurso (ainda a definir como) e um grau de permissão (ainda a definir como)
 
 Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
  - [ ] Entender 'Compound Components' e a 'Context API' para ver se consegue melhorar nosso código (ref: https://www.youtube.com/watch?v=vPRdY87_SH0)

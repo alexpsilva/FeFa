@@ -8,7 +8,10 @@ const routeMapping = [
   { title: 'Insurances', path: '/insurance' },
 ]
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps, ...appProps }) {
+
+  if (appProps.router.pathname == '/login') return <Component {...pageProps} />
+
   return (
     <>
       <SideMenu routes={routeMapping} width="200px" />
