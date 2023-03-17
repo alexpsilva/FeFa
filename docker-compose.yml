@@ -10,8 +10,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - EXPENSE_API_URL=api:3000
-      - NEXT_PUBLIC_EXPENSE_API_URL=localhost:3001
+      - API_URL=http://api:3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
       - NEXT_PUBLIC_GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
     depends_on:
       - expense-api
