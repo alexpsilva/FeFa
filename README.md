@@ -43,9 +43,9 @@
  - [x] Criar modelo de `User` (com dados de usuário e o hash da senha)
  - [x] Criar modelo de `Token` (1 `User` to n `Tokens`, com um campo `ExpiredAt`)
  - [x] Criar tela de `Login` (a partir da doc https://developers.google.com/identity/sign-in/web/sign-in?hl=pt-br)
- - [ ] Avaliar se podemos usar a propriedade `data-login_uri` para configurar nosso botão de login (https://developers.google.com/identity/gsi/web/reference/html-reference#data-login_uri)
+ - [x] Configurar tratamento pós login via JS (https://developers.google.com/identity/gsi/web/reference/html-reference#data-login_uri)
  - [ ] ref: https://www.intricatecloud.io/2020/12/passwordless-sign-in-with-google-one-tap-for-web/
- - [ ] Implementar validação de tokens Google no backend (segundo esta doc https://developers.google.com/identity/sign-in/web/backend-auth?hl=pt-br)
+ - [x] Implementar validação de tokens Google no backend (segundo esta doc https://developers.google.com/identity/sign-in/web/backend-auth?hl=pt-br)
  - [ ] Criar rota `/login`, para validar o token Google. Se passar, verificar a existência do `User` correspondente no nosso banco. Se não existir, criar. Por fim, criar um `Token` e retorna-lo
  - [ ] Criar rota `/logout`, para invalidar um `Token`
  - [ ] Renomear campo `expiredAt` do modelo `Token` para `expiresAt`
