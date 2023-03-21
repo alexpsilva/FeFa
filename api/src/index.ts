@@ -7,6 +7,8 @@ import Auth from './routes/auth'
 import Appointment from './routes/appointment'
 import Insurance from './routes/insurance'
 import Pacient from './routes/pacient'
+import User from './routes/user'
+
 
 const app: Express = express()
 const port = process.env.PORT
@@ -25,6 +27,7 @@ app.use('/auth', Auth)
 app.use('/appointments', Appointment)
 app.use('/pacients', Pacient)
 app.use('/insurances', Insurance)
+app.use('/users', User)
 
 app.use((req: Request, res: Response) => {
   res.status(StatusCodes.NOT_FOUND)

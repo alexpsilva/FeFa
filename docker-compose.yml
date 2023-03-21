@@ -26,8 +26,10 @@ services:
     environment:
       - PORT=3000
       - LOG_LEVEL=debug
-      - GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
       - DATABASE_URL=postgresql://username:password@db:5432/fefa-db?schema=public
+      - GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
+      - AUTH_TOKEN_IDLE_LIMIT_SECONDS=60
+      - AUTH_TOKEN_AGE_LIMIT_SECONDS=600
     depends_on:
       - db
   db:

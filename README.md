@@ -46,10 +46,9 @@
  - [x] Configurar tratamento pós login via JS (https://developers.google.com/identity/gsi/web/reference/html-reference#data-login_uri)
  - [ ] ref: https://www.intricatecloud.io/2020/12/passwordless-sign-in-with-google-one-tap-for-web/
  - [x] Implementar validação de tokens Google no backend (segundo esta doc https://developers.google.com/identity/sign-in/web/backend-auth?hl=pt-br)
- - [ ] Criar rota `/login`, para validar o token Google. Se passar, verificar a existência do `User` correspondente no nosso banco. Se não existir, criar. Por fim, criar um `Token` e retorna-lo
+ - [ ] Criar rota `/login`, para validar o token Google. Se passar, verificar se o email do `User` é permitido. Se for, cria um `Token` e retorna o JWT associado
  - [ ] Criar rota `/logout`, para invalidar um `Token`
- - [ ] Renomear campo `expiredAt` do modelo `Token` para `expiresAt`
- - [ ] Criar middleware de autenticação que recebe um JWT possuindo um `Token.id` e valida de acordo com a tabela `Token`, bloqueando a requisição ou não. Caso o token seja valido, atualizar o campo `expiresAt`
+ - [ ] Criar middleware de autenticação que recebe um JWT possuindo um `Token.id` e valida de acordo com a tabela `Token`, bloqueando a requisição ou não. Caso o token seja valido, atualizar o campo `lastUsedAt`
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Adicionar middleware de autenticação a todas as rotas
  - [ ] Guardar token de autenticação na seção do usuário

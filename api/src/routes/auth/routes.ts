@@ -5,6 +5,10 @@ import { OAuth2Client } from "google-auth-library"
 import LoginAuthRequest from "./types/login.dto"
 import validate from "../../utils/validate"
 import HttpError from "../../errors/http"
+import { AuthToken, Prisma, User } from "@prisma/client"
+import prisma from "../../prisma"
+import deleteExpiredTokens from "./utils/delete-expired-tokens"
+import verifyGoogleToken from "./utils/verify-google-token"
 
 const router = express.Router()
 
@@ -13,37 +17,30 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
   try { body = await validate(LoginAuthRequest, req.body) }
   catch (error) { return next(error) }
 
-  const clientId = process.env.GOOGLE_CLIENT_ID
-
-  const client = new OAuth2Client(clientId)
-  const ticket = await client.verifyIdToken({
-    idToken: body.idToken,
-    audience: clientId
-  })
-
-  const payload = ticket.getPayload()
-  if (!payload) {
-    return next(new HttpError(StatusCodes.UNAUTHORIZED, "Google SignIn validation failed"))
+  const googleToken = await verifyGoogleToken(body.idToken)
+  if ('error' in googleToken) {
+    return next(new HttpError(StatusCodes.UNAUTHORIZED, googleToken.error))
   }
 
-  const email = payload.email
-  logger.debug(payload)
+  let user: User & { tokens: AuthToken[] } | null
+  try {
+    user = await prisma.user.findUnique({
+      where: { email: googleToken.payload.email },
+      include: { tokens: true }
+    })
+  }
+  catch (error) { return next(error) }
+  if (!user) { return next(new HttpError(StatusCodes.UNAUTHORIZED, "Unauthorized email")) }
 
-  res.status(StatusCodes.OK)
-  res.send()
+  const cleanup = deleteExpiredTokens(user.tokens)
 
+  let authToken: AuthToken
+  try { authToken = await prisma.authToken.create({ data: { userId: user.id } }) }
+  catch (error) { return next(error) }
 
-
-  // let user: User
-  // try { user = await prisma.user.create({ data: body }) }
-  // catch (error) { return next(error) }
-
-  // let token: AuthToken
-  // try { token = await prisma.authToken.create({ data: { userId: user.id } }) }
-  // catch (error) { return next(error) }
-
-  // res.status(StatusCodes.CREATED)
-  // res.send(token)
+  await cleanup
+  res.status(StatusCodes.CREATED)
+  res.send(authToken) // TO-DO: Wrap the created token in a JWT to allow validating its origin
 })
 
 export default router
