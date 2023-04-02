@@ -3,10 +3,7 @@ import express, { NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import validate from "../../utils/validate"
 import prisma from "../../prisma"
-import CreateInsuranceRequest from "./types/create.dto"
-import UpdateInsuranceRequest from "./types/update.dto"
 import BatchInsuranceRequest from "./types/batch.dto"
-import { logger } from "../../utils/logger"
 import HttpError from "../../errors/http"
 
 const router = express.Router()
@@ -16,7 +13,6 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try { entry = await prisma.insurance.findMany() }
   catch (error) { return next(error) }
 
-  logger.debug(entry)
   res.status(StatusCodes.OK)
   res.send(entry)
 })

@@ -1,13 +1,13 @@
 import { OAuth2Client, TokenPayload } from "google-auth-library"
 
-const verifyGoogleToken = async (idToken: string)
+const verifyGoogleToken = async (token: string)
   : Promise<{ payload: TokenPayload } | { error: string }> => {
   const clientId = process.env.GOOGLE_CLIENT_ID
 
   const client = new OAuth2Client(clientId)
 
   let ticket
-  try { ticket = await client.verifyIdToken({ audience: clientId, idToken }) }
+  try { ticket = await client.verifyIdToken({ audience: clientId, idToken: token }) }
   catch { return { error: "Google SignIn validation failed" } }
 
   const payload = ticket.getPayload()

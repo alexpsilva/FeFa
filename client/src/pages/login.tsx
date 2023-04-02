@@ -12,9 +12,9 @@ const Login: NextPage = () => {
     const [authToken, error] = await fetchAPI(`/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken: credentials.credential })
+      body: JSON.stringify({ googleToken: credentials.credential })
     })
-    console.log(authToken, error)
+    console.log(JSON.stringify(authToken), error)
   }
 
   return (

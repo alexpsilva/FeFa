@@ -4,5 +4,5 @@ export default class LoginAuthRequest {
   @IsString()
   @IsNotEmpty()
   @IsJWT()
-  idToken: string
+  googleToken: string
 }

@@ -1,14 +1,14 @@
 import express, { NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
-import { logger } from "../../utils/logger"
-import { OAuth2Client } from "google-auth-library"
 import LoginAuthRequest from "./types/login.dto"
 import validate from "../../utils/validate"
 import HttpError from "../../errors/http"
-import { AuthToken, Prisma, User } from "@prisma/client"
+import { AuthToken, User } from "@prisma/client"
 import prisma from "../../prisma"
 import deleteExpiredTokens from "./utils/delete-expired-tokens"
 import verifyGoogleToken from "./utils/verify-google-token"
+import { JwtEncode } from "./utils/jwt"
+import authenticationMiddleware from "./middleware"
 
 const router = express.Router()
 
@@ -17,7 +17,7 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
   try { body = await validate(LoginAuthRequest, req.body) }
   catch (error) { return next(error) }
 
-  const googleToken = await verifyGoogleToken(body.idToken)
+  const googleToken = await verifyGoogleToken(body.googleToken)
   if ('error' in googleToken) {
     return next(new HttpError(StatusCodes.UNAUTHORIZED, googleToken.error))
   }
@@ -39,8 +39,19 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
   catch (error) { return next(error) }
 
   await cleanup
+
   res.status(StatusCodes.CREATED)
-  res.send(authToken) // TO-DO: Wrap the created token in a JWT to allow validating its origin
+  res.send({ jwt: JwtEncode({ userId: user.id, token: authToken.value }) })
 })
+
+router.post('/logout',
+  authenticationMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    await prisma.authToken.deleteMany({ where: { userId: res.locals.userId } })
+
+    res.status(StatusCodes.NO_CONTENT)
+    res.send()
+  }
+)
 
 export default router

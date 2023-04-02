@@ -8,6 +8,7 @@ import Appointment from './routes/appointment'
 import Insurance from './routes/insurance'
 import Pacient from './routes/pacient'
 import User from './routes/user'
+import authenticationMiddleware from './routes/auth/middleware'
 
 
 const app: Express = express()
@@ -24,6 +25,8 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use('/auth', Auth)
+app.use(authenticationMiddleware) // All authenticated routes must be defined after this point 
+
 app.use('/appointments', Appointment)
 app.use('/pacients', Pacient)
 app.use('/insurances', Insurance)
@@ -35,7 +38,3 @@ app.use((req: Request, res: Response) => {
 })
 
 app.use(errorMiddleware)
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`)
-})
