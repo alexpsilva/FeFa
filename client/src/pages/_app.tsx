@@ -1,5 +1,6 @@
 import '../styles/global.css'
 import SideMenu from '@/components/side-menu'
+import { AppProps } from 'next/app'
 
 const routeMapping = [
   { title: 'Home', path: '/' },
@@ -8,8 +9,7 @@ const routeMapping = [
   { title: 'Insurances', path: '/insurance' },
 ]
 
-export default function App({ Component, pageProps, ...appProps }) {
-
+const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
   if (appProps.router.pathname == '/login') return <Component {...pageProps} />
 
   return (
@@ -21,3 +21,5 @@ export default function App({ Component, pageProps, ...appProps }) {
     </>
   )
 }
+
+export default CustomApp

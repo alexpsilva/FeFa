@@ -28,26 +28,28 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
     operations.push(operation().catch(error => errors.push(error)))
   }
 
+  const userId = res.locals.userId as number
+
   if (body.delete?.length) {
     const args: Prisma.InsuranceDeleteManyArgs = {
-      where: { id: { in: body.delete.map(i => Number(i)) } }
+      where: { id: { in: body.delete.map(i => Number(i)) }, userId }
     }
     addOperation(() => prisma.insurance.deleteMany(args))
   }
 
   if (body.create?.length) {
     const args: Prisma.InsuranceCreateManyArgs = {
-      data: body.create.map(i => ({ name: i.name }))
+      data: body.create.map(i => ({ name: i.name, userId }))
     }
     addOperation(() => prisma.insurance.createMany(args))
   }
 
   body.update?.map(i => {
-    const args: Prisma.InsuranceUpdateArgs = {
-      where: { id: Number(i.id) },
+    const args: Prisma.InsuranceUpdateManyArgs = {
+      where: { id: Number(i.id), userId },
       data: { name: i.name }
     }
-    addOperation(() => prisma.insurance.update(args))
+    addOperation(() => prisma.insurance.updateMany(args))
   })
 
   await Promise.all(operations)

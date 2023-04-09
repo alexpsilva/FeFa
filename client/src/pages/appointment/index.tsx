@@ -1,8 +1,7 @@
 import SimpleTable, { SimpleColumnSpecification } from "@/components/tables/simple-table"
-import byId from "@/types/byId"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPI from "@/utils/fetch-api"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import stringifyDate from "@/utils/stringify-date"
 import { NextPage } from "next"
 import Head from "next/head"
@@ -49,12 +48,12 @@ const ListAppointments: NextPage<Props> = ({ appointments }) => {
   )
 }
 
-ListAppointments.getInitialProps = async () => {
-  const [appointments, error] = await fetchAPI('/appointments?includePacient=true', { method: 'GET' })
-  if (error) { throw new Error(error) }
+ListAppointments.getInitialProps = async (ctx) => {
+  const { data, error } = await fetchAPIWithAuth('/appointments?includePacient=true', { method: 'GET' }, ctx)
+  if (error) { throw new Error(error.message) }
 
   return {
-    appointments: appointments.sort((a: Appointment, b: Appointment) => a.id - b.id),
+    appointments: data.sort((a: Appointment, b: Appointment) => a.id - b.id),
   }
 }
 

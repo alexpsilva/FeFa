@@ -9,11 +9,10 @@ import Insurance from './routes/insurance'
 import Pacient from './routes/pacient'
 import User from './routes/user'
 import authenticationMiddleware from './routes/auth/middleware'
+import { PORT } from './utils/env'
 
 
 const app: Express = express()
-const port = process.env.PORT
-
 
 app.use(express.json())
 app.use(cors())
@@ -38,3 +37,7 @@ app.use((req: Request, res: Response) => {
 })
 
 app.use(errorMiddleware)
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`)
+})

@@ -1,10 +1,10 @@
 import Button from "@/components/ui/button"
 import PacientSheet from "@/components/features/pacient-sheet"
 import Pacient from "@/types/model/pacient"
-import fetchAPI from "@/utils/fetch-api"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 
 function CreatePacient() {
   const router = useRouter()
@@ -13,7 +13,7 @@ function CreatePacient() {
   if (!router.isReady) { return <h3>Loading...</h3> }
 
   const onCreateHandler = async () => {
-    const [created, error] = await fetchAPI('/pacients', {
+    const { data: created } = await fetchAPIWithAuth('/pacients', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

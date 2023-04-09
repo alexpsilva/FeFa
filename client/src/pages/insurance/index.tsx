@@ -2,11 +2,11 @@ import Insurance from "@/types/model/insurance"
 import stringifyDate from "@/utils/stringify-date"
 import Head from "next/head"
 import EditableTable, { EditableColumnSpecification } from "@/components/tables/editable-table"
-import fetchAPI from "@/utils/fetch-api"
 import { NextPage } from "next/types"
 import useDraft from "@/hooks/useDraft"
 import Button from "@/components/ui/button"
 import useInlineDelayedDelete from "@/hooks/useInlineDelayedDelete"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 
 const insuranceFields: EditableColumnSpecification<Insurance>[] = [
   { title: 'Id', key: 'id' },
@@ -27,7 +27,7 @@ const ListInsurances: NextPage<Props> = ({ data }) => {
   const canSave = isDrafting || toDelete.length
 
   const onSaveHandler = async () => {
-    const [data, error] = await fetchAPI('/insurances/batch', {
+    const { data } = await fetchAPIWithAuth('/insurances/batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
@@ -64,10 +64,10 @@ const ListInsurances: NextPage<Props> = ({ data }) => {
   )
 }
 
-ListInsurances.getInitialProps = async () => {
-  const [data, error] = await fetchAPI('/insurances', { method: 'GET' })
+ListInsurances.getInitialProps = async (ctx) => {
+  const { data, error } = await fetchAPIWithAuth('/insurances', { method: 'GET' }, ctx)
 
-  if (error) { throw new Error(error) }
+  if (error) { throw new Error(error.message) }
   return {
     data: data.sort((a: Insurance, b: Insurance) => a.id - b.id),
   }

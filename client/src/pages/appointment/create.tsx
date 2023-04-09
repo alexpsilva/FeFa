@@ -2,7 +2,7 @@ import AppointmentSheet from "@/components/features/appointment-sheet"
 import Button from "@/components/ui/button"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPI from "@/utils/fetch-api"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import { NextPage } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -19,12 +19,12 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
   if (!router.isReady) { return <h3>Loading...</h3> }
 
   const onCreateHandler = async () => {
-    const [created, error] = await fetchAPI('/appointments', {
+    const { data } = await fetchAPIWithAuth('/appointments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(appointment)
     })
-    router.push(`/appointment/${created.id}`)
+    router.push(`/appointment/${data.id}`)
   }
 
   const onCancelHandler = () => { router.back() }
@@ -48,10 +48,10 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 }
 
 CreateAppointment.getInitialProps = async (ctx) => {
-  const [pacients, pacientsError] = await fetchAPI(`/pacients`, { method: 'GET' })
-  if (pacientsError) { throw new Error(pacientsError) }
+  const { data, error } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
+  if (error) { throw new Error(error.message) }
 
-  return { pacients }
+  return { pacients: data }
 }
 
 export default CreateAppointment

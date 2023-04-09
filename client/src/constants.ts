@@ -1,0 +1,9 @@
+const ACCESS_TOKEN_COOKIE = 'fefaAccess'
+const REFRESH_TOKEN_COOKIE = 'fefaRefresh'
+const POST_LOGIN_REDIRECT_QUERY = 'redirect_to'
+
+export {
+  ACCESS_TOKEN_COOKIE,
+  REFRESH_TOKEN_COOKIE,
+  POST_LOGIN_REDIRECT_QUERY,
+}

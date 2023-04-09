@@ -44,15 +44,18 @@
  - [x] Criar modelo de `Token` (1 `User` to n `Tokens`, com um campo `ExpiredAt`)
  - [x] Criar tela de `Login` (a partir da doc https://developers.google.com/identity/sign-in/web/sign-in?hl=pt-br)
  - [x] Configurar tratamento pós login via JS (https://developers.google.com/identity/gsi/web/reference/html-reference#data-login_uri)
- - [ ] ref: https://www.intricatecloud.io/2020/12/passwordless-sign-in-with-google-one-tap-for-web/
+ - [x] ref: https://www.intricatecloud.io/2020/12/passwordless-sign-in-with-google-one-tap-for-web/
  - [x] Implementar validação de tokens Google no backend (segundo esta doc https://developers.google.com/identity/sign-in/web/backend-auth?hl=pt-br)
  - [x] Criar rota `/login`, para validar o token Google. Se passar, verificar se o email do `User` é permitido. Se for, cria um `Token` e retorna o JWT associado
  - [x] Criar rota `/logout`, para invalidar um `Token`
  - [x] Criar middleware de autenticação que recebe um JWT possuindo um `Token.value` e valida de acordo com a tabela `Token`, bloqueando a requisição ou não. Caso o token seja valido, atualizar o campo `lastUsedAt`
  - [x] Adicionar middleware de autenticação a todas as rotas
- - [ ] Implementar renovação automática de `Token`. Valido por período curto (~15 min) mas pode ser renovado por um período maior (limitado. provavelmente 12~24 horas)
+ - [x] Implementar renovação automática de `Token`. Valido por período curto (~15 min) mas pode ser renovado por um período maior (limitado. provavelmente 12~24 horas)
+ - [x] Guardar token de autenticação na seção do usuário
+ - [x] Garantir que todas as paginas do client validam que o usuário está logado e, caso não esteja, redireciona para a tela de `Login`
+ - [x] Garantir que após o `Login`, o usuário é redirecionado de volta para a pagina que estava (ao invés de sempre voltar para a home)
+ 
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
- - [ ] Guardar token de autenticação na seção do usuário
  - [ ] Criar botão de `Logout`
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
 

@@ -1,17 +1,41 @@
 import jwt from 'jsonwebtoken'
-import getMandatoryEnv from '../../../utils/env'
+import {
+  ACCESS_TOKEN_EXPIRES_SECONDS,
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_EXPIRES_SECONDS,
+  REFRESH_TOKEN_SECRET
+} from '../../../utils/env'
 
 const encodingAlgorithm: jwt.Algorithm = 'HS256'
 
-const JwtEncode = (payload: string | object | Buffer) => {
-  const secret = getMandatoryEnv('AUTH_TOKEN_SECRET')
-  const expiresIn = getMandatoryEnv('AUTH_TOKEN_IDLE_LIMIT_SECONDS')
-  return jwt.sign(payload, secret, { algorithm: encodingAlgorithm, expiresIn })
+const encodeAccessToken = (userId: number) => {
+  return jwt.sign(
+    { userId },
+    ACCESS_TOKEN_SECRET,
+    {
+      algorithm: encodingAlgorithm,
+      expiresIn: ACCESS_TOKEN_EXPIRES_SECONDS,
+    }
+  )
 }
 
-const JwtDecode = (token: string) => {
-  const secret = getMandatoryEnv('AUTH_TOKEN_SECRET')
-  return jwt.verify(token, secret, { algorithms: [encodingAlgorithm] })
+const decodeAccessToken = (token: string) => {
+  return jwt.verify(token, ACCESS_TOKEN_SECRET, { algorithms: [encodingAlgorithm] })
 }
 
-export { JwtEncode, JwtDecode } 
+const encodeRefreshToken = (value: string) => {
+  return jwt.sign(
+    { value },
+    REFRESH_TOKEN_SECRET,
+    {
+      algorithm: encodingAlgorithm,
+      expiresIn: REFRESH_TOKEN_EXPIRES_SECONDS
+    }
+  )
+}
+
+const decodeRefreshToken = (token: string) => {
+  return jwt.verify(token, REFRESH_TOKEN_SECRET, { algorithms: [encodingAlgorithm] })
+}
+
+export { encodeAccessToken, decodeAccessToken, encodeRefreshToken, decodeRefreshToken } 

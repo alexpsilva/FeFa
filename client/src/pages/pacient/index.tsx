@@ -1,6 +1,6 @@
 import SimpleTable, { SimpleColumnSpecification } from "@/components/tables/simple-table"
 import Pacient from "@/types/model/pacient"
-import fetchAPI from "@/utils/fetch-api"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
@@ -32,12 +32,12 @@ const ListPacients: NextPage<Props> = ({ pacients }) => {
   )
 }
 
-ListPacients.getInitialProps = async () => {
-  const [pacients, error] = await fetchAPI('/pacients', { method: 'GET' })
+ListPacients.getInitialProps = async (ctx) => {
+  const { data, error } = await fetchAPIWithAuth('/pacients', { method: 'GET' }, ctx)
 
-  if (error) { throw new Error(error) }
+  if (error) { throw new Error(error.message) }
   return {
-    pacients: pacients.sort((a: Pacient, b: Pacient) => a.id - b.id),
+    pacients: data.sort((a: Pacient, b: Pacient) => a.id - b.id),
   }
 }
 

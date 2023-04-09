@@ -3,7 +3,7 @@ import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPI from "@/utils/fetch-api"
+import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import { NextPage } from "next"
 import Head from "next/head"
 
@@ -14,12 +14,12 @@ const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
   if (!draft) { return <h3>Loading...</h3> }
 
   const onSaveHandler = async () => {
-    const [newAppointment, error] = await fetchAPI(`/appointments/${appointment.id}`, {
+    const { data } = await fetchAPIWithAuth(`/appointments/${appointment.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
     })
-    draftDispatch({ type: 'save', payload: newAppointment })
+    draftDispatch({ type: 'save', payload: data })
   }
 
   const onDiscardHandler = () => { draftDispatch({ type: 'discard' }) }
@@ -44,11 +44,17 @@ const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
 
 EditAppointment.getInitialProps = async (ctx) => {
   const appointmentId = ctx.query.appointmentId as string
-  const [appointment, appointmentError] = await fetchAPI(`/appointments/${appointmentId}`, { method: 'GET' })
-  if (appointmentError) { throw new Error(appointmentError) }
+  const {
+    data: appointment,
+    error: appointmentError
+  } = await fetchAPIWithAuth(`/appointments/${appointmentId}`, { method: 'GET' }, ctx)
+  if (appointmentError) { throw new Error(appointmentError.message) }
 
-  const [pacients, pacientsError] = await fetchAPI(`/pacients`, { method: 'GET' })
-  if (pacientsError) { throw new Error(pacientsError) }
+  const {
+    data: pacients,
+    error: pacientsError
+  } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
+  if (pacientsError) { throw new Error(pacientsError.message) }
 
   return { appointment, pacients }
 }
