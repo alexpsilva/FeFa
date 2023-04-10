@@ -14,9 +14,10 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try { body = await validate(CreatePacientRequest, req.body) }
   catch (error) { return next(error) }
 
+  const userId = res.locals.userId as number
   const args: Prisma.PacientCreateArgs = {
     data: {
-      userId: res.locals.userId,
+      userId,
       name: body.name,
       birthday: new Date(body.birthday),
       cpf: body.cpf,
@@ -40,9 +41,21 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
   try { body = await validate(UpdatePacientRequest, req.body) }
   catch (error) { return next(error) }
 
-  // TO-DO: Validate userID
+  const pacientId = Number(req.params.id)
+
+  let pacient: Pacient | null
+  try { pacient = await prisma.pacient.findUnique({ where: { id: pacientId } }) }
+  catch (error) { return next(error) }
+
+  const userId = res.locals.userId as number
+  if (!pacient || pacient.userId != userId) {
+    res.status(StatusCodes.NOT_FOUND)
+    res.send()
+    return
+  }
+
   const args: Prisma.PacientUpdateArgs = {
-    where: { id: Number(req.params.id) },
+    where: { id: pacient.id },
     data: {
       name: body.name,
       birthday: body.birthday && new Date(body.birthday),
@@ -81,12 +94,12 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
 })
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  let body: DeletePacientRequest
-  try { body = await validate(DeletePacientRequest, req.body) }
+  let params: DeletePacientRequest
+  try { params = await validate(DeletePacientRequest, req.params) }
   catch (error) { return next(error) }
 
   let pacient: Pacient | null
-  try { pacient = await prisma.pacient.findUnique({ where: { id: body.id } }) }
+  try { pacient = await prisma.pacient.findUnique({ where: { id: params.id } }) }
   catch (error) { return next(error) }
 
   const userId = res.locals.userId as number
@@ -122,7 +135,6 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 
   let entry: Pacient | null
-
   try { entry = await prisma.pacient.findUnique(args) }
   catch (error) { return next(error) }
 

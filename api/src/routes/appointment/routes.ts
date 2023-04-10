@@ -1,4 +1,4 @@
-import { Prisma, Appointment } from "@prisma/client"
+import { Prisma, Appointment, Pacient } from "@prisma/client"
 import express, { NextFunction, Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import validate from "../../utils/validate"
@@ -6,7 +6,7 @@ import prisma from "../../prisma"
 import CreateAppointmentRequest from "./types/create.dto"
 import UpdateAppointmentRequest from "./types/update.dto"
 import ListAppointmentRequest from "./types/list.dto"
-import GetAppointmentRequest from "./types/get.dto"
+import DeleteAppointmentRequest from "./types/delete.dto"
 
 const router = express.Router()
 
@@ -14,6 +14,17 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   let body: CreateAppointmentRequest
   try { body = await validate(CreateAppointmentRequest, req.body) }
   catch (error) { return next(error) }
+
+  let pacient: Pacient | null
+  try { pacient = await prisma.pacient.findUnique({ where: { id: body.pacientId } }) }
+  catch (error) { return next(error) }
+
+  const userId = res.locals.userId as number
+  if (!pacient || pacient.userId != userId) {
+    res.status(StatusCodes.NOT_FOUND)
+    res.send()
+    return
+  }
 
   const args: Prisma.AppointmentCreateArgs = {
     data: {
@@ -36,8 +47,21 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
   try { body = await validate(UpdateAppointmentRequest, req.body) }
   catch (error) { return next(error) }
 
+  const appointmentId = Number(req.params.id)
+
+  let appointment: Appointment & { pacient: Pacient } | null
+  try { appointment = await prisma.appointment.findUnique({ where: { id: appointmentId }, include: { pacient: true } }) }
+  catch (error) { return next(error) }
+
+  const userId = res.locals.userId as number
+  if (!appointment || appointment.pacient.userId != userId) {
+    res.status(StatusCodes.NOT_FOUND)
+    res.send()
+    return
+  }
+
   const args: Prisma.AppointmentUpdateArgs = {
-    where: { id: Number(req.params.id) },
+    where: { id: appointmentId },
     data: {
       pacientId: body.pacientId,
       date: new Date(body.date),
@@ -54,13 +78,22 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
 })
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  const args: Prisma.AppointmentDeleteArgs = {
-    where: {
-      id: Number(req.params.id)
-    }
+  let params: DeleteAppointmentRequest
+  try { params = await validate(DeleteAppointmentRequest, req.params) }
+  catch (error) { return next(error) }
+
+  let appointment: Appointment & { pacient: Pacient } | null
+  try { appointment = await prisma.appointment.findUnique({ where: { id: params.id }, include: { pacient: true } }) }
+  catch (error) { return next(error) }
+
+  const userId = res.locals.userId as number
+  if (!appointment || appointment.pacient.userId != userId) {
+    res.status(StatusCodes.NOT_FOUND)
+    res.send()
+    return
   }
 
-  try { await prisma.appointment.delete(args) }
+  try { await prisma.appointment.delete({ where: { id: appointment.id } }) }
   catch (error) { return next(error) }
 
   res.status(StatusCodes.NO_CONTENT)
@@ -72,9 +105,10 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try { query = await validate(ListAppointmentRequest, req.query) }
   catch (error) { return next(error) }
 
-  const args: Prisma.AppointmentFindManyArgs = {}
+  const userId = res.locals.userId as number
+  const args: Prisma.AppointmentFindManyArgs = { where: { pacient: { userId } } }
   if (query.includePacient == 'true') args.include = { pacient: true }
-  if (query.pacientId) args.where = { pacient: { is: { id: { equals: Number(query.pacientId) } } } }
+  if (query.pacientId) args.where!.pacient!.id = Number(query.pacientId)
 
   let entry: Appointment[] | null
   try { entry = await prisma.appointment.findMany(args) }
@@ -85,20 +119,23 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 })
 
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  let query: GetAppointmentRequest
-  try { query = await validate(GetAppointmentRequest, req.query) }
-  catch (error) { return next(error) }
+  const userId = res.locals.userId as number
+  const args = {
+    where: { id: Number(req.params.id) },
+    include: { pacient: true },
+  }
 
-  const args: Prisma.AppointmentFindUniqueArgs = { where: { id: Number(req.params.id) } }
-  if (query.includePacient == 'true') args.include = { pacient: true }
-
-  let entry: Appointment | null
+  let entry: Appointment & { pacient: Pacient } | null
   try { entry = await prisma.appointment.findUnique(args) }
   catch (error) { return next(error) }
 
-  if (entry) { res.status(StatusCodes.OK) }
-  else { res.status(StatusCodes.NOT_FOUND) }
-  res.send(entry)
+  if (!entry || entry.pacient.userId != userId) {
+    res.status(StatusCodes.NOT_FOUND)
+    res.send()
+  } else {
+    res.status(StatusCodes.OK)
+    res.send(entry)
+  }
 })
 
 export default router

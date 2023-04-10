@@ -55,15 +55,19 @@
  - [x] Garantir que todas as paginas do client validam que o usuário está logado e, caso não esteja, redireciona para a tela de `Login`
  - [x] Garantir que após o `Login`, o usuário é redirecionado de volta para a pagina que estava (ao invés de sempre voltar para a home)
  
+ - [x] Segregar modelos base (`Pacient` e `Insurance`) entre `User`s
+ - [x] Atualizar todos os métodos para considerar o `User` autenticado
+ - [ ] Validate request body, query and params in a single DTO
+
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Criar botão de `Logout`
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
 
- - [ ] Segregar modelos base (`Pacient` e `Insurance`) entre `Pacient`s
- - [ ] Criar modelo de permissionamento: tabela `AllowsUser` que relaciona `User`, um recurso (ainda a definir como) e um grau de permissão (ainda a definir como)
 
 Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
  - [ ] Entender 'Compound Components' e a 'Context API' para ver se consegue melhorar nosso código (ref: https://www.youtube.com/watch?v=vPRdY87_SH0)
+
+ - [ ] Criar modelo de permissionamento: tabela `AllowsUser` que relaciona `User`, um recurso (ainda a definir como) e um grau de permissão (ainda a definir como)
 
  - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário no topo da tela com as informações desejadas:
    - [ ] Acessível em qualquer ponto da aplicação

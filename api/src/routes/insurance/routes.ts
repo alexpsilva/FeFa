@@ -9,8 +9,10 @@ import HttpError from "../../errors/http"
 const router = express.Router()
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  const userId = res.locals.userId as number
+
   let entry: Insurance[] | null
-  try { entry = await prisma.insurance.findMany() }
+  try { entry = await prisma.insurance.findMany({ where: { userId } }) }
   catch (error) { return next(error) }
 
   res.status(StatusCodes.OK)
@@ -29,7 +31,6 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
   }
 
   const userId = res.locals.userId as number
-
   if (body.delete?.length) {
     const args: Prisma.InsuranceDeleteManyArgs = {
       where: { id: { in: body.delete.map(i => Number(i)) }, userId }
