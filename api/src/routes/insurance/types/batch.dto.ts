@@ -1,22 +1,31 @@
 import { IsArray, IsOptional, IsString } from "class-validator";
-import CreateInsuranceRequest from "./create.dto";
-import UpdateInsuranceRequest from "./update.dto";
 
-class BatchUpdateInsuranceRequest extends UpdateInsuranceRequest {
+class BatchUpdateInsuranceBody {
   @IsString()
   id: string
+
+  @IsOptional()
+  @IsString()
+  name?: string
 }
 
-export default class BatchInsuranceRequest {
+class CreateInsuranceBody {
+  @IsString()
+  name: string
+}
+
+class BatchInsuranceBody {
   @IsOptional()
   @IsArray()
   delete?: string[]
 
   @IsOptional()
   @IsArray()
-  update?: BatchUpdateInsuranceRequest[]
+  update?: BatchUpdateInsuranceBody[]
 
   @IsOptional()
   @IsArray()
-  create?: CreateInsuranceRequest[]
+  create?: CreateInsuranceBody[]
 }
+
+export { BatchInsuranceBody }

@@ -29,9 +29,9 @@ services:
       - DATABASE_URL=postgresql://username:password@db:5432/fefa-db?schema=public
       - GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
       - ACCESS_TOKEN_SECRET=123
-      - ACCESS_TOKEN_EXPIRES_SECONDS=60
+      - ACCESS_TOKEN_EXPIRES_SECONDS=3600
       - REFRESH_TOKEN_SECRET=123
-      - REFRESH_TOKEN_EXPIRES_SECONDS=600
+      - REFRESH_TOKEN_EXPIRES_SECONDS=7200
     depends_on:
       - db
   db:

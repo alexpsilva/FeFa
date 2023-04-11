@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator"
 import 'reflect-metadata'
 
-export default class CreateUserRequest {
+class CreateUserBody {
   @IsString()
   @IsNotEmpty()
   name: string
@@ -11,3 +11,5 @@ export default class CreateUserRequest {
   @IsNotEmpty()
   email: string
 }
+
+export { CreateUserBody }

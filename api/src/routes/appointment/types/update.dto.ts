@@ -1,7 +1,13 @@
 import { IsDateString, IsInt, IsOptional, IsString } from "class-validator"
 import 'reflect-metadata'
 
-export default class UpdateAppointmentRequest {
+class UpdateAppointmentParams {
+  @IsOptional()
+  @IsInt()
+  id: string
+}
+
+class UpdateAppointmentBody {
   @IsOptional()
   @IsInt()
   pacientId: number
@@ -13,4 +19,9 @@ export default class UpdateAppointmentRequest {
   @IsOptional()
   @IsString()
   description: string
+}
+
+export {
+  UpdateAppointmentBody,
+  UpdateAppointmentParams,
 }

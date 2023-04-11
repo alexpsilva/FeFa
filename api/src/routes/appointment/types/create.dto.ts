@@ -1,7 +1,7 @@
 import { IsDateString, IsInt, IsString } from "class-validator"
 import 'reflect-metadata'
 
-export default class CreateAppointmentRequest {
+class CreateAppointmentBody {
   @IsInt()
   pacientId: number
 
@@ -11,3 +11,5 @@ export default class CreateAppointmentRequest {
   @IsString()
   description: string
 }
+
+export { CreateAppointmentBody }

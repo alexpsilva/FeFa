@@ -2,7 +2,7 @@ import { Type } from "class-transformer"
 import { IsArray, IsDateString, IsOptional, IsString, ValidateNested } from "class-validator"
 import 'reflect-metadata'
 
-export default class CreatePacientRequest {
+class CreatePacientBody {
   @IsString()
   name: string
 
@@ -18,15 +18,17 @@ export default class CreatePacientRequest {
   address?: string
 
   @IsArray()
-  @Type(() => CreatePacientRequestPhone)
+  @Type(() => CreatePacientBodyPhone)
   @ValidateNested({ each: true })
-  phones?: CreatePacientRequestPhone[] = []
+  phones?: CreatePacientBodyPhone[] = []
 }
 
-class CreatePacientRequestPhone {
+class CreatePacientBodyPhone {
   @IsString()
   label: string
 
   @IsString()
   number: string
 }
+
+export { CreatePacientBody }

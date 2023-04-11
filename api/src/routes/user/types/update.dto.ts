@@ -1,7 +1,7 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator"
+import { IsEmail, IsNotEmpty, IsNumberString, IsOptional, IsString } from "class-validator"
 import 'reflect-metadata'
 
-export default class UpdateUserRequest {
+class UpdateUserBody {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
@@ -12,4 +12,15 @@ export default class UpdateUserRequest {
   @IsEmail()
   @IsNotEmpty()
   email: string
+}
+
+class UpdateUserParams {
+  @IsNumberString()
+  @IsNotEmpty()
+  id: string
+}
+
+export {
+  UpdateUserBody,
+  UpdateUserParams,
 }

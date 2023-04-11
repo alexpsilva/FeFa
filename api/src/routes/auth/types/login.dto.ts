@@ -1,8 +1,10 @@
 import { IsJWT, IsNotEmpty, IsString } from "class-validator";
 
-export default class LoginAuthRequest {
+class LoginAuthBody {
   @IsString()
   @IsNotEmpty()
   @IsJWT()
   googleToken: string
 }
+
+export { LoginAuthBody }

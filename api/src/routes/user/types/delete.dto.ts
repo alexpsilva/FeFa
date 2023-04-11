@@ -1,10 +1,10 @@
 import { IsNotEmpty, IsNumberString } from "class-validator"
 import 'reflect-metadata'
 
-class DeletePacientParams {
+class DeleteUserParams {
   @IsNumberString()
   @IsNotEmpty()
   id: string
 }
 
-export { DeletePacientParams }
+export { DeleteUserParams }

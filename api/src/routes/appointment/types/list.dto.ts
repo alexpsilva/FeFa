@@ -1,7 +1,7 @@
 import { IsBooleanString, IsNumberString, IsOptional } from "class-validator"
 import 'reflect-metadata'
 
-export default class ListAppointmentRequest {
+class ListAppointmentQuery {
   @IsNumberString()
   @IsOptional()
   pacientId?: string
@@ -10,3 +10,5 @@ export default class ListAppointmentRequest {
   @IsOptional()
   includePacient?: string
 }
+
+export { ListAppointmentQuery }

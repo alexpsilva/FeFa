@@ -1,8 +1,14 @@
 import { Type } from "class-transformer"
-import { IsArray, IsDateString, IsInt, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsArray, IsDateString, IsInt, IsNotEmpty, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator"
 import 'reflect-metadata'
 
-export default class UpdatePacientRequest {
+class UpdatePacientParams {
+  @IsNumberString()
+  @IsNotEmpty()
+  id: string
+}
+
+class UpdatePacientBody {
   @IsOptional()
   @IsString()
   name?: string
@@ -20,12 +26,12 @@ export default class UpdatePacientRequest {
   address?: string
 
   @IsArray()
-  @Type(() => UpdatePacientRequestPhone)
+  @Type(() => UpdatePacientBodyPhone)
   @ValidateNested({ each: true })
-  phones?: UpdatePacientRequestPhone[] = []
+  phones?: UpdatePacientBodyPhone[] = []
 }
 
-class UpdatePacientRequestPhone {
+class UpdatePacientBodyPhone {
   @IsInt()
   @IsOptional()
   id?: number
@@ -35,4 +41,9 @@ class UpdatePacientRequestPhone {
 
   @IsString()
   number: string
+}
+
+export {
+  UpdatePacientBody,
+  UpdatePacientParams,
 }

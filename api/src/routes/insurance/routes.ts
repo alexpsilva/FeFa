@@ -1,76 +1,77 @@
-import { Prisma, Insurance } from "@prisma/client"
-import express, { NextFunction, Request, Response } from "express"
+import { Prisma } from "@prisma/client"
+import express, { Request, Response } from "express"
 import { StatusCodes } from "http-status-codes"
 import validate from "../../utils/validate"
 import prisma from "../../prisma"
-import BatchInsuranceRequest from "./types/batch.dto"
+import { BatchInsuranceBody } from "./types/batch.dto"
 import HttpError from "../../errors/http"
+import asyncRoute from "../../utils/async-route"
 
 const router = express.Router()
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  const userId = res.locals.userId as number
+router.get('/', asyncRoute(
+  async (req: Request, res: Response) => {
+    const userId = res.locals.userId as number
 
-  let entry: Insurance[] | null
-  try { entry = await prisma.insurance.findMany({ where: { userId } }) }
-  catch (error) { return next(error) }
+    const entry = await prisma.insurance.findMany(
+      { where: { userId } }
+    )
 
-  res.status(StatusCodes.OK)
-  res.send(entry)
-})
-
-router.post('/batch', async (req: Request, res: Response, next: NextFunction) => {
-  let body: BatchInsuranceRequest
-  try { body = await validate(BatchInsuranceRequest, req.body) }
-  catch (error) { return next(error) }
-
-  const operations: Promise<any>[] = []
-  const errors: any[] = []
-  const addOperation = (operation: () => Promise<any>) => {
-    operations.push(operation().catch(error => errors.push(error)))
+    res.status(StatusCodes.OK)
+    res.send(entry)
   }
+))
 
-  const userId = res.locals.userId as number
-  if (body.delete?.length) {
-    const args: Prisma.InsuranceDeleteManyArgs = {
-      where: { id: { in: body.delete.map(i => Number(i)) }, userId }
+router.post('/batch', asyncRoute(
+  async (req: Request, res: Response) => {
+    const body = await validate(BatchInsuranceBody, req.body)
+
+    const operations: Promise<any>[] = []
+    const errors: any[] = []
+    const addOperation = (operation: () => Promise<any>) => {
+      operations.push(operation().catch(error => errors.push(error)))
     }
-    addOperation(() => prisma.insurance.deleteMany(args))
-  }
 
-  if (body.create?.length) {
-    const args: Prisma.InsuranceCreateManyArgs = {
-      data: body.create.map(i => ({ name: i.name, userId }))
+    const userId = res.locals.userId as number
+    if (body.delete?.length) {
+      const args: Prisma.InsuranceDeleteManyArgs = {
+        where: { id: { in: body.delete.map(i => Number(i)) }, userId }
+      }
+      addOperation(() => prisma.insurance.deleteMany(args))
     }
-    addOperation(() => prisma.insurance.createMany(args))
-  }
 
-  body.update?.map(i => {
-    const args: Prisma.InsuranceUpdateManyArgs = {
-      where: { id: Number(i.id), userId },
-      data: { name: i.name }
+    if (body.create?.length) {
+      const args: Prisma.InsuranceCreateManyArgs = {
+        data: body.create.map(i => ({ name: i.name, userId }))
+      }
+      addOperation(() => prisma.insurance.createMany(args))
     }
-    addOperation(() => prisma.insurance.updateMany(args))
-  })
 
-  await Promise.all(operations)
+    body.update?.map(i => {
+      const args: Prisma.InsuranceUpdateManyArgs = {
+        where: { id: Number(i.id), userId },
+        data: { name: i.name }
+      }
+      addOperation(() => prisma.insurance.updateMany(args))
+    })
 
-  if (errors.length) {
-    next(new HttpError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      errors.map(e => String(e)).join('; ')
-    ))
+    await Promise.all(operations)
+
+    if (errors.length) {
+      throw new HttpError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        errors.map(e => String(e)).join('; ')
+      )
+    }
+
+    const result = await prisma.insurance.findMany()
+
+    res.status(StatusCodes.OK)
+    res.send(result)
   }
+))
 
-  let result: Insurance[] | null
-  try { result = await prisma.insurance.findMany() }
-  catch (error) { return next(error) }
-
-  res.status(StatusCodes.OK)
-  res.send(result)
-})
-
-// router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+// router.post('/', async (req: Request, res: Response) => {
 //   let body: CreateInsuranceRequest
 //   try { body = await validate(CreateInsuranceRequest, req.body) }
 //   catch (error) { return next(error) }
@@ -85,7 +86,7 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
 //   res.send(entry)
 // })
 
-// router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
+// router.patch('/:id', async (req: Request, res: Response) => {
 //   let body: UpdateInsuranceRequest
 //   try { body = await validate(UpdateInsuranceRequest, req.body) }
 //   catch (error) { return next(error) }
@@ -103,7 +104,7 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
 //   res.send(entry)
 // })
 
-// router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+// router.delete('/:id', async (req: Request, res: Response) => {
 //   const args: Prisma.InsuranceDeleteArgs = {
 //     where: {
 //       id: Number(req.params.id)
@@ -117,7 +118,7 @@ router.post('/batch', async (req: Request, res: Response, next: NextFunction) =>
 //   res.send()
 // })
 
-// router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+// router.get('/:id', async (req: Request, res: Response) => {
 //   const args: Prisma.InsuranceFindUniqueArgs = {
 //     where: { id: Number(req.params.id) }
 //   }

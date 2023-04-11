@@ -1,7 +1,9 @@
 import { IsInt } from "class-validator"
 import 'reflect-metadata'
 
-export default class DeleteAppointmentRequest {
+class DeleteAppointmentRequest {
   @IsInt()
   id: number
 }
+
+export { DeleteAppointmentRequest }
