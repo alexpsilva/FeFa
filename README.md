@@ -59,12 +59,16 @@
  - [x] Atualizar todos os métodos para considerar o `User` autenticado
  - [x] Validar body, query e params de todas requests
 
+Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
+
+ - [x] Adicionar `TailwindCSS` ao projeto
+ - [ ] Definir paleta de cores
+ - [ ] Estilizar componentes...
+
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Criar botão de `Logout`
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
 
-
-Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
  - [ ] Entender 'Compound Components' e a 'Context API' para ver se consegue melhorar nosso código (ref: https://www.youtube.com/watch?v=vPRdY87_SH0)
 
  - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
@@ -80,8 +84,6 @@ Desnecessário por enquanto mas promete ser muito mais dificil de implementar de
  - [ ] Criar modelo de `Role` (inicialmente só com `admin` e `doctor`)
  - [ ] Incorporar filtro por `User.id` e `Role` em todas as rotas de CRUD (impedir que um `User` não-admin leia ou altere dados de outro)
  
- - [ ] Decidir entre usar `PicoCSS` ou `TailwindCSS`
- - [ ] Estilizar componentes...
 
  - [ ] Desenvolver importação de dados (seja via Excell ou direto em base Access)
  

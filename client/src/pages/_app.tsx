@@ -13,12 +13,12 @@ const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
   if (appProps.router.pathname == '/login') return <Component {...pageProps} />
 
   return (
-    <>
-      <SideMenu routes={routeMapping} width="200px" />
-      <div style={{ marginLeft: "200px", paddingLeft: "15px", marginTop: "30px" }}>
+    <div className='w-screen h-screen bg-gray-50'>
+      <SideMenu routes={routeMapping} />
+      <main className='float-left m-2 ml-4'>
         <Component {...pageProps} />
-      </div>
-    </>
+      </main>
+    </div>
   )
 }
 

@@ -7,16 +7,24 @@ interface RouteMapping {
 
 interface Props {
   routes: RouteMapping[]
-  width: string
 }
 
-const SideMenu = ({ routes, width }: Props) => (
-  <div style={{ display: 'block', width: width, height: '100%', position: 'fixed', top: 0, bottom: 0, left: 0, border: '2px solid black' }} >
+const SideMenu = ({ routes }: Props) => (
+  <div className="relative w-48 h-full float-left bg-gray-100">
     {routes.map(route => (
-      <div key={route.title} style={{ width: '100%', float: 'left', borderBottom: '2px solid black' }}>
-        <Link href={route.path}>{route.title}</Link>
-      </div>
+      <Link
+        className="block w-full py-1 px-3 font-bold text-gray-600
+        hover:text-cyan-700 hover:bg-gray-200 hover:no-underline"
+        href={route.path}
+        key={route.title}
+      >
+        {route.title}
+      </Link>
     ))}
+    <div className="absolute bottom-0 block w-full mb-0 mt-auto px-3 py-1
+     bg-gray-800 text-cyan-500 font-bold">
+      Lock?
+    </div>
   </div>
 )
 
