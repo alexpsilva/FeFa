@@ -10,7 +10,7 @@ interface Props {
 }
 
 const SideMenu = ({ routes }: Props) => (
-  <div className="relative w-48 h-full float-left bg-gray-100">
+  <div className="relative w-48 bg-gray-100">
     {routes.map(route => (
       <Link
         className="block w-full py-1 px-3 font-bold text-gray-600

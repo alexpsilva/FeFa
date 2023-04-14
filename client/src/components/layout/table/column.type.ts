@@ -1,4 +1,4 @@
-export default interface EditableColumnSpecification<T> {
+export default interface ColumnSpecification<T> {
   title: string
   key: keyof T
   isEditable?: boolean

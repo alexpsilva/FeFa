@@ -1,4 +1,5 @@
-import SimpleTable, { SimpleColumnSpecification } from "@/components/tables/simple-table"
+import ColumnSpecification from "@/components/layout/table/column.type"
+import SimpleTable from "@/components/layout/table/simple-table"
 import Pacient from "@/types/model/pacient"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import { NextPage } from "next"
@@ -6,9 +7,8 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-const columns: SimpleColumnSpecification<Pacient>[] = [
-  { title: 'Id', key: 'id' },
-  { title: 'Name', key: 'name' },
+const columns: ColumnSpecification<Pacient>[] = [
+  { title: 'Nome', key: 'name' },
 ]
 
 type Props = { pacients: Pacient[] }

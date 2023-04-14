@@ -1,4 +1,5 @@
-import SimpleTable, { SimpleColumnSpecification } from "@/components/tables/simple-table"
+import ColumnSpecification from "@/components/layout/table/column.type"
+import SimpleTable from "@/components/layout/table/simple-table"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
@@ -16,7 +17,7 @@ interface Row extends Appointment {
   pacientName: string
 }
 
-const columns: SimpleColumnSpecification<Row>[] = [
+const columns: ColumnSpecification<Row>[] = [
   { title: 'Id', key: 'id' },
   { title: 'Pacient', key: 'pacientName' },
   { title: 'Date', key: 'date', stringify: stringifyDate },

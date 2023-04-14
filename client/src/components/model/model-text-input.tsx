@@ -9,7 +9,7 @@ interface Props<T> {
 const ModelTextInput = <T,>({ model, field, setValue }: Props<T>) => {
   return <Input
     value={String(model[field] ?? '')}
-    setValue={(newValue) => setValue({ ...model, [field]: newValue })}
+    onChange={(newValue) => setValue({ ...model, [field]: newValue })}
   />
 }
 

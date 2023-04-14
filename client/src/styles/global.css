@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 
+/* @layer base {
+  :root {
+    --color-primary: ;
+    --color-secondary: ;
+  }
+} */
+
 html,
 body {
   padding: 0;
@@ -15,15 +22,6 @@ body {
 
 * {
   box-sizing: border-box;
-}
-
-a {
-  color: #0070f3;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
 }
 
 img {

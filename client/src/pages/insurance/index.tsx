@@ -1,14 +1,15 @@
 import Insurance from "@/types/model/insurance"
 import stringifyDate from "@/utils/stringify-date"
 import Head from "next/head"
-import EditableTable, { EditableColumnSpecification } from "@/components/tables/editable-table"
 import { NextPage } from "next/types"
 import useDraft from "@/hooks/useDraft"
 import Button from "@/components/ui/button"
 import useInlineDelayedDelete from "@/hooks/useInlineDelayedDelete"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import ColumnSpecification from "@/components/layout/table/column.type"
+import EditableTable from "@/components/layout/table/editable-table"
 
-const insuranceFields: EditableColumnSpecification<Insurance>[] = [
+const insuranceFields: ColumnSpecification<Insurance>[] = [
   { title: 'Id', key: 'id' },
   { title: 'Name', key: 'name', isEditable: true },
   { title: 'Updated', key: 'updatedAt', stringify: stringifyDate },

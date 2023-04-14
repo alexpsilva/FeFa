@@ -13,9 +13,9 @@ const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
   if (appProps.router.pathname == '/login') return <Component {...pageProps} />
 
   return (
-    <div className='w-screen h-screen bg-gray-50'>
+    <div className='flex h-screen bg-gray-50'>
       <SideMenu routes={routeMapping} />
-      <main className='float-left m-2 ml-4'>
+      <main className='m-2 flex-grow'>
         <Component {...pageProps} />
       </main>
     </div>
