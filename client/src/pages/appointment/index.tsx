@@ -1,5 +1,4 @@
-import ColumnSpecification from "@/components/layout/table/column.type"
-import SimpleTable from "@/components/layout/table/simple-table"
+import Table from "@/components/layout/table/table"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
@@ -17,12 +16,6 @@ interface Row extends Appointment {
   pacientName: string
 }
 
-const columns: ColumnSpecification<Row>[] = [
-  { title: 'Id', key: 'id' },
-  { title: 'Pacient', key: 'pacientName' },
-  { title: 'Date', key: 'date', stringify: stringifyDate },
-]
-
 type Props = { appointments: AppointmentWithPacient[] }
 const ListAppointments: NextPage<Props> = ({ appointments }) => {
   const router = useRouter()
@@ -39,10 +32,15 @@ const ListAppointments: NextPage<Props> = ({ appointments }) => {
         <title>Appointments</title>
       </Head>
       <h1>Appointments</h1>
-      <SimpleTable
-        columns={columns}
+      <Table
         data={data}
-        onClick={appointment => router.push(`/appointment/${appointment.id}`)}
+        columns={[
+          { header: 'Paciente', id: 'pacientName' },
+          { header: 'Data', id: 'date', format: stringifyDate },
+        ]}
+        onRow={{
+          click: index => router.push(`/appointment/${appointments[index].id}`)
+        }}
       />
       <Link href='/appointment/create'>Adicionar</Link>
     </>

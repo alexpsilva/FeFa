@@ -16,10 +16,10 @@ const reducer = <T>(state: State<T>, action: Action<T>): State<T> => {
   }
 }
 
-const useDraft = <T,>() => useReducer<Reducer<State<T>, Action<T>>>(
+const useArray = <T,>() => useReducer<Reducer<State<T>, Action<T>>>(
   reducer,
   { data: [] },
 )
 
 export type { Action, State }
-export default useDraft
+export default useArray

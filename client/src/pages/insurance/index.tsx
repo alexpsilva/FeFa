@@ -1,25 +1,19 @@
 import Insurance from "@/types/model/insurance"
-import stringifyDate from "@/utils/stringify-date"
 import Head from "next/head"
 import { NextPage } from "next/types"
 import useDraft from "@/hooks/useDraft"
 import Button from "@/components/ui/button"
-import useInlineDelayedDelete from "@/hooks/useInlineDelayedDelete"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
-import ColumnSpecification from "@/components/layout/table/column.type"
-import EditableTable from "@/components/layout/table/editable-table"
+import Table from "@/components/layout/table/table"
+import updateArray from "@/utils/update-array"
+import useArray from "@/hooks/useArray"
+import stringifyDate from "@/utils/stringify-date"
 
-const insuranceFields: ColumnSpecification<Insurance>[] = [
-  { title: 'Id', key: 'id' },
-  { title: 'Name', key: 'name', isEditable: true },
-  { title: 'Updated', key: 'updatedAt', stringify: stringifyDate },
-  { title: 'Created', key: 'createdAt', stringify: stringifyDate },
-]
 
-type Props = { data: Insurance[] }
-const ListInsurances: NextPage<Props> = ({ data }) => {
-  const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(data)
-  const [toDelete, toDeleteDispatch, inlineDelete] = useInlineDelayedDelete<Insurance>()
+type Props = { insurances: Insurance[] }
+const ListInsurances: NextPage<Props> = ({ insurances }) => {
+  const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(insurances)
+  const [{ data: toDelete }, toDeleteDispatch] = useArray<Insurance['id']>()
 
   if (!draft) { return <h3>Loading...</h3> }
 
@@ -45,17 +39,52 @@ const ListInsurances: NextPage<Props> = ({ data }) => {
     toDeleteDispatch({ type: 'clear' })
   }
 
+  const onChangeHandler = (row: number, col: keyof Insurance, newValue: any) => {
+    draftDispatch({
+      type: "draft",
+      payload: updateArray(
+        draft,
+        (_, i) => i == row,
+        { ...draft[row], [col]: newValue }
+      )
+    })
+  }
+
+  const onAddHandler = () => {
+    draftDispatch({
+      type: "draft",
+      payload: [...draft, {}]
+    })
+  }
+
+  const onDeleteHandler = (row: number) => {
+    if (row < insurances.length) {
+      const payload = insurances[row].id
+      toDeleteDispatch({ type: 'add', payload })
+    }
+    draftDispatch({
+      type: "draft",
+      payload: [...draft.slice(0, row), ...draft.slice(row + 1)]
+    })
+  }
+
   return (
     <>
       <Head>
         <title>Insurances</title>
       </Head>
       <h1>Insurances</h1>
-      <EditableTable
-        columns={insuranceFields}
+      <Table
+        columns={[
+          { header: 'Nome', id: 'name', isEditable: true },
+          { header: 'Atualizado em', id: 'updatedAt', format: stringifyDate },
+          { header: 'Criado em', id: 'createdAt', format: stringifyDate },
+        ]}
         data={draft}
-        setData={(newDraft) => draftDispatch({ type: 'draft', payload: newDraft })}
-        inlineActions={[inlineDelete]}
+        inlineActions={<Table.InlineButton text='Deletar' onClick={onDeleteHandler} />}
+        footers={{ name: '+ Adicionar' }}
+        onCell={{ change: onChangeHandler }}
+        onFooter={{ click: onAddHandler }}
       />
       <div>
         <Button text="Save" disabled={!canSave} onClick={onSaveHandler} />
@@ -70,7 +99,7 @@ ListInsurances.getInitialProps = async (ctx) => {
 
   if (error) { throw new Error(error.message) }
   return {
-    data: data.sort((a: Insurance, b: Insurance) => a.id - b.id),
+    insurances: data.sort((a: Insurance, b: Insurance) => a.id - b.id),
   }
 }
 

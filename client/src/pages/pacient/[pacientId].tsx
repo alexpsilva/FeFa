@@ -1,11 +1,11 @@
 import Button from "@/components/ui/button"
-import PacientSheet from "@/components/features/pacient-sheet"
 import useDraft from "@/hooks/useDraft"
 import Pacient from "@/types/model/pacient"
 import { NextPage } from "next"
 import Head from "next/head"
 import Appointment from "@/types/model/appointment"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import PacientSheet from "@/components/features/pacient-sheet.tsx"
 
 type Props = { pacient: Pacient, appointments: Appointment[] }
 const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {

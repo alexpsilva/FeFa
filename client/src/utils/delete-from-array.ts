@@ -1,7 +1,8 @@
-const deleteFromArray = <T,>(array: T[], criteria: (item: T) => boolean): T[] => {
+const deleteFromArray = <T,>(array: T[], criteria: (item: T, index: number) => boolean): T[] => {
   const newArray: T[] = []
-  for (const item of array) {
-    criteria(item) ? null : newArray.push(item)
+  for (const index in array) {
+    const item = array[index]
+    criteria(item, Number(index)) ? null : newArray.push(item)
   }
 
   return newArray

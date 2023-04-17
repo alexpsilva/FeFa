@@ -1,8 +1,8 @@
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import ModelDateInput from "@/components/model/model-date-input"
-import ModelFKDropdown from "@/components/model/model-fk-dropdown"
-import ModelTextArea from "@/components/model/model-text-area"
+import ModelDateInput from "../model/date-input"
+import ModelFKDropdown from "../model/fk-dropdown"
+import ModelTextArea from "../model/text-area"
 
 interface Props {
   pacients: Pacient[]

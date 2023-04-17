@@ -59,9 +59,13 @@
  - [x] Atualizar todos os métodos para considerar o `User` autenticado
  - [x] Validar body, query e params de todas requests
 
-Desnecessário por enquanto mas promete ser muito mais dificil de implementar depois que a aplicação se tornar mais complexa:
-
  - [x] Adicionar `TailwindCSS` ao projeto
+ - [ ] Refatorar componente `Table` para torna-lo mais 'composable' e usa-lo em todos cenários (ao invés de manter uma `EditableTable` e outra `SimpleTable`)
+  - [x] Montar estrutura da table toda em um mesmo componente (para facilitar estilização)
+  - [x] Extrair toda a gerência de estado para fora (ainda estavamos manipulando 'creatingRow' e 'onChange' internamente)
+  - [x] Criar CompoundComponent `InlineButton` para implementar inlineActions
+  - [x] Criar parametro `footer` que recebe um React.ReactNode como valores. Assim podemos configurar para adicionar novas linhas (e qualquer outra ação que desejarmos)
+
  - [ ] Definir paleta de cores
  - [ ] Estilizar componentes...
 

@@ -1,9 +1,9 @@
-import { IsDateString, IsInt, IsOptional, IsString } from "class-validator"
+import { IsDateString, IsInt, IsNumberString, IsOptional, IsString } from "class-validator"
 import 'reflect-metadata'
 
 class UpdateAppointmentParams {
   @IsOptional()
-  @IsInt()
+  @IsNumberString()
   id: string
 }
 

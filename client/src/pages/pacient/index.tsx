@@ -1,15 +1,10 @@
-import ColumnSpecification from "@/components/layout/table/column.type"
-import SimpleTable from "@/components/layout/table/simple-table"
+import Table from "@/components/layout/table/table"
 import Pacient from "@/types/model/pacient"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-
-const columns: ColumnSpecification<Pacient>[] = [
-  { title: 'Nome', key: 'name' },
-]
 
 type Props = { pacients: Pacient[] }
 const ListPacients: NextPage<Props> = ({ pacients }) => {
@@ -22,10 +17,10 @@ const ListPacients: NextPage<Props> = ({ pacients }) => {
         <title>Pacients</title>
       </Head>
       <h1>Pacients</h1>
-      <SimpleTable
-        columns={columns}
+      <Table
+        columns={[{ header: 'Nome', id: 'name' }]}
         data={pacients}
-        onClick={pacient => router.push(`/pacient/${pacient.id}`)}
+        onCell={{ click: index => router.push(`/pacient/${pacients[index].id}`) }}
       />
       <Link href='/pacient/create'>Adicionar</Link>
     </>
