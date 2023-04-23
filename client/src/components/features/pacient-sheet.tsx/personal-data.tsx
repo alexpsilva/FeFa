@@ -1,48 +1,33 @@
-import Table from "@/components/layout/table/table";
 import ModelDateInput from "@/components/model/date-input";
 import ModelTextInput from "@/components/model/text-input";
-import { Phone } from "@/types/model/pacient";
-import deleteFromArray from "@/utils/delete-from-array";
-import updateArray from "@/utils/update-array";
+import dateDifference from "@/utils/date-difference";
 import { usePacientSheetContext } from "./context";
 
 export default function PacientSheetPersonalData() {
   const { pacient, setPacient } = usePacientSheetContext()
 
-  const onChangeHandler = (row: number, col: keyof Phone, newValue: any) => {
-    setPacient({
-      ...pacient, phones: updateArray(
-        pacient.phones || [],
-        (_, i) => i == row,
-        newValue
-      )
-    })
-  }
-
-  const onDeleteHandler = (row: number) => {
-    setPacient({
-      ...pacient, phones: deleteFromArray(
-        pacient.phones || [],
-        (_, i) => i == row,
-      )
-    })
-  }
+  const birthday = pacient.birthday ? new Date(pacient.birthday) : null
+  const age = birthday ? dateDifference(birthday, new Date(), 'years') : null
 
   return (
     <div>
-      <label> CPF: <ModelTextInput model={pacient} field='cpf' setValue={setPacient} /> </label>
-      <label> Nascimento: <ModelDateInput model={pacient} field='birthday' setValue={setPacient} /> </label>
-      <label> Phones:
-        <Table
-          columns={[
-            { header: 'Label', id: 'label', isEditable: true },
-            { header: 'Number', id: 'number', isEditable: true },
-          ]}
-          data={pacient.phones || []}
-          onCell={{ change: onChangeHandler }}
-          inlineActions={<Table.InlineButton text='Deletar' onClick={onDeleteHandler} />}
-        />
-      </label>
+      <div className="flex">
+        <div>
+          <label>
+            Nome: <ModelTextInput model={pacient} field='name' setValue={setPacient} />
+          </label>
+          <label>CPF: <ModelTextInput model={pacient} field='cpf' setValue={setPacient} /> </label>
+        </div>
+        <div className="ml-auto">
+          <label className="block">
+            Nascimento: <ModelDateInput model={pacient} field='birthday' setValue={setPacient} />
+          </label>
+          {age && age > 0
+            ? <a className="block text-center text-slate-500">({age} anos)</a>
+            : null
+          }
+        </div>
+      </div>
     </div>
   )
 }

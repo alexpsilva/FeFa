@@ -8,10 +8,17 @@ interface Props<T> {
 }
 
 const ModelDateInput = <T,>({ model, field, setValue }: Props<T>) => {
+  const onChangeHandler = (newValue: string) => {
+    const newDate = new Date(newValue)
+    if (isNaN(newDate)) { return }
+
+    setValue({ ...model, [field]: newDate })
+  }
+
   return <Input
     type='date'
     value={model[field] ? stringifyDateISO(model[field]) : ''}
-    onChange={(newValue) => setValue({ ...model, [field]: new Date(newValue) })}
+    onChange={onChangeHandler}
   />
 }
 

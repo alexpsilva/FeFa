@@ -14,7 +14,7 @@ const SideMenu = ({ routes }: Props) => (
     {routes.map(route => (
       <Link
         className="block w-full py-1 px-3 font-bold text-gray-600
-        hover:text-cyan-700 hover:bg-gray-200 hover:no-underline"
+          hover:text-cyan-700 hover:bg-gray-200 hover:no-underline"
         href={route.path}
         key={route.title}
       >
@@ -22,7 +22,7 @@ const SideMenu = ({ routes }: Props) => (
       </Link>
     ))}
     <div className="absolute bottom-0 block w-full mb-0 mt-auto px-3 py-1
-     bg-gray-800 text-cyan-500 font-bold">
+       bg-gray-800 text-cyan-500 font-bold">
       Lock?
     </div>
   </div>

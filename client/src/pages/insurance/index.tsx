@@ -8,6 +8,7 @@ import Table from "@/components/layout/table/table"
 import updateArray from "@/utils/update-array"
 import useArray from "@/hooks/useArray"
 import stringifyDate from "@/utils/stringify-date"
+import Trash from "@/components/icons/trash"
 
 
 type Props = { insurances: Insurance[] }
@@ -59,8 +60,7 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 
   const onDeleteHandler = (row: number) => {
     if (row < insurances.length) {
-      const payload = insurances[row].id
-      toDeleteDispatch({ type: 'add', payload })
+      toDeleteDispatch({ type: 'add', payload: draft[row].id as number })
     }
     draftDispatch({
       type: "draft",
@@ -71,9 +71,15 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
   return (
     <>
       <Head>
-        <title>Insurances</title>
+        <title>Planos de Saúde</title>
       </Head>
-      <h1>Insurances</h1>
+      <div className="flex mb-2">
+        <h1 className="text-2xl">Planos de Saúde</h1>
+        <div className="ml-auto">
+          <Button text="Salvar" disabled={!canSave} onClick={onSaveHandler} />
+          <Button text="Cancelar" disabled={!canSave} onClick={onCancelHandler} />
+        </div>
+      </div>
       <Table
         columns={[
           { header: 'Nome', id: 'name', isEditable: true },
@@ -81,15 +87,11 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
           { header: 'Criado em', id: 'createdAt', format: stringifyDate },
         ]}
         data={draft}
-        inlineActions={<Table.InlineButton text='Deletar' onClick={onDeleteHandler} />}
-        footers={{ name: '+ Adicionar' }}
+        inlineActions={<Table.InlineIcon builder={Trash} onClick={onDeleteHandler} />}
+        footer={{ name: <a className="cursor-pointer">+ Adicionar</a> }}
         onCell={{ change: onChangeHandler }}
         onFooter={{ click: onAddHandler }}
       />
-      <div>
-        <Button text="Save" disabled={!canSave} onClick={onSaveHandler} />
-        <Button text="Cancel" disabled={!canSave} onClick={onCancelHandler} />
-      </div>
     </>
   )
 }

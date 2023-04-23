@@ -29,20 +29,20 @@ const ListAppointments: NextPage<Props> = ({ appointments }) => {
   return (
     <>
       <Head>
-        <title>Appointments</title>
+        <title>Consultas</title>
       </Head>
-      <h1>Appointments</h1>
+      <div className="mb-2">
+        <h1 className="text-2xl">Consultas</h1>
+      </div>
       <Table
         data={data}
         columns={[
           { header: 'Paciente', id: 'pacientName' },
           { header: 'Data', id: 'date', format: stringifyDate },
         ]}
-        onRow={{
-          click: index => router.push(`/appointment/${appointments[index].id}`)
-        }}
+        onRow={{ click: index => router.push(`/appointment/${appointments[index].id}`) }}
+        footer={{ pacientName: <Link href='/appointment/create'>+ Adicionar</Link> }}
       />
-      <Link href='/appointment/create'>Adicionar</Link>
     </>
   )
 }

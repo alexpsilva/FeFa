@@ -23,13 +23,12 @@ function PacientSheet(
   return (
     <PacientSheetContext.Provider value={{ pacient, setPacient, appointments }}>
       <div>
-        <ModelTextInput model={pacient} field='name' setValue={setPacient} />
         <MultitabFrame>
-          <TabItem tabName="Histórico">
-            <PacientSheetHistory />
-          </TabItem>
           <TabItem tabName="Dados Pessoais">
             <PacientSheetPersonalData />
+          </TabItem>
+          <TabItem tabName="Histórico">
+            <PacientSheetHistory />
           </TabItem>
           <TabItem tabName="Contato">
             <PacientSheetContact />

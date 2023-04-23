@@ -27,14 +27,21 @@ function MultitabFrame(
   return (
     <>
       <div>
-        <div style={{ width: "100%", height: "30px", display: "flex" }}>
-          {childrenArray.map((child, i) => (
-            <div key={i} onClick={() => useSelected(child.props.tabName)} style={{ paddingLeft: "10px", paddingRight: "10px", border: '1px solid black' }}>
+        <div className="flex h-7 w-full">
+          {childrenArray.map((child, index) => (
+            <div
+              className={`px-2 border-t border-r first:border-l border-slate-300
+                ${child.props.tabName != selected ? 'bg-slate-200' : ''}`}
+              key={index}
+              onClick={() => useSelected(child.props.tabName)}
+            >
               {child.props.tabName}
             </div>
           ))}
         </div>
-        <div style={{ border: '1px solid black' }}>
+        <div
+          className="p-2 border border-slate-300"
+        >
           {selectedChild}
         </div>
       </div>

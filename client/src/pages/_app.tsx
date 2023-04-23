@@ -3,10 +3,9 @@ import SideMenu from '@/components/side-menu'
 import { AppProps } from 'next/app'
 
 const routeMapping = [
-  { title: 'Home', path: '/' },
-  { title: 'Appointments', path: '/appointment' },
-  { title: 'Pacients', path: '/pacient' },
-  { title: 'Insurances', path: '/insurance' },
+  { title: 'Consultas', path: '/appointment' },
+  { title: 'Pacientes', path: '/pacient' },
+  { title: 'Planos de Saúde', path: '/insurance' },
 ]
 
 const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {

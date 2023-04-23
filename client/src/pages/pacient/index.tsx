@@ -1,6 +1,7 @@
 import Table from "@/components/layout/table/table"
 import Pacient from "@/types/model/pacient"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import stringifyDate from "@/utils/stringify-date"
 import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
@@ -14,15 +15,20 @@ const ListPacients: NextPage<Props> = ({ pacients }) => {
   return (
     <>
       <Head>
-        <title>Pacients</title>
+        <title>Pacientes</title>
       </Head>
-      <h1>Pacients</h1>
+      <div className="mb-2">
+        <h1 className="text-2xl">Pacientes</h1>
+      </div>
       <Table
-        columns={[{ header: 'Nome', id: 'name' }]}
+        columns={[
+          { header: 'Nome', id: 'name' },
+          { header: 'Criado em', id: 'createdAt', format: stringifyDate },
+        ]}
         data={pacients}
         onCell={{ click: index => router.push(`/pacient/${pacients[index].id}`) }}
+        footer={{ name: <Link href='/pacient/create'>+ Adicionar</Link> }}
       />
-      <Link href='/pacient/create'>Adicionar</Link>
     </>
   )
 }

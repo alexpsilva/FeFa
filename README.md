@@ -60,30 +60,33 @@
  - [x] Validar body, query e params de todas requests
 
  - [x] Adicionar `TailwindCSS` ao projeto
- - [ ] Refatorar componente `Table` para torna-lo mais 'composable' e usa-lo em todos cenários (ao invés de manter uma `EditableTable` e outra `SimpleTable`)
+ - [x ] Refatorar componente `Table` para torna-lo mais 'composable' e usa-lo em todos cenários (ao invés de manter uma `EditableTable` e outra `SimpleTable`)
   - [x] Montar estrutura da table toda em um mesmo componente (para facilitar estilização)
   - [x] Extrair toda a gerência de estado para fora (ainda estavamos manipulando 'creatingRow' e 'onChange' internamente)
   - [x] Criar CompoundComponent `InlineButton` para implementar inlineActions
   - [x] Criar parametro `footer` que recebe um React.ReactNode como valores. Assim podemos configurar para adicionar novas linhas (e qualquer outra ação que desejarmos)
 
- - [ ] Definir paleta de cores
- - [ ] Estilizar componentes...
+ - [x] Bug: Apesar de marcar multiplas linhas para deleção, só estamos apagando 1 depois de salvar
 
- - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
- - [ ] Criar botão de `Logout`
- - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
-
- - [ ] Entender 'Compound Components' e a 'Context API' para ver se consegue melhorar nosso código (ref: https://www.youtube.com/watch?v=vPRdY87_SH0)
-
- - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
-   - [ ] Conseguir visualizar dados de diferentes `User`s (seja trocando de `User` exibido ou visualizando todos de uma vez)
-   - [ ] CRUD para manipulação de `User`
-
- - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário no topo da tela com as informações desejadas:
+ - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário com as informações desejadas:
    - [ ] Acessível em qualquer ponto da aplicação
    - [ ] Retorna um `NotificationId` para permitir trocar o texto caso desejado (ao salvar um paciente, começa com 'Loading' e depois troca para 'Saved' ou 'Error')
 
  - [ ] Centralizar tratamento de erros para conseguir reportá-los em qualquer ponto da aplicação (React ErrorBoundry?, Integrar com `NotificationBanner`)
+ 
+ - [ ] Criar botão de `Logout`
+
+ - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
+ - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
+ - [ ] Definir paleta de cores
+ - [ ] Estilizar componentes...
+
+ - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
+ - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
+
+ - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
+   - [ ] Conseguir visualizar dados de diferentes `User`s (seja trocando de `User` exibido ou visualizando todos de uma vez)
+   - [ ] CRUD para manipulação de `User`
 
  - [ ] Criar modelo de `Role` (inicialmente só com `admin` e `doctor`)
  - [ ] Incorporar filtro por `User.id` e `Role` em todas as rotas de CRUD (impedir que um `User` não-admin leia ou altere dados de outro)

@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react"
 import InlineButton from "./inline-button"
 import Input from "@/components/ui/input"
+import InlineIcon from "./inline-icon"
 
 type TableContextType =
   | { type: 'row', row: number }
@@ -41,12 +42,12 @@ interface Props<T> {
     click: () => void
   }
   showHeaders?: boolean
-  footers?: { [key in keyof T]: React.ReactNode }
+  footer?: { [key in keyof T]?: React.ReactNode }
   inlineActions?: React.ReactNode | React.ReactNode[]
 }
 
 const Table = <T,>(
-  { data, columns, onCell, onRow, onHeader, onFooter, showHeaders, footers, inlineActions }: Props<T>
+  { data, columns, onCell, onRow, onHeader, onFooter, showHeaders, footer, inlineActions }: Props<T>
 ) => {
   const formatValue = (column: Column<T>, value: any) => column.format
     ? column.format(value)
@@ -67,14 +68,19 @@ const Table = <T,>(
   }
 
   return (
-    <table>
+    <table className="w-full border border-slate-300 text-slate-700">
       {showHeaders === false
         ? null
         : (
           <thead>
-            <tr>
+            <tr
+              className=""
+            >
               {columns.map((column, c_index) => (
                 <th
+                  className="text-left border border-slate-300 px-2 
+                    font-medium text-sm text-slate-400 leading-loose
+                    hover:bg-gray-100"
                   key={c_index}
                   onClick={() => eventHandlers.headerClick(column.id)}
                 >
@@ -94,6 +100,8 @@ const Table = <T,>(
             <TableContext.Provider value={{ type: 'row', row: r_index }}>
               {columns.map((column, c_key) => (
                 <td
+                  className="text-left border border-slate-300 px-2 py-1
+                    hover:bg-gray-100"
                   key={c_key}
                   onClick={() => eventHandlers.cellClick(r_index, column.id)}
                 >
@@ -107,7 +115,10 @@ const Table = <T,>(
                 </td>
               ))}
               {inlineActionsArray.map((inlineAction, ia_index) => (
-                <td key={ia_index}>
+                <td
+                  className="text-left border border-slate-300 px-2 py-1"
+                  key={ia_index}
+                >
                   {inlineAction}
                 </td>
               ))}
@@ -115,22 +126,31 @@ const Table = <T,>(
           </tr>
         ))}
       </tbody>
-      <tfoot>
-        <tr onClick={eventHandlers.footerClick}>
-          {columns.map((column, c_index) => (
-            <td
-              key={c_index}
-            >
-              {footers ? footers[column.id] : null}
-            </td>
-          ))}
-        </tr>
-      </tfoot>
+      {footer
+        ? (
+          <tfoot>
+            <tr onClick={eventHandlers.footerClick}>
+              {columns.map((column, c_index) => (
+                <td
+                  className="text-left border border-slate-300 px-2 
+                    font-medium text-sm text-slate-400 leading-loose"
+                  key={c_index}
+                >
+                  {footer ? footer[column.id] : null}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )
+        : null
+      }
+
     </table>
   )
 }
 
 Table.InlineButton = InlineButton
+Table.InlineIcon = InlineIcon
 
 export { useTableContext }
 export default Table
