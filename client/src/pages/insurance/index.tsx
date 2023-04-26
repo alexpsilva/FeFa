@@ -9,10 +9,12 @@ import updateArray from "@/utils/update-array"
 import useArray from "@/hooks/useArray"
 import stringifyDate from "@/utils/stringify-date"
 import Trash from "@/components/icons/trash"
+import useDispatchNotification from "@/components/features/notification/context"
 
 
 type Props = { insurances: Insurance[] }
 const ListInsurances: NextPage<Props> = ({ insurances }) => {
+  const dispatchNotification = useDispatchNotification()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(insurances)
   const [{ data: toDelete }, toDeleteDispatch] = useArray<Insurance['id']>()
 
@@ -33,6 +35,13 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 
     draftDispatch({ type: 'save', payload: sorted })
     toDeleteDispatch({ type: 'clear' })
+    dispatchNotification({
+      type: 'add', payload: {
+        id: 'INSURANCE_SAVED',
+        text: 'Alterações salvas com sucesso',
+        type: 'success'
+      }
+    })
   }
 
   const onCancelHandler = () => {
