@@ -74,13 +74,12 @@ const Table = <T,>(
         : (
           <thead>
             <tr
-              className=""
+              className="hover:bg-gray-100"
             >
               {columns.map((column, c_index) => (
                 <th
                   className="text-left border border-slate-300 px-2 
-                    font-medium text-sm text-slate-400 leading-loose
-                    hover:bg-gray-100"
+                    font-medium text-sm text-slate-400 leading-loose"
                   key={c_index}
                   onClick={() => eventHandlers.headerClick(column.id)}
                 >
@@ -94,14 +93,14 @@ const Table = <T,>(
       <tbody>
         {data.map((row, r_index) => (
           <tr
+            className="hover:bg-gray-100"
             key={r_index}
             onClick={() => eventHandlers?.rowClick(r_index)}
           >
             <TableContext.Provider value={{ type: 'row', row: r_index }}>
               {columns.map((column, c_key) => (
                 <td
-                  className="text-left border border-slate-300 px-2 py-1
-                    hover:bg-gray-100"
+                  className="text-left border border-slate-300 px-2 py-1"
                   key={c_key}
                   onClick={() => eventHandlers.cellClick(r_index, column.id)}
                 >

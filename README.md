@@ -71,16 +71,18 @@
  - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário com as informações desejadas:
    - [x] Acessível em qualquer ponto da aplicação
    - [x] Define um `NotificationId` para permitir trocar o texto caso desejado (ao salvar um paciente, começa com 'Loading' e depois troca para 'Saved' ou 'Error')
-   - [ ] Pode definir um tempo de expiração, depois do qual, o banner some
-   - [ ] Adicionar botão de X ao banner, permitindo descartar notificações antes de sua expiração (apenas para notificações com expiração definida. notificações 'permanentes' como estados de Loading, não podem ser descartadas)
-   - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
-   - [ ] (opcional) Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
-   - [ ] (opcional) Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
+   - [x] Pode definir um tempo de expiração, depois do qual, o banner some
+   - [x] Adicionar botão de X ao banner, permitindo descartar notificações antes de sua expiração (apenas para notificações com expiração definida. notificações 'permanentes' como estados de Loading, não podem ser descartadas)
 
- - [ ] Centralizar tratamento de erros para conseguir reportá-los em qualquer ponto da aplicação (React ErrorBoundry?, Integrar com `NotificationBanner`)
+ - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
  
  - [ ] Criar botão de `Logout`
 
+ - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
+ - [ ] (opcional) Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
+ - [ ] (opcional) Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
+
+ - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
  - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
  - [ ] Definir paleta de cores

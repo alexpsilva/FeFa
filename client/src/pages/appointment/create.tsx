@@ -1,4 +1,5 @@
 import AppointmentSheet from "@/components/features/appointment-sheet"
+import useNotify from "@/components/features/notification/context"
 import Button from "@/components/ui/button"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
@@ -10,6 +11,7 @@ import { useState } from "react"
 
 type Props = { pacients: Pacient[] }
 const CreateAppointment: NextPage<Props> = ({ pacients }) => {
+  const notify = useNotify()
   const router = useRouter()
   const [appointment, setAppointment] = useState<Partial<Appointment>>({
     pacientId: pacients[0].id,
@@ -19,11 +21,14 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
   if (!router.isReady) { return <h3>Loading...</h3> }
 
   const onCreateHandler = async () => {
+    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
     const { data } = await fetchAPIWithAuth('/appointments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(appointment)
     })
+
+    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
     router.push(`/appointment/${data.id}`)
   }
 

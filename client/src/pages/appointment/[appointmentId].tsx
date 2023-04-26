@@ -1,4 +1,5 @@
 import AppointmentSheet from "@/components/features/appointment-sheet"
+import useNotify from "@/components/features/notification/context"
 import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
 import Appointment from "@/types/model/appointment"
@@ -9,16 +10,20 @@ import Head from "next/head"
 
 type Props = { appointment: Appointment, pacients: Pacient[] }
 const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
+  const notify = useNotify()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Appointment>>(appointment)
 
   if (!draft) { return <h3>Loading...</h3> }
 
   const onSaveHandler = async () => {
+    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
     const { data } = await fetchAPIWithAuth(`/appointments/${appointment.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
     })
+
+    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
     draftDispatch({ type: 'save', payload: data })
   }
 

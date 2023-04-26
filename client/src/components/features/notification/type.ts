@@ -1,5 +1,7 @@
 type NotificationId =
-  | 'INSURANCE_SAVED'
+  | 'INSURANCE_SAVE'
+  | 'PACIENT_SAVE'
+  | 'APPOINTMENT_SAVE'
 
 export type { NotificationId }
 export default interface Notification {

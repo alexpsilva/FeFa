@@ -6,19 +6,24 @@ import Head from "next/head"
 import Appointment from "@/types/model/appointment"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
+import useNotify from "@/components/features/notification/context"
 
 type Props = { pacient: Pacient, appointments: Appointment[] }
 const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
+  const notify = useNotify()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Pacient>>(pacient)
 
   if (!draft) { return <h3>Loading...</h3> }
 
   const onSaveHandler = async () => {
+    notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
     const { data } = await fetchAPIWithAuth(`/pacients/${pacient.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
     })
+
+    notify({ id: 'PACIENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
     draftDispatch({ type: 'save', payload: data })
   }
 

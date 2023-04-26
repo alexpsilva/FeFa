@@ -9,12 +9,12 @@ import updateArray from "@/utils/update-array"
 import useArray from "@/hooks/useArray"
 import stringifyDate from "@/utils/stringify-date"
 import Trash from "@/components/icons/trash"
-import useDispatchNotification from "@/components/features/notification/context"
+import useNotify from "@/components/features/notification/context"
 
 
 type Props = { insurances: Insurance[] }
 const ListInsurances: NextPage<Props> = ({ insurances }) => {
-  const dispatchNotification = useDispatchNotification()
+  const notify = useNotify()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(insurances)
   const [{ data: toDelete }, toDeleteDispatch] = useArray<Insurance['id']>()
 
@@ -25,6 +25,7 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
   const canSave = isDrafting || toDelete.length
 
   const onSaveHandler = async () => {
+    notify({ id: 'INSURANCE_SAVE', text: 'Salvando...' })
     const { data } = await fetchAPIWithAuth('/insurances/batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,13 +36,7 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 
     draftDispatch({ type: 'save', payload: sorted })
     toDeleteDispatch({ type: 'clear' })
-    dispatchNotification({
-      type: 'add', payload: {
-        id: 'INSURANCE_SAVED',
-        text: 'Alterações salvas com sucesso',
-        type: 'success'
-      }
-    })
+    notify({ id: 'INSURANCE_SAVE', text: 'Salvo com sucesso', expiresInSeconds: 3 })
   }
 
   const onCancelHandler = () => {

@@ -5,19 +5,24 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
+import useNotify from "@/components/features/notification/context"
 
 function CreatePacient() {
   const router = useRouter()
+  const notify = useNotify()
   const [data, setData] = useState<Partial<Pacient>>({})
 
   if (!router.isReady) { return <h3>Loading...</h3> }
 
   const onCreateHandler = async () => {
+    notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
     const { data: created } = await fetchAPIWithAuth('/pacients', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
+
+    notify({ id: 'PACIENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
     router.push(`/pacient/${created.id}`)
   }
 
