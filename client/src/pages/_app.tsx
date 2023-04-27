@@ -6,8 +6,8 @@ import useNotifications from '@/components/features/notification/reducer'
 import { NotificationContext } from '@/components/features/notification/context'
 
 const routeMapping = [
-  { title: 'Consultas', path: '/appointment' },
   { title: 'Pacientes', path: '/pacient' },
+  { title: 'Consultas', path: '/appointment' },
   { title: 'Planos de Saúde', path: '/insurance' },
 ]
 

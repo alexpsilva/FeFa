@@ -3,12 +3,23 @@
 @tailwind utilities;
 
 
-/* @layer base {
+@layer base {
   :root {
-    --color-primary: ;
-    --color-secondary: ;
+    --color-text-base: 55, 65, 81;
+
+    /* EMERALD */
+    /* --color-text-selected: 5, 150, 105; */
+
+    /* CYAN */
+    --color-text-selected: 8, 145, 178;
+
+    /* SKY */
+    /* --color-text-selected: 2, 132, 199; */
+
+    /* INDIGO */
+    /* --color-text-selected: 99, 102, 241; */
   }
-} */
+}
 
 html,
 body {

@@ -1,4 +1,4 @@
-export default function Cross({ ...props }) {
+export default function CrossIcon({ ...props }) {
   return (
     <svg
       viewBox='0 0 24 24'
