@@ -75,24 +75,28 @@
    - [x] Adicionar botão de X ao banner, permitindo descartar notificações antes de sua expiração (apenas para notificações com expiração definida. notificações 'permanentes' como estados de Loading, não podem ser descartadas)
 
  - [x] Criar botão de `Logout`
- 
+
  - [ ] Preferir max-width, min-width e min-height ao invés de width e height
- - [ ] Entender o que são as unidades `em` e `rem`
+
+ - [ ] Adicionar busca à tela de `Pacient`
+ - [ ] Adicionar paginação à tela de `Pacient`
+
  - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
- 
 
  - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
- - [ ] (opcional) Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
- - [ ] (opcional) Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
 
  - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
  - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
- - [ ] Definir paleta de cores
- - [ ] Estilizar componentes...
 
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
+
+ - [ ] Desenvolver importação de dados (seja via Excell ou direto em base Access)
+
+
+# Backlog (not essential)
+ - [ ] Criar ícone de lapis para indicar os campos que são editáveis (talvez só exibir on hover)
 
  - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
    - [ ] Conseguir visualizar dados de diferentes `User`s (seja trocando de `User` exibido ou visualizando todos de uma vez)
@@ -100,13 +104,10 @@
 
  - [ ] Criar modelo de `Role` (inicialmente só com `admin` e `doctor`)
  - [ ] Incorporar filtro por `User.id` e `Role` em todas as rotas de CRUD (impedir que um `User` não-admin leia ou altere dados de outro)
- 
 
- - [ ] Desenvolver importação de dados (seja via Excell ou direto em base Access)
- 
+ - [ ] Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
+ - [ ] Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
 
-
-# Backlog (not essential)
  - [ ] Criar modelo de `Medicine` para padronizar dados de `Prescription`.
  - [ ] Criar modelo de `Prescription`, tendo em mente que precisamos conseguir montar um histórico de mudanças de remédios (quando doses mudaram, remedios foram interrompidos, etc.).
  - [ ] Adicionar `Prescription` à primeira aba da tela de `Pacient` via `EditableTable`.
@@ -121,20 +122,11 @@
  - [ ] Criar modelo de `PacientCondition`, permitindo anotações para cada `Condition` que um paciente possui.
  - [ ] Adicionar à primeira aba da tela de `Pacient` via `EditableTable` (mostrando apenas os atuais e linkando para o histórico daquele paciente).
 
- - [ ] Adicionar ordenação customizavel a `SimpleTable` e `EditableTable`
- - [ ] Adicionar busca a `SimpleTable` e `EditableTable`
- - [ ] Adicionar paginação a `SimpleTable` e `EditableTable`
+ - [ ] Adicionar ordenação customizavel à `Table`
 
- - [ ] Refatorar `useImediateInlineDelete` para guardar os ids dos elementos deletados
- - [ ] Substituir todos os usos de `useDeleayedInlineDelete` por `useImediateInlineDelete`
- - [ ] Renomear `useImediateInlineDelete` para `useInlineDelete`
-
- - [ ] Omitir a primeira aba da `PacientSheet` durante a criação de `Pacients`
- - [ ] Adaptar `SimpleTable` para permitir colunas com valores aninhados (ex: `appointment.pacient.name`)
+ - [ ] Omitir a aba de consultas da `PacientSheet` durante a criação de `Pacients`
  - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
- - [ ] Avaliar se vale a pena utilizar `NextJS` ou se seria melhor com `React` puro
  - [ ] Testar interface mobile
  - [ ] Pedir confirmação antes de sair da tela com alterações pendentes
- - [ ] Transformar `SideMenu` em `SandwichMenu`, permitindo que ele seja colapsado
  - [ ] Escolher ferramenta que permita estilização do texto de um `Appointment`.
- - [ ] Adicionar suporte a Foreign Keys ao componente `EditableTable`.
+ - [ ] Adicionar suporte a Foreign Keys ao componente `Table`.
