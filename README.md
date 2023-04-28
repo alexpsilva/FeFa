@@ -68,15 +68,18 @@
 
  - [x] Bug: Apesar de marcar multiplas linhas para deleção, só estamos apagando 1 depois de salvar
 
- - [ ] Criar componente `NotificationBanner`, que exibe um banner temporário com as informações desejadas:
+ - [x] Criar componente `NotificationBanner`, que exibe um banner temporário com as informações desejadas:
    - [x] Acessível em qualquer ponto da aplicação
    - [x] Define um `NotificationId` para permitir trocar o texto caso desejado (ao salvar um paciente, começa com 'Loading' e depois troca para 'Saved' ou 'Error')
    - [x] Pode definir um tempo de expiração, depois do qual, o banner some
    - [x] Adicionar botão de X ao banner, permitindo descartar notificações antes de sua expiração (apenas para notificações com expiração definida. notificações 'permanentes' como estados de Loading, não podem ser descartadas)
 
+ - [x] Criar botão de `Logout`
+ 
+ - [ ] Preferir max-width, min-width e min-height ao invés de width e height
+ - [ ] Entender o que são as unidades `em` e `rem`
  - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
  
- - [ ] Criar botão de `Logout`
 
  - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
  - [ ] (opcional) Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
