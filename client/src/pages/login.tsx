@@ -2,7 +2,7 @@ import { NextPage } from "next"
 import dynamic from "next/dynamic"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import setJWTCookie from "@/utils/set-jwt-cookie"
+import setJWTCookie from "@/auth/set-jwt-cookie"
 import { ACCESS_TOKEN_COOKIE, POST_LOGIN_REDIRECT_QUERY, REFRESH_TOKEN_COOKIE } from "@/constants"
 import fetchAPI from "@/utils/fetch-api"
 

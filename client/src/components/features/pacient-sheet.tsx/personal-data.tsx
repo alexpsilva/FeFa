@@ -1,6 +1,6 @@
 import ModelDateInput from "@/components/model/date-input";
 import ModelTextInput from "@/components/model/text-input";
-import dateDifference from "@/utils/date-difference";
+import dateDifference from "@/utils/date/date-difference";
 import { usePacientSheetContext } from "./context";
 
 export default function PacientSheetPersonalData() {

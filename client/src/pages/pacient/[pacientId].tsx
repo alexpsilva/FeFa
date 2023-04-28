@@ -4,7 +4,7 @@ import Pacient from "@/types/model/pacient"
 import { NextPage } from "next"
 import Head from "next/head"
 import Appointment from "@/types/model/appointment"
-import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
 import useNotify from "@/components/features/notification/context"
 

@@ -4,7 +4,7 @@ import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import { NextPage } from "next"
 import Head from "next/head"
 

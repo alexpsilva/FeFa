@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/constants"
-import deleteJWTCookie from "@/utils/delete-jwt-cookie"
-import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import deleteJWTCookie from "@/auth/delete-jwt-cookie"
+import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import LogoutIcon from "./icons/logout"

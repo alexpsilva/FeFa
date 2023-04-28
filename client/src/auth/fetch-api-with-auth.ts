@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/constants"
 import { StatusCodes } from "http-status-codes"
 import getJWTCookie from "./get-jwt-cookie"
-import fetchAPI from './fetch-api'
+import fetchAPI from '@/utils/fetch-api'
 import setJWTCookie from "./set-jwt-cookie"
 import { NextPageContext } from "next"
 

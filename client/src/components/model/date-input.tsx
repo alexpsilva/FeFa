@@ -1,4 +1,4 @@
-import stringifyDateISO from "@/utils/stringify-date-iso"
+import stringifyDateISO from "@/utils/date/stringify-date-iso"
 import Input from "@/components/ui/input"
 
 interface Props<T> {

@@ -3,7 +3,7 @@ import Pacient from "@/types/model/pacient"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import fetchAPIWithAuth from "@/utils/fetch-api-with-auth"
+import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
 import useNotify from "@/components/features/notification/context"
 

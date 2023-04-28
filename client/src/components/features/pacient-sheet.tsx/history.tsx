@@ -1,5 +1,5 @@
 import Table from "@/components/layout/table/table"
-import stringifyDate from "@/utils/stringify-date"
+import stringifyDate from "@/utils/date/stringify-date"
 import { useRouter } from "next/router"
 import { usePacientSheetContext } from "./context"
 
