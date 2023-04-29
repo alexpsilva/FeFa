@@ -8,6 +8,8 @@ import { GetPacientParams } from "./types/get.dto"
 import { DeletePacientParams } from "./types/delete.dto"
 import { UpdatePacientBody, UpdatePacientParams } from "./types/update.dto"
 import { CreatePacientBody } from "./types/create.dto"
+import { ListPacientQuery } from "./types/list.dto"
+import { PAGINATION_PAGE_SIZE_LIMIT } from "../../utils/env"
 
 const router = express.Router()
 
@@ -114,14 +116,17 @@ router.delete('/:id', asyncRoute(
 
 router.get('/', asyncRoute(
   async (req: Request, res: Response) => {
+    const query = await validate(ListPacientQuery, req.query)
     const userId = res.locals.userId as number
 
-    const pacients = await prisma.pacient.findMany(
-      {
-        where: { userId },
-        include: { phones: true }
-      }
-    )
+    const where: Prisma.PacientWhereInput = { userId }
+    if (query.name) where.name = { contains: query.name }
+
+    const pacients = await prisma.pacient.findMany({
+      skip: Number(query.pageOffset) || 0,
+      take: Number(query.pageSize) || PAGINATION_PAGE_SIZE_LIMIT,
+      where
+    })
 
     res.status(StatusCodes.OK)
     res.send(pacients)

@@ -81,6 +81,9 @@
  - [ ] Adicionar busca à tela de `Pacient`
  - [ ] Adicionar paginação à tela de `Pacient`
 
+ - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`
+ - [ ] Remover tela de listagem de `Appointment`
+
  - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
 
  - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)

@@ -32,6 +32,7 @@ services:
       - ACCESS_TOKEN_EXPIRES_SECONDS=3600
       - REFRESH_TOKEN_SECRET=123
       - REFRESH_TOKEN_EXPIRES_SECONDS=7200
+      - PAGINATION_PAGE_SIZE_LIMIT=50
     depends_on:
       - db
   db:
