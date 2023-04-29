@@ -78,7 +78,7 @@
 
  - [ ] Preferir max-width, min-width e min-height ao invés de width e height
 
- - [ ] Adicionar busca à tela de `Pacient`
+ - [x] Adicionar busca à tela de `Pacient`
  - [ ] Adicionar paginação à tela de `Pacient`
 
  - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`

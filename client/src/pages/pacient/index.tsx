@@ -6,11 +6,22 @@ import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import SearchInput from "@/components/features/search-input"
+import { useState } from "react"
 
-type Props = { pacients: Pacient[] }
-const ListPacients: NextPage<Props> = ({ pacients }) => {
+type Props = { initialPacients: Pacient[] }
+const ListPacients: NextPage<Props> = ({ initialPacients }) => {
+
+  const [pacients, setPacients] = useState<Pacient[]>(initialPacients)
   const router = useRouter()
   if (!router.isReady) { return <h3>Loading...</h3> }
+
+  const onSearchHandler = async (term: string) => {
+    const { data, error } = await fetchAPIWithAuth(`/pacients?name=${term}`, { method: 'GET' })
+    if (error) { throw new Error(error.message) }
+
+    setPacients(data.sort((a: Pacient, b: Pacient) => a.id - b.id))
+  }
 
   return (
     <>
@@ -20,6 +31,11 @@ const ListPacients: NextPage<Props> = ({ pacients }) => {
       <div className="mb-2">
         <h1 className="text-2xl">Pacientes</h1>
       </div>
+      <SearchInput
+        className="block mx-auto mt-3 mb-5 w-full max-w-md bg-gray-200"
+        onSearch={onSearchHandler}
+        hint="Buscar..."
+      />
       <Table
         columns={[
           { header: 'Nome', id: 'name' },
@@ -38,7 +54,7 @@ ListPacients.getInitialProps = async (ctx) => {
 
   if (error) { throw new Error(error.message) }
   return {
-    pacients: data.sort((a: Pacient, b: Pacient) => a.id - b.id),
+    initialPacients: data.sort((a: Pacient, b: Pacient) => a.id - b.id),
   }
 }
 

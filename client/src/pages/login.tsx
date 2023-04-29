@@ -35,7 +35,9 @@ const Login: NextPage = () => {
       <Head>
         <title>SignIn</title>
       </Head>
-      <GoogleSignIn onSignIn={onSignIn} />
+      <div className="h-screen flex justify-center items-center">
+        <GoogleSignIn onSignIn={onSignIn} />
+      </div>
     </>
   )
 }

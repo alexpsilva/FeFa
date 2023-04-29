@@ -19,7 +19,7 @@ const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
   return (
     <div className='flex h-screen bg-gray-50'>
       <SideMenu routes={routeMapping} />
-      <main className='m-2 flex-grow'>
+      <main className='m-5 flex-grow'>
         <NotificationContext.Provider value={dispatchNotification}>
           <Component {...pageProps} />
           <NotificationBanner
