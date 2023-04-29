@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    --color-text-muted: 148, 163, 184;
     --color-text-base: 55, 65, 81;
 
     /* EMERALD */
@@ -23,12 +24,18 @@
 
 html,
 body {
+  height: 100%;
   padding: 0;
   margin: 0;
   font-family: Intel, sans-serif;
   line-height: 1.6;
   font-weight: 400;
   font-size: 18px;
+  overflow: hidden;
+}
+
+#__next {
+  height: 100%;
 }
 
 * {

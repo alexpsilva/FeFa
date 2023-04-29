@@ -8,6 +8,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import SearchInput from "@/components/features/search-input"
 import { useState } from "react"
+import SearchIcon from "@/components/icons/search"
 
 type Props = { initialPacients: Pacient[] }
 const ListPacients: NextPage<Props> = ({ initialPacients }) => {
@@ -28,21 +29,33 @@ const ListPacients: NextPage<Props> = ({ initialPacients }) => {
       <Head>
         <title>Pacientes</title>
       </Head>
-      <div className="mb-2">
-        <h1 className="text-2xl">Pacientes</h1>
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold text-skin-base">Pacientes</h1>
       </div>
-      <SearchInput
-        className="block mx-auto mt-3 mb-5 w-full max-w-md bg-gray-200"
-        onSearch={onSearchHandler}
-        hint="Buscar..."
-      />
+      <hr className="mb-6 border-b-2 border-gray-200 rounded-full"></hr>
+      <div className="
+          flex items-center justify-center 
+          mx-auto mt-3 mb-5 max-w-md 
+          rounded-lg bg-gray-200"
+      >
+        <SearchIcon
+          className='mx-1 stroke-skin-base'
+          width="22"
+          height="22"
+        />
+        <SearchInput
+          className="flex-grow ml-1 bg-transparent focus:outline-none"
+          onSearch={onSearchHandler}
+          hint="Buscar..."
+        />
+      </div>
       <Table
         columns={[
           { header: 'Nome', id: 'name' },
-          { header: 'Criado em', id: 'createdAt', format: stringifyDate },
+          { header: 'Criado', id: 'createdAt', format: stringifyDate },
         ]}
         data={pacients}
-        onCell={{ click: index => router.push(`/pacient/${pacients[index].id}`) }}
+        onRow={{ click: index => router.push(`/pacient/${pacients[index].id}`) }}
         footer={{ name: <Link href='/pacient/create'>+ Adicionar</Link> }}
       />
     </>

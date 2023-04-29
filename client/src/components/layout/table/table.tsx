@@ -68,23 +68,26 @@ const Table = <T,>(
   }
 
   return (
-    <table className="w-full border border-slate-300 text-slate-700">
+    <table className="w-full border-slate-200 text-left text-skin-base ">
       {showHeaders === false
         ? null
         : (
-          <thead>
-            <tr
-              className="hover:bg-gray-100"
-            >
+          <thead className="border-b-2">
+            <tr>
               {columns.map((column, c_index) => (
                 <th
-                  className="text-left border border-slate-300 px-2 
-                    font-medium text-sm text-slate-400 leading-loose"
+                  className="
+                    px-2 
+                    font-medium text-sm text-skin-muted leading-loose
+                    hover:bg-gray-100 hover:text-skin-selected"
                   key={c_index}
                   onClick={() => eventHandlers.headerClick(column.id)}
                 >
                   {column.header}
                 </th>
+              ))}
+              {inlineActionsArray.map((inlineAction, ia_index) => (
+                <th key={ia_index}></th>
               ))}
             </tr>
           </thead>
@@ -93,19 +96,23 @@ const Table = <T,>(
       <tbody>
         {data.map((row, r_index) => (
           <tr
-            className="hover:bg-gray-100"
+            className={
+              `hover:bg-gray-100 hover:text-skin-selected
+              ${!!onRow ? 'cursor-pointer' : ''}`
+            }
             key={r_index}
             onClick={() => eventHandlers?.rowClick(r_index)}
           >
             <TableContext.Provider value={{ type: 'row', row: r_index }}>
               {columns.map((column, c_key) => (
                 <td
-                  className="text-left border border-slate-300 px-2 py-1"
+                  className="px-2 py-1"
                   key={c_key}
                   onClick={() => eventHandlers.cellClick(r_index, column.id)}
                 >
                   {column.isEditable
                     ? <Input
+                      className="w-full"
                       value={formatValue(column, row[column.id])}
                       onChange={(newValue) => eventHandlers.cellChange(r_index, column.id, newValue)}
                     />
@@ -115,7 +122,7 @@ const Table = <T,>(
               ))}
               {inlineActionsArray.map((inlineAction, ia_index) => (
                 <td
-                  className="text-left border border-slate-300 px-2 py-1"
+                  className="px-2 py-1"
                   key={ia_index}
                 >
                   {inlineAction}
@@ -127,12 +134,13 @@ const Table = <T,>(
       </tbody>
       {footer
         ? (
-          <tfoot>
+          <tfoot className="border-t-2 hover:bg-slate-100">
             <tr onClick={eventHandlers.footerClick}>
               {columns.map((column, c_index) => (
                 <td
-                  className="text-left border border-slate-300 px-2 
-                    font-medium text-sm text-slate-400 leading-loose"
+                  className=" 
+                    px-2 
+                    font-medium text-sm text-skin-muted leading-loose"
                   key={c_index}
                 >
                   {footer ? footer[column.id] : null}

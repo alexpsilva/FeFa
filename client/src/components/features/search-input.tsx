@@ -1,4 +1,5 @@
-import { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef, useState } from "react"
+import { DEBOUNCER_TOLERANCE_MILLISECONDS } from "@/constants"
+import { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, useState } from "react"
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 interface Props {
@@ -16,7 +17,7 @@ const SearchInput = ({ onSearch, hint, ...props }: Props & InputProps) => {
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const newTerm = e.target.value
-    const interval = 800
+    const interval = DEBOUNCER_TOLERANCE_MILLISECONDS
 
     if (state.callback) { clearTimeout(state.callback) }
 

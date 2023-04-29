@@ -4,17 +4,19 @@ import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import LogoutIcon from "./icons/logout"
+import { DetailedHTMLProps, HTMLAttributes } from "react"
 
 interface RouteMapping {
   title: string
   path: string
 }
 
+type DivProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 interface Props {
   routes: RouteMapping[]
 }
 
-const SideMenu = ({ routes }: Props) => {
+const SideMenu = ({ routes, className, ...props }: Props & DivProps) => {
   const router = useRouter()
   const onLogoutHandler = async () => {
     await fetchAPIWithAuth('/auth/logout', { method: 'POST' })
@@ -24,7 +26,7 @@ const SideMenu = ({ routes }: Props) => {
   }
 
   return (
-    <div className="relative w-48 bg-gray-100 border-r-4 border-gray-300">
+    <div className={`relative bg-gray-100 border-r-2 border-gray-300 ${className}`} {...props}>
       <div className="
           mt-4 mb-8 text-center 
           text-3xl font-extrabold 

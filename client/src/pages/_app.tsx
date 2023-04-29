@@ -17,14 +17,19 @@ const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
   const [notifications, dispatchNotification] = useNotifications()
 
   return (
-    <div className='flex h-screen bg-gray-50'>
-      <SideMenu routes={routeMapping} />
-      <main className='m-5 flex-grow'>
+    <div className='flex h-full bg-gray-50'>
+      <SideMenu
+        className='flex-grow max-w-[25ch]'
+        routes={routeMapping}
+      />
+      <main className='flex-grow overflow-auto'>
         <NotificationContext.Provider value={dispatchNotification}>
-          <Component {...pageProps} />
-          <NotificationBanner
-            notifications={Array.from(notifications.values())}
-          />
+          <div className='m-5'>
+            <Component {...pageProps} />
+            <NotificationBanner
+              notifications={Array.from(notifications.values())}
+            />
+          </div>
         </NotificationContext.Provider>
       </main>
     </div>

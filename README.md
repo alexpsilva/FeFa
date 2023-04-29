@@ -79,18 +79,35 @@
  - [ ] Preferir max-width, min-width e min-height ao invés de width e height
 
  - [x] Adicionar busca à tela de `Pacient`
+
  - [ ] Adicionar paginação à tela de `Pacient`
+
+ - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 
+ HTML no banco, que é parseado para uma arvore de JSON server-side. O client-side só itera a arvore e renderiza as tags correspondentes
+  - [ ] Suporte a negrito
+  - [ ] Suporte a itálico
+  - [ ] Suporte a sublinhado
+  - [ ] (optional) Suporte a strikethrough
+  - [ ] Suporte a texto colorido
+  - [ ] Suporte a listagem (multiplos itens)
+  - [ ] Suporte a enumeração (itens ordenados: 1. 2. 3.)
+  - [ ] Suporte a alinhamento à esquerda
+  - [ ] Suporte a alinhamento à direita
+  - [ ] Suporte a alinhamento ao centro
+  - [ ] Suporte a alinhamento justificado
+
+ - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
 
  - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`
  - [ ] Remover tela de listagem de `Appointment`
 
- - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
-
- - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
-
  - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
+ - [ ] Marcar items que serão deletados com 'strikethrough' em tabelas como operações batch
  - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
+ 
+ - [ ] Ordernar tela de `Appointments` por data
+ - [ ] Mostrar hora nas telas de listagem e edição de `Appointments` (o horario da consulta é relevante enquanto o horario de criação de um paciente não é)
 
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
@@ -99,6 +116,8 @@
 
 
 # Backlog (not essential)
+ - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
+
  - [ ] Criar ícone de lapis para indicar os campos que são editáveis (talvez só exibir on hover)
 
  - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
@@ -131,5 +150,4 @@
  - [ ] Criar configuração de valor padrão para `Pacient.country`, `Pacient.city` e `Pacient.state`
  - [ ] Testar interface mobile
  - [ ] Pedir confirmação antes de sair da tela com alterações pendentes
- - [ ] Escolher ferramenta que permita estilização do texto de um `Appointment`.
  - [ ] Adicionar suporte a Foreign Keys ao componente `Table`.

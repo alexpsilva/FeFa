@@ -87,8 +87,8 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
       <Table
         columns={[
           { header: 'Nome', id: 'name', isEditable: true },
-          { header: 'Atualizado em', id: 'updatedAt', format: stringifyDate },
-          { header: 'Criado em', id: 'createdAt', format: stringifyDate },
+          { header: 'Atualizado', id: 'updatedAt', format: stringifyDate },
+          { header: 'Criado', id: 'createdAt', format: stringifyDate },
         ]}
         data={draft}
         inlineActions={<Table.InlineIcon builder={Trash} onClick={onDeleteHandler} />}

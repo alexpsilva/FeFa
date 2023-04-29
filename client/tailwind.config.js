@@ -10,6 +10,9 @@ module.exports = {
           base: ({ opacityValue }) => opacityValue === undefined
             ? 'rgb(var(--color-text-base))'
             : `rgba(var(--color-text-base), ${opacityValue})`,
+          muted: ({ opacityValue }) => opacityValue === undefined
+            ? 'rgb(var(--color-text-muted))'
+            : `rgba(var(--color-text-muted), ${opacityValue})`,
           selected:
             ({ opacityValue }) => opacityValue === undefined
               ? 'rgb(var(--color-text-selected))'
@@ -21,6 +24,9 @@ module.exports = {
           base: ({ opacityValue }) => opacityValue === undefined
             ? 'rgb(var(--color-text-base))'
             : `rgba(var(--color-text-base), ${opacityValue})`,
+          muted: ({ opacityValue }) => opacityValue === undefined
+            ? 'rgb(var(--color-text-muted))'
+            : `rgba(var(--color-text-muted), ${opacityValue})`,
           selected:
             ({ opacityValue }) => opacityValue === undefined
               ? 'rgb(var(--color-text-selected))'
