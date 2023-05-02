@@ -1,7 +1,7 @@
 import Table from "@/components/layout/table/table"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import stringifyDate from "@/utils/date/stringify-date"
 import { NextPage } from "next"
 import Head from "next/head"
@@ -48,7 +48,7 @@ const ListAppointments: NextPage<Props> = ({ appointments }) => {
 }
 
 ListAppointments.getInitialProps = async (ctx) => {
-  const { response: data, error } = await fetchAPIWithAuth('/appointments?includePacient=true', { method: 'GET' }, ctx)
+  const { response: data, error } = await authenticatedRequest('/appointments?includePacient=true', { method: 'GET' }, ctx)
   if (error) { throw new Error(error.message) }
 
   return {

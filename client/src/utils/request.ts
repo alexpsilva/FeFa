@@ -3,13 +3,15 @@ import { StatusCodes } from "http-status-codes"
 
 type HttpError = { message: string, status: number }
 type Result = { response: any, error: null } | { response: null, error: HttpError }
-type QueryStringOption = { query: { [key: string]: Stringifiable } }
+interface QueryStringOption {
+  query?: { [key: string]: Stringifiable }
+}
 
-const request = async (path: string, options?: RequestInit, query?: QueryStringOption): Promise<Result> => {
+const request = async (path: string, options?: RequestInit & QueryStringOption): Promise<Result> => {
   const base = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
   let url = `${base}${path}`
 
-  const querystring = Object.entries(query ?? {})
+  const querystring = Object.entries(options?.query ?? {})
     .map(([key, value]) => `${key}=${value}`)
     .join('&')
   if (querystring) url = `${url}?${querystring}`
@@ -32,4 +34,5 @@ const request = async (path: string, options?: RequestInit, query?: QueryStringO
   return { response: await response.json(), error: null }
 }
 
+export type { QueryStringOption }
 export default request

@@ -3,7 +3,7 @@ import Pacient from "@/types/model/pacient"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
 import useNotify from "@/hooks/notifications/useNotify"
 
@@ -16,7 +16,7 @@ function CreatePacient() {
 
   const onCreateHandler = async () => {
     notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
-    const { response: created } = await fetchAPIWithAuth('/pacients', {
+    const { response: created } = await authenticatedRequest('/pacients', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

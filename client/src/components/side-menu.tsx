@@ -1,6 +1,6 @@
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/constants"
 import deleteJWTCookie from "@/auth/delete-jwt-cookie"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import LogoutIcon from "./icons/logout"
@@ -19,7 +19,7 @@ interface Props {
 const SideMenu = ({ routes, className, ...props }: Props & DivProps) => {
   const router = useRouter()
   const onLogoutHandler = async () => {
-    await fetchAPIWithAuth('/auth/logout', { method: 'POST' })
+    await authenticatedRequest('/auth/logout', { method: 'POST' })
     deleteJWTCookie(ACCESS_TOKEN_COOKIE)
     deleteJWTCookie(REFRESH_TOKEN_COOKIE)
     router.push('/')

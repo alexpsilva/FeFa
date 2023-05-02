@@ -4,7 +4,7 @@ import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import { NextPage } from "next"
 import Head from "next/head"
 
@@ -17,7 +17,7 @@ const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
 
   const onSaveHandler = async () => {
     notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
-    const { response: data } = await fetchAPIWithAuth(`/appointments/${appointment.id}`, {
+    const { response: data } = await authenticatedRequest(`/appointments/${appointment.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
@@ -52,13 +52,13 @@ EditAppointment.getInitialProps = async (ctx) => {
   const {
     response: appointment,
     error: appointmentError
-  } = await fetchAPIWithAuth(`/appointments/${appointmentId}`, { method: 'GET' }, ctx)
+  } = await authenticatedRequest(`/appointments/${appointmentId}`, { method: 'GET' }, ctx)
   if (appointmentError) { throw new Error(appointmentError.message) }
 
   const {
     response: { data: pacients },
     error: pacientsError
-  } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
+  } = await authenticatedRequest(`/pacients`, { method: 'GET' }, ctx)
   if (pacientsError) { throw new Error(pacientsError.message) }
 
   return { appointment, pacients }

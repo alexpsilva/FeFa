@@ -3,7 +3,7 @@ import useNotify from "@/hooks/notifications/useNotify"
 import Button from "@/components/ui/button"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import { NextPage } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -22,7 +22,7 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 
   const onCreateHandler = async () => {
     notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
-    const { response: data } = await fetchAPIWithAuth('/appointments', {
+    const { response: data } = await authenticatedRequest('/appointments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(appointment)
@@ -53,7 +53,7 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 }
 
 CreateAppointment.getInitialProps = async (ctx) => {
-  const { response: data, error } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
+  const { response: data, error } = await authenticatedRequest(`/pacients`, { method: 'GET' }, ctx)
   if (error) { throw new Error(error.message) }
 
   return { pacients: data.data }

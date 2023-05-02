@@ -1,16 +1,17 @@
-import Table from "@/components/layout/table/table"
-import Pacient from "@/types/model/pacient"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
-import stringifyDate from "@/utils/date/stringify-date"
+import { useState } from "react"
 import { NextPage } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
-import { useState } from "react"
-import SearchIcon from "@/components/icons/search"
+
+import authenticatedRequest from "@/auth/authenticated-request"
 import { PAGINATION_PAGE_SIZE } from "@/constants"
-import PaginationControls from "@/components/features/pagination"
+import stringifyDate from "@/utils/date/stringify-date"
 import usePagination from "@/hooks/usePagination"
+import Pacient from "@/types/model/pacient"
+import Table from "@/components/layout/table/table"
+import SearchIcon from "@/components/icons/search"
+import PaginationControls from "@/components/features/pagination"
 import SearchInput from "@/components/features/search-input"
 
 type Props = { initialPacients: Pacient[], initialTotalPacients: number }
@@ -23,18 +24,22 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
   const [pagination, paginationDispatch] = usePagination(totalPacients, PAGINATION_PAGE_SIZE)
 
   const router = useRouter()
-  if (!router.isReady) { return <h3>Loading...</h3> }
 
   const refetchPacients = async (term: string, pageSize: number, pageOffset: number) => {
-    const query = [`pageSize=${pageSize}`]
-    if (term) { query.push(`name=${term}`) }
-    if (pageOffset) { query.push(`pageOffset=${pageOffset}`) }
+    const query = {
+      pageSize,
+      ...(term && { term }),
+      ...(pageOffset && { pageOffset })
+    }
 
-    const { response: data, error } = await fetchAPIWithAuth(`/pacients?${query.join('&')}`, { method: 'GET' })
+    const { response, error } = await authenticatedRequest(
+      '/pacients',
+      { method: 'GET', query }
+    )
     if (error) { throw new Error(error.message) }
 
-    setPacients(data.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
-    setTotalPacients(data.total)
+    setPacients(response.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
+    setTotalPacients(response.total)
   }
 
   const onSearch = (newTerm: string) => {
@@ -110,12 +115,12 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
 
 ListPacients.getInitialProps = async (ctx) => {
   const url = `/pacients?pageSize=${PAGINATION_PAGE_SIZE}`
-  const { response: data, error } = await fetchAPIWithAuth(url, { method: 'GET' }, ctx)
+  const { response, error } = await authenticatedRequest(url, { method: 'GET' }, ctx)
 
   if (error) { throw new Error(error.message) }
   return {
-    initialPacients: data.data.sort((a: Pacient, b: Pacient) => a.id - b.id),
-    initialTotalPacients: data.total
+    initialPacients: response.data.sort((a: Pacient, b: Pacient) => a.id - b.id),
+    initialTotalPacients: response.total
   }
 }
 

@@ -4,7 +4,7 @@ import Pacient from "@/types/model/pacient"
 import { NextPage } from "next"
 import Head from "next/head"
 import Appointment from "@/types/model/appointment"
-import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import authenticatedRequest from "@/auth/authenticated-request"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
 import useNotify from "@/hooks/notifications/useNotify"
 
@@ -17,7 +17,7 @@ const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
 
   const onSaveHandler = async () => {
     notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
-    const { response: data } = await fetchAPIWithAuth(`/pacients/${pacient.id}`, {
+    const { response: data } = await authenticatedRequest(`/pacients/${pacient.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
@@ -52,13 +52,13 @@ EditPacient.getInitialProps = async (ctx) => {
   const {
     response: pacient,
     error: pacientError
-  } = await fetchAPIWithAuth(`/pacients/${pacientId}`, { method: 'GET' }, ctx)
+  } = await authenticatedRequest(`/pacients/${pacientId}`, { method: 'GET' }, ctx)
   if (pacientError) { throw new Error(pacientError.message) }
 
   const {
     response: appointments,
     error: appointmentError
-  } = await fetchAPIWithAuth(`/appointments?pacientId=${pacientId}`, { method: 'GET' }, ctx)
+  } = await authenticatedRequest(`/appointments?pacientId=${pacientId}`, { method: 'GET' }, ctx)
   if (appointmentError) { throw new Error(appointmentError.message) }
 
   return { pacient, appointments }
