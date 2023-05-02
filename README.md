@@ -80,7 +80,16 @@
 
  - [x] Adicionar busca à tela de `Pacient`
 
- - [ ] Adicionar paginação à tela de `Pacient`
+ - [x] Adicionar paginação à tela de `Pacient`
+  - [x] Converter `PaginationLinks` em um CompoundComponent (permitindo estilizar os botões e o texto separadamente)
+  - [x] Converter setas para <button>
+  - [x] Marcar setas com a propriedade 'disabled' quando elas estiverem desabilitadas
+  - [x] Utilizar os modificadores `enabled:` e `disabled:` para estilizar as setas condicionalmente
+  - [x] Organizar estado da caixa de busca. Vai ficar no componente ou na pagina?
+  - [x] Sanitizar termo de busca (hoje diferenciamos lower de uppercase)
+
+ - [ ] Refatorar `fetchPacientWithAuth` para tornar mais legível (ex: resolver data.data)
+ - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
 
  - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 
  HTML no banco, que é parseado para uma arvore de JSON server-side. O client-side só itera a arvore e renderiza as tags correspondentes
@@ -96,11 +105,10 @@
   - [ ] Suporte a alinhamento ao centro
   - [ ] Suporte a alinhamento justificado
 
- - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
-
  - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`
  - [ ] Remover tela de listagem de `Appointment`
 
+ - [ ] Bug: Invalid refresh token
  - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
  - [ ] Marcar items que serão deletados com 'strikethrough' em tabelas como operações batch
