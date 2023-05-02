@@ -2,8 +2,8 @@ import '../styles/global.css'
 import SideMenu from '@/components/side-menu'
 import { AppProps } from 'next/app'
 import NotificationBanner from '@/components/features/notification/banner'
-import useNotifications from '@/components/features/notification/reducer'
-import { NotificationContext } from '@/components/features/notification/context'
+import { NotificationContext } from '@/hooks/notifications/context'
+import { useNotifications } from '@/hooks/notifications'
 
 const routeMapping = [
   { title: 'Pacientes', path: '/pacient' },

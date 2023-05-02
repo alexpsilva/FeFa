@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/constants"
 import { StatusCodes } from "http-status-codes"
 import getJWTCookie from "./get-jwt-cookie"
-import fetchAPI from '@/utils/fetch-api'
+import request from '@/utils/request'
 import setJWTCookie from "./set-jwt-cookie"
 import { NextPageContext } from "next"
 
@@ -9,7 +9,7 @@ const refreshAccessToken = async (nextCtx?: NextPageContext): Promise<string> =>
   let refreshCookie = getJWTCookie(REFRESH_TOKEN_COOKIE, nextCtx)
   if (refreshCookie.error) { throw Error('Invalid refresh token') }
 
-  const response = await fetchAPI('/auth/refresh', {
+  const response = await request('/auth/refresh', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refreshToken: refreshCookie.data })
@@ -19,7 +19,7 @@ const refreshAccessToken = async (nextCtx?: NextPageContext): Promise<string> =>
     throw Error('Failed to fetch new access token')
   }
 
-  const accessToken = response.data['accessToken']
+  const accessToken = response.response['accessToken']
   setJWTCookie(ACCESS_TOKEN_COOKIE, accessToken, nextCtx)
   return accessToken
 }
@@ -35,7 +35,7 @@ const authorizedFetch = (
       Authorization: `Bearer ${accessToken}`
     }
   }
-  return fetchAPI(path, optionsWithAuth)
+  return request(path, optionsWithAuth)
 }
 
 const fetchAPIWithAuth = async (path: string, options?: RequestInit, nextCtx?: NextPageContext) => {

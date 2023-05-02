@@ -48,7 +48,7 @@ const ListAppointments: NextPage<Props> = ({ appointments }) => {
 }
 
 ListAppointments.getInitialProps = async (ctx) => {
-  const { data, error } = await fetchAPIWithAuth('/appointments?includePacient=true', { method: 'GET' }, ctx)
+  const { response: data, error } = await fetchAPIWithAuth('/appointments?includePacient=true', { method: 'GET' }, ctx)
   if (error) { throw new Error(error.message) }
 
   return {

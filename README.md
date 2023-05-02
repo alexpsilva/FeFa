@@ -76,8 +76,6 @@
 
  - [x] Criar botão de `Logout`
 
- - [ ] Preferir max-width, min-width e min-height ao invés de width e height
-
  - [x] Adicionar busca à tela de `Pacient`
 
  - [x] Adicionar paginação à tela de `Pacient`
@@ -87,6 +85,8 @@
   - [x] Utilizar os modificadores `enabled:` e `disabled:` para estilizar as setas condicionalmente
   - [x] Organizar estado da caixa de busca. Vai ficar no componente ou na pagina?
   - [x] Sanitizar termo de busca (hoje diferenciamos lower de uppercase)
+
+ - [ ] Preferir max-width, min-width e min-height ao invés de width e height
 
  - [ ] Refatorar `fetchPacientWithAuth` para tornar mais legível (ex: resolver data.data)
  - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
@@ -108,6 +108,7 @@
  - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`
  - [ ] Remover tela de listagem de `Appointment`
 
+ - [ ] Bug: Google not initialized
  - [ ] Bug: Invalid refresh token
  - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)

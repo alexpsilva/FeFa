@@ -1,5 +1,5 @@
 import AppointmentSheet from "@/components/features/appointment-sheet"
-import useNotify from "@/components/features/notification/context"
+import useNotify from "@/hooks/notifications/useNotify"
 import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
 import Appointment from "@/types/model/appointment"
@@ -17,7 +17,7 @@ const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
 
   const onSaveHandler = async () => {
     notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
-    const { data } = await fetchAPIWithAuth(`/appointments/${appointment.id}`, {
+    const { response: data } = await fetchAPIWithAuth(`/appointments/${appointment.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
@@ -50,13 +50,13 @@ const EditAppointment: NextPage<Props> = ({ appointment, pacients }) => {
 EditAppointment.getInitialProps = async (ctx) => {
   const appointmentId = ctx.query.appointmentId as string
   const {
-    data: appointment,
+    response: appointment,
     error: appointmentError
   } = await fetchAPIWithAuth(`/appointments/${appointmentId}`, { method: 'GET' }, ctx)
   if (appointmentError) { throw new Error(appointmentError.message) }
 
   const {
-    data: pacients,
+    response: { data: pacients },
     error: pacientsError
   } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
   if (pacientsError) { throw new Error(pacientsError.message) }

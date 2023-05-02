@@ -1,8 +1,7 @@
 import Table from "@/components/layout/table/table";
 import ModelTextInput from "@/components/model/text-input";
 import { Phone } from "@/types/model/pacient";
-import deleteFromArray from "@/utils/delete-from-array";
-import updateArray from "@/utils/update-array";
+import { updateArray, deleteFromArray } from "@/utils/array";
 import { usePacientSheetContext } from "./context";
 
 export default function PacientSheetContact() {

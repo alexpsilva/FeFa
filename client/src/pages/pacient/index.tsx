@@ -30,7 +30,7 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
     if (term) { query.push(`name=${term}`) }
     if (pageOffset) { query.push(`pageOffset=${pageOffset}`) }
 
-    const { data, error } = await fetchAPIWithAuth(`/pacients?${query.join('&')}`, { method: 'GET' })
+    const { response: data, error } = await fetchAPIWithAuth(`/pacients?${query.join('&')}`, { method: 'GET' })
     if (error) { throw new Error(error.message) }
 
     setPacients(data.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
@@ -110,7 +110,7 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
 
 ListPacients.getInitialProps = async (ctx) => {
   const url = `/pacients?pageSize=${PAGINATION_PAGE_SIZE}`
-  const { data, error } = await fetchAPIWithAuth(url, { method: 'GET' }, ctx)
+  const { response: data, error } = await fetchAPIWithAuth(url, { method: 'GET' }, ctx)
 
   if (error) { throw new Error(error.message) }
   return {

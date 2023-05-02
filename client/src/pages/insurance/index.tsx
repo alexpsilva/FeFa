@@ -1,15 +1,15 @@
 import Insurance from "@/types/model/insurance"
 import Head from "next/head"
 import { NextPage } from "next/types"
-import useDraft from "@/hooks/useDraft"
-import Button from "@/components/ui/button"
 import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
+import Button from "@/components/ui/button"
 import Table from "@/components/layout/table/table"
-import updateArray from "@/utils/update-array"
-import useArray from "@/hooks/useArray"
-import stringifyDate from "@/utils/date/stringify-date"
 import Trash from "@/components/icons/trash"
-import useNotify from "@/components/features/notification/context"
+import useNotify from "@/hooks/notifications/useNotify"
+import useDraft from "@/hooks/useDraft"
+import useArray from "@/hooks/useArray"
+import { updateArray } from "@/utils/array"
+import stringifyDate from "@/utils/date/stringify-date"
 
 
 type Props = { insurances: Insurance[] }
@@ -26,7 +26,7 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 
   const onSaveHandler = async () => {
     notify({ id: 'INSURANCE_SAVE', text: 'Salvando...' })
-    const { data } = await fetchAPIWithAuth('/insurances/batch', {
+    const { response: data } = await fetchAPIWithAuth('/insurances/batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
@@ -101,7 +101,7 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 }
 
 ListInsurances.getInitialProps = async (ctx) => {
-  const { data, error } = await fetchAPIWithAuth('/insurances', { method: 'GET' }, ctx)
+  const { response: data, error } = await fetchAPIWithAuth('/insurances', { method: 'GET' }, ctx)
 
   if (error) { throw new Error(error.message) }
   return {

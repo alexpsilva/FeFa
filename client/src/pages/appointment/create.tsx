@@ -1,5 +1,5 @@
 import AppointmentSheet from "@/components/features/appointment-sheet"
-import useNotify from "@/components/features/notification/context"
+import useNotify from "@/hooks/notifications/useNotify"
 import Button from "@/components/ui/button"
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
@@ -22,7 +22,7 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 
   const onCreateHandler = async () => {
     notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
-    const { data } = await fetchAPIWithAuth('/appointments', {
+    const { response: data } = await fetchAPIWithAuth('/appointments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(appointment)
@@ -53,10 +53,10 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 }
 
 CreateAppointment.getInitialProps = async (ctx) => {
-  const { data, error } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
+  const { response: data, error } = await fetchAPIWithAuth(`/pacients`, { method: 'GET' }, ctx)
   if (error) { throw new Error(error.message) }
 
-  return { pacients: data }
+  return { pacients: data.data }
 }
 
 export default CreateAppointment

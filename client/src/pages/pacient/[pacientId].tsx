@@ -6,7 +6,7 @@ import Head from "next/head"
 import Appointment from "@/types/model/appointment"
 import fetchAPIWithAuth from "@/auth/fetch-api-with-auth"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
-import useNotify from "@/components/features/notification/context"
+import useNotify from "@/hooks/notifications/useNotify"
 
 type Props = { pacient: Pacient, appointments: Appointment[] }
 const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
@@ -17,7 +17,7 @@ const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
 
   const onSaveHandler = async () => {
     notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
-    const { data } = await fetchAPIWithAuth(`/pacients/${pacient.id}`, {
+    const { response: data } = await fetchAPIWithAuth(`/pacients/${pacient.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(draft)
@@ -50,13 +50,13 @@ const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
 EditPacient.getInitialProps = async (ctx) => {
   const pacientId = ctx.query.pacientId as string
   const {
-    data: pacient,
+    response: pacient,
     error: pacientError
   } = await fetchAPIWithAuth(`/pacients/${pacientId}`, { method: 'GET' }, ctx)
   if (pacientError) { throw new Error(pacientError.message) }
 
   const {
-    data: appointments,
+    response: appointments,
     error: appointmentError
   } = await fetchAPIWithAuth(`/appointments?pacientId=${pacientId}`, { method: 'GET' }, ctx)
   if (appointmentError) { throw new Error(appointmentError.message) }

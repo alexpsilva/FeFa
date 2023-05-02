@@ -1,4 +1,4 @@
-import usePagination, { PaginationAction, PaginationState } from "@/hooks/usePagination"
+import { PaginationAction, PaginationState } from "@/hooks/usePagination"
 import { DetailedHTMLProps, Dispatch, HTMLAttributes } from "react"
 import PaginationContext from "./context"
 import CurrentPage from "./current-page"

@@ -40,5 +40,5 @@ const useNotifications = () => useReducer<Reducer<NotificationState, Notificatio
   new Map()
 )
 
-export type { NotificationAction, NotificationState, Notification }
+export type { NotificationAction, NotificationState }
 export default useNotifications

@@ -1,13 +1,13 @@
 import CrossIcon from "@/components/icons/cross"
-import { useNotificationDispatch } from "./context"
-import Notification from "./type"
+import { Notification } from "@/hooks/notifications"
+import useNotificationContext from "@/hooks/notifications/context"
 
 interface Props {
   notifications: Notification[]
 }
 
 const NotificationBanner = ({ notifications }: Props) => {
-  const dispatchNotification = useNotificationDispatch()
+  const dispatch = useNotificationContext()
 
   return (
     <div className="fixed bottom-0 right-3">
@@ -26,7 +26,7 @@ const NotificationBanner = ({ notifications }: Props) => {
             width='22'
             height='22'
             className='ml-2 stroke-black cursor-pointer'
-            onClick={() => dispatchNotification({ type: "remove", id: notification.id })}
+            onClick={() => dispatch({ type: "remove", id: notification.id })}
           />
         </div>
       ))}

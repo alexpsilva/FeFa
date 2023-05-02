@@ -1,19 +1,9 @@
-import { createContext, Dispatch, useContext } from "react";
-import { Notification, NotificationAction } from "./reducer";
-import { NotificationId } from "./type";
-
-const NotificationContext = createContext<Dispatch<NotificationAction> | null>(null)
-
-function useNotificationDispatch() {
-  const context = useContext(NotificationContext)
-  if (!context) throw new Error("NotificationContext wasn't initialized")
-
-  return context
-}
+import useNotificationContext from "./context"
+import Notification, { NotificationId } from "./type"
 
 const timeouts = new Map<NotificationId, NodeJS.Timeout>()
 const useNotify = () => {
-  const dispatch = useNotificationDispatch()
+  const dispatch = useNotificationContext()
 
   return (payload: Notification & { expiresInSeconds?: number }) => {
     const { expiresInSeconds, ...notification } = payload
@@ -34,5 +24,4 @@ const useNotify = () => {
   }
 }
 
-export { NotificationContext, useNotificationDispatch }
 export default useNotify
