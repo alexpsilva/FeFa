@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, InputHTMLAttributes, useEffect, useRef } from "react"
 
-type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
+type InputProps = Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, 'onChange'>
 interface Props {
   value: any,
   onChange: (newValue: any) => void
