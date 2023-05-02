@@ -120,16 +120,19 @@ router.get('/', asyncRoute(
     const userId = res.locals.userId as number
 
     const where: Prisma.PacientWhereInput = { userId }
-    if (query.name) where.name = { contains: query.name }
+    if (query.name) where.name = { contains: query.name, mode: 'insensitive' }
 
-    const pacients = await prisma.pacient.findMany({
-      skip: Number(query.pageOffset) || 0,
-      take: Number(query.pageSize) || PAGINATION_PAGE_SIZE_LIMIT,
-      where
-    })
+    const [pacients, count] = await Promise.all([
+      prisma.pacient.findMany({
+        skip: Number(query.pageOffset) || 0,
+        take: Number(query.pageSize) || PAGINATION_PAGE_SIZE_LIMIT,
+        where,
+      }),
+      prisma.pacient.count({ where })
+    ])
 
     res.status(StatusCodes.OK)
-    res.send(pacients)
+    res.send({ data: pacients, total: count })
   }
 ))
 
