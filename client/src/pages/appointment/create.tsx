@@ -1,35 +1,49 @@
 import AppointmentSheet from "@/components/features/appointment-sheet"
-import useNotify from "@/hooks/notifications/useNotify"
 import Button from "@/components/ui/button"
-import Appointment from "@/types/model/appointment"
-import Pacient from "@/types/model/pacient"
+import Appointment, { AppointmentSchema } from "@/types/model/appointment"
+import Pacient, { PacientSchema } from "@/types/model/pacient"
 import authenticatedRequest from "@/auth/authenticated-request"
 import { NextPage } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState } from "react"
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
+import { z } from "zod"
 
 type Props = { pacients: Pacient[] }
 const CreateAppointment: NextPage<Props> = ({ pacients }) => {
-  const notify = useNotify()
   const router = useRouter()
   const [appointment, setAppointment] = useState<Partial<Appointment>>({
     pacientId: pacients[0].id,
     date: new Date()
   })
+  const whileLoading = useRequestWhileLoading()
 
   if (!router.isReady) { return <h3>Loading...</h3> }
 
   const onCreateHandler = async () => {
-    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvando...' })
-    const { response: data } = await authenticatedRequest('/appointments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(appointment)
-    })
+    const saveRequest = () => authenticatedRequest(
+      '/appointments',
+      AppointmentSchema,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(appointment)
+      }
+    )
 
-    notify({ id: 'APPOINTMENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
-    router.push(`/appointment/${data.id}`)
+    const { response, error } = await whileLoading(
+      saveRequest,
+      {
+        loading: 'Salvando...',
+        success: 'Consulta criada com sucesso',
+        failure: 'Falha ao criar consulta',
+      },
+    )
+
+    if (!error) {
+      router.push(`/appointment/${response.id}`)
+    }
   }
 
   const onCancelHandler = () => { router.back() }
@@ -53,10 +67,15 @@ const CreateAppointment: NextPage<Props> = ({ pacients }) => {
 }
 
 CreateAppointment.getInitialProps = async (ctx) => {
-  const { response: data, error } = await authenticatedRequest(`/pacients`, { method: 'GET' }, ctx)
+  const { response, error } = await authenticatedRequest(
+    `/pacients`,
+    z.object({ data: z.array(PacientSchema) }),
+    { method: 'GET' },
+    ctx
+  )
   if (error) { throw new Error(error.message) }
 
-  return { pacients: data.data }
+  return { pacients: response.data }
 }
 
 export default CreateAppointment

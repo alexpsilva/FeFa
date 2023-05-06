@@ -1,14 +1,17 @@
-import BaseModel from "./base";
+import { z } from "zod"
 
-interface Appointment extends BaseModel {
-  id: number,
-  pacientId: number
+const AppointmentSchema = z.object({
+  id: z.number(),
+  pacientId: z.number(),
 
-  date: Date
-  description: string
+  date: z.coerce.date(),
+  description: z.string(),
 
-  updatedAt: string
-  createdAt: string
-}
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+})
 
+type Appointment = z.infer<typeof AppointmentSchema>
+
+export { AppointmentSchema }
 export default Appointment

@@ -1,18 +1,22 @@
 import Stringifiable from "@/types/stringifiable"
-import { StatusCodes } from "http-status-codes"
+import { TypeOf, z } from "zod"
 
-type JSONPrimitive = string | number | boolean | null
-interface Nested<T> { [key: string]: T | T[] | Nested<T> }
-
-type HttpResponse = JSONPrimitive | JSONPrimitive[] | Nested<JSONPrimitive>
-type HttpError = { message: string, status: number }
-type RequestResult = { response: HttpResponse, error: null } | { response: null, error: HttpError }
+type HttpError = { message: string, status?: number }
+type RequestResult<T> =
+  { response: T, error: null }
+  | { response: null, error: HttpError }
 
 interface QueryStringOption {
   query?: { [key: string]: Stringifiable }
 }
+type RequestOptions = RequestInit & QueryStringOption
 
-const request = async (path: string, options?: RequestInit & QueryStringOption): Promise<RequestResult> => {
+const request = async <T extends z.ZodTypeAny>(
+  path: string,
+  schema: T | null,
+  options?: RequestOptions
+): Promise<RequestResult<null extends T ? null : TypeOf<T>>> => {
+
   const base = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
   let url = `${base}${path}`
 
@@ -23,7 +27,6 @@ const request = async (path: string, options?: RequestInit & QueryStringOption):
 
   const response = await fetch(url, options)
 
-  response.status
   if (!response.ok) {
     return {
       response: null, error: {
@@ -33,11 +36,22 @@ const request = async (path: string, options?: RequestInit & QueryStringOption):
     }
   }
 
-  if (response.status == StatusCodes.NO_CONTENT) {
+  if (schema === null) {
     return { response: null, error: null }
   }
-  return { response: await response.json(), error: null }
+
+  const responseJson = await response.json()
+  const parseResult = schema.safeParse(responseJson)
+  if (!parseResult.success) {
+    return {
+      response: null, error: {
+        message: `Fetch response did not meet the expected schema. \nresponse: ${JSON.stringify(responseJson)} \nerror: ${JSON.stringify(parseResult.error.format())}`
+      }
+    }
+  }
+
+  return { response: parseResult.data, error: null }
 }
 
-export type { QueryStringOption, RequestResult }
+export type { RequestOptions, RequestResult }
 export default request

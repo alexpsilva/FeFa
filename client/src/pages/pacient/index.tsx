@@ -8,16 +8,17 @@ import authenticatedRequest from "@/auth/authenticated-request"
 import { PAGINATION_PAGE_SIZE } from "@/constants"
 import stringifyDate from "@/utils/date/stringify-date"
 import usePagination from "@/hooks/usePagination"
-import Pacient from "@/types/model/pacient"
+import Pacient, { PacientSchema } from "@/types/model/pacient"
 import Table from "@/components/layout/table/table"
 import SearchIcon from "@/components/icons/search"
 import PaginationControls from "@/components/features/pagination"
 import SearchInput from "@/components/features/search-input"
 import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
+import { z } from "zod"
 
 type Props = { initialPacients: Pacient[], initialTotalPacients: number }
 const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }) => {
-  const requestWhileLoading = useRequestWhileLoading()
+  const whileLoading = useRequestWhileLoading()
 
   const [pacients, setPacients] = useState<Pacient[]>(initialPacients)
   const [totalPacients, setTotalPacients] = useState<number>(initialTotalPacients)
@@ -28,18 +29,27 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
   const router = useRouter()
 
   const refetchPacients = async (term: string, pageSize: number, pageOffset: number) => {
-    const query = {
-      pageSize,
-      ...(term && { term }),
-      ...(pageOffset && { pageOffset })
-    }
-
-    const { response } = await requestWhileLoading(() => authenticatedRequest(
+    const refreshRequest = () => authenticatedRequest(
       '/pacients',
-      { method: 'GET', query }
-    ))
+      z.object({ data: z.array(PacientSchema), total: z.number() }),
+      {
+        method: 'GET', query: {
+          pageSize,
+          ...(term && { term }),
+          ...(pageOffset && { pageOffset })
+        }
+      }
+    )
 
-    if (response) {
+    const { response, error } = await whileLoading(
+      refreshRequest,
+      {
+        loading: 'Carregando...',
+        failure: 'Falha ao carregar pacientes',
+      },
+    )
+
+    if (!error) {
       setPacients(response.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
       setTotalPacients(response.total)
     }
@@ -117,8 +127,12 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
 }
 
 ListPacients.getInitialProps = async (ctx) => {
-  const url = `/pacients?pageSize=${PAGINATION_PAGE_SIZE}`
-  const { response, error } = await authenticatedRequest(url, { method: 'GET' }, ctx)
+  const { response, error } = await authenticatedRequest(
+    `/pacients?pageSize=${PAGINATION_PAGE_SIZE}`,
+    z.object({ data: z.array(PacientSchema), total: z.number() }),
+    { method: 'GET' },
+    ctx,
+  )
 
   if (error) { throw new Error(error.message) }
   return {

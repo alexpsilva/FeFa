@@ -1,4 +1,4 @@
-import Insurance from "@/types/model/insurance"
+import Insurance, { InsuranceSchema } from "@/types/model/insurance"
 import Head from "next/head"
 import { NextPage } from "next/types"
 import authenticatedRequest from "@/auth/authenticated-request"
@@ -10,11 +10,12 @@ import useDraft from "@/hooks/useDraft"
 import useArray from "@/hooks/useArray"
 import { updateArray } from "@/utils/array"
 import stringifyDate from "@/utils/date/stringify-date"
+import { z } from "zod"
 
 
 type Props = { insurances: Insurance[] }
 const ListInsurances: NextPage<Props> = ({ insurances }) => {
-  const requestWhileLoading = useRequestWhileLoading()
+  const whileLoading = useRequestWhileLoading()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(insurances)
   const [{ data: toDelete }, toDeleteDispatch] = useArray<Insurance['id']>()
 
@@ -25,18 +26,31 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
   const canSave = isDrafting || toDelete.length
 
   const onSaveHandler = async () => {
-    const { response: data } = await requestWhileLoading(() => authenticatedRequest(
-      '/insurances/batch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
+    const saveRequest = () => authenticatedRequest(
+      '/insurances/batch',
+      z.array(InsuranceSchema),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
+      }
+    )
+
+    const { response, error } = await whileLoading(
+      saveRequest,
+      {
+        loading: 'Salvando...',
+        success: 'Planos de saúde atualizados com sucesso',
+        failure: 'Falha ao atualizar planos de saude',
+      }
+    )
+
+    if (!error) {
+      const sorted = response.sort((a: Insurance, b: Insurance) => a.id - b.id)
+
+      draftDispatch({ type: 'save', payload: sorted })
+      toDeleteDispatch({ type: 'clear' })
     }
-    ))
-
-    const sorted = data.sort((a: Insurance, b: Insurance) => a.id - b.id)
-
-    draftDispatch({ type: 'save', payload: sorted })
-    toDeleteDispatch({ type: 'clear' })
   }
 
   const onCancelHandler = () => {
@@ -101,7 +115,12 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 }
 
 ListInsurances.getInitialProps = async (ctx) => {
-  const { response, error } = await authenticatedRequest('/insurances', { method: 'GET' }, ctx)
+  const { response, error } = await authenticatedRequest(
+    '/insurances',
+    z.array(InsuranceSchema),
+    { method: 'GET' },
+    ctx
+  )
 
   if (error) { throw new Error(error.message) }
   return {

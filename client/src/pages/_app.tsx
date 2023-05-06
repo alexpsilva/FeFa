@@ -7,7 +7,7 @@ import { useNotifications } from '@/hooks/notifications'
 
 const routeMapping = [
   { title: 'Pacientes', path: '/pacient' },
-  { title: 'Consultas', path: '/appointment' },
+  // { title: 'Consultas', path: '/appointment' },
   { title: 'Planos de Saúde', path: '/insurance' },
 ]
 

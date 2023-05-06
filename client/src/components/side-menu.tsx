@@ -19,7 +19,7 @@ interface Props {
 const SideMenu = ({ routes, className, ...props }: Props & DivProps) => {
   const router = useRouter()
   const onLogoutHandler = async () => {
-    await authenticatedRequest('/auth/logout', { method: 'POST' })
+    authenticatedRequest('/auth/logout', null, { method: 'POST' })
     deleteJWTCookie(ACCESS_TOKEN_COOKIE)
     deleteJWTCookie(REFRESH_TOKEN_COOKIE)
     router.push('/')

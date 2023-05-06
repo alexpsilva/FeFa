@@ -1,30 +1,44 @@
 import Button from "@/components/ui/button"
 import useDraft from "@/hooks/useDraft"
-import Pacient from "@/types/model/pacient"
+import Pacient, { PacientSchema } from "@/types/model/pacient"
 import { NextPage } from "next"
 import Head from "next/head"
-import Appointment from "@/types/model/appointment"
+import Appointment, { AppointmentSchema } from "@/types/model/appointment"
 import authenticatedRequest from "@/auth/authenticated-request"
 import PacientSheet from "@/components/features/pacient-sheet.tsx"
-import useNotify from "@/hooks/notifications/useNotify"
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
+import { z } from "zod"
 
 type Props = { pacient: Pacient, appointments: Appointment[] }
 const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
-  const notify = useNotify()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Pacient>>(pacient)
+  const whileLoading = useRequestWhileLoading()
 
   if (!draft) { return <h3>Loading...</h3> }
 
   const onSaveHandler = async () => {
-    notify({ id: 'PACIENT_SAVE', 'text': 'Salvando...' })
-    const { response: data } = await authenticatedRequest(`/pacients/${pacient.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(draft)
-    })
+    const saveRequest = () => authenticatedRequest(
+      `/pacients/${pacient.id}`,
+      PacientSchema,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(draft)
+      }
+    )
 
-    notify({ id: 'PACIENT_SAVE', 'text': 'Salvo com sucesso', 'expiresInSeconds': 3 })
-    draftDispatch({ type: 'save', payload: data })
+    const { response, error } = await whileLoading(
+      saveRequest,
+      {
+        loading: 'Salvando...',
+        success: 'Paciente salvo com sucesso',
+        failure: 'Falha ao salvar paciente',
+      },
+    )
+
+    if (!error) {
+      draftDispatch({ type: 'save', payload: response })
+    }
   }
 
   const onDiscardHandler = () => { draftDispatch({ type: 'discard' }) }
@@ -49,16 +63,21 @@ const EditPacient: NextPage<Props> = ({ pacient, appointments }) => {
 
 EditPacient.getInitialProps = async (ctx) => {
   const pacientId = ctx.query.pacientId as string
-  const {
-    response: pacient,
-    error: pacientError
-  } = await authenticatedRequest(`/pacients/${pacientId}`, { method: 'GET' }, ctx)
+
+  const { response: pacient, error: pacientError } = await authenticatedRequest(
+    `/pacients/${pacientId}`,
+    PacientSchema,
+    { method: 'GET' },
+    ctx,
+  )
   if (pacientError) { throw new Error(pacientError.message) }
 
-  const {
-    response: appointments,
-    error: appointmentError
-  } = await authenticatedRequest(`/appointments?pacientId=${pacientId}`, { method: 'GET' }, ctx)
+  const { response: appointments, error: appointmentError } = await authenticatedRequest(
+    `/appointments?pacientId=${pacientId}`,
+    z.array(AppointmentSchema),
+    { method: 'GET' },
+    ctx,
+  )
   if (appointmentError) { throw new Error(appointmentError.message) }
 
   return { pacient, appointments }

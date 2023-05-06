@@ -89,10 +89,10 @@
  - [ ] Preferir max-width, min-width e min-height ao invés de width e height
 
  - [x] Refatorar `fetchPacientWithAuth` para tornar mais legível (ex: resolver data.data)
- - [ ] Considerar tRPC e/ou Zod. Código typesafe entre cliente e servidor?
+ - [x] Considerar tRPC e/ou Zod. Código typesafe entre cliente e servidor?
   > tRPC: Muito interessante mas não faz sentido migrar tudo o que ja foi feito agora
   > Zod: Talvez? Pode substituir class-validator (que acho bem +/-). Seria um refactor relativamente pequeno
- - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
+ - [x] Centralizar tratamento de erros e integrar com o sistema de notificação
 
  - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 
  HTML no banco, que é parseado para uma arvore de JSON server-side. O client-side só itera a arvore e renderiza as tags correspondentes
@@ -108,18 +108,13 @@
   - [ ] Suporte a alinhamento ao centro
   - [ ] Suporte a alinhamento justificado
 
- - [ ] Repensar criação de `Appointment` para sempre ser feita via tela de `Pacient`
- - [ ] Remover tela de listagem de `Appointment`
+ - [ ] Permitir criação de `Appointment` através da tela de `Pacient`
 
  - [ ] Bug: Google not initialized
  - [ ] Bug: Invalid refresh token
+ - [ ] Bug: Adição de telefones na tela de pacientes omitida
  - [ ] Bug: Se adicionarmos uma nova `Insurance`, salvarmos, deletarmos a mesma insurance e salvarmos denovo, ela reaparece (ou seja, não é deletada)
  - [ ] Bug: Estamos atualizando o `UpdatedAt` de todos os registros ao invés de só os alterados (em requests /batch)
- - [ ] Marcar items que serão deletados com 'strikethrough' em tabelas como operações batch
- - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
- 
- - [ ] Ordernar tela de `Appointments` por data
- - [ ] Mostrar hora nas telas de listagem e edição de `Appointments` (o horario da consulta é relevante enquanto o horario de criação de um paciente não é)
 
  - [ ] Criar rotina de 'limpeza' para deletar `Token`s expirados a muito tempo
  - [ ] Validar se estamos de acordo com as boas praticas de autenticação: https://goteleport.com/blog/authentication-best-practices/
@@ -128,9 +123,24 @@
 
 
 # Backlog (not essential)
- - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
+ - [ ] Em tabelas como operações batch, marcar items que serão deletados com 'strikethrough' 
+ - [ ] Juntar abas de 'Contato' e 'Dados Pessoais' do paciente
 
- - [ ] Criar ícone de lapis para indicar os campos que são editáveis (talvez só exibir on hover)
+ - [ ] Configurar página 404.js para tratar erros de roteamento
+ - [ ] Configurar página 500.js para tratar erros durante SSR (getInitialProps)
+ - [ ] Exportar erros para um centralizador (ex: Sentry)
+
+ - [ ] Decidir se vamos manter a tela de `Appointment`
+  - [ ] Remover tela de listagem de `Appointment`
+    ou
+  - [ ] Ordernar tela de `Appointments` por data
+  - [ ] Mostrar hora nas telas de listagem e edição de `Appointments` (o horario da consulta é relevante enquanto o horario de criação de um paciente não é)
+
+ - [ ] Estilizar diferentes tipos de notificação de forma diferente (erro vermelho, sucesso verde ou azul, info em tons de cinza)
+ - [ ] Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
+ - [ ] Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
+
+ - [ ] Criar ícone de lapis para indicar os campos que são editáveis (talvez só exibir on-hover)
 
  - [ ] Implementar funcionalidades de SuperAdmin (ainda a decidir como):
    - [ ] Conseguir visualizar dados de diferentes `User`s (seja trocando de `User` exibido ou visualizando todos de uma vez)
@@ -139,12 +149,9 @@
  - [ ] Criar modelo de `Role` (inicialmente só com `admin` e `doctor`)
  - [ ] Incorporar filtro por `User.id` e `Role` em todas as rotas de CRUD (impedir que um `User` não-admin leia ou altere dados de outro)
 
- - [ ] Adicionar animação para a criação e expiração de notificações (slide de alguma das bordas ao invés de só aparecer do nada)
- - [ ] Adicionar barra de progresso para indicar o tempo de expiração de uma notificação
-
  - [ ] Criar modelo de `Medicine` para padronizar dados de `Prescription`.
  - [ ] Criar modelo de `Prescription`, tendo em mente que precisamos conseguir montar um histórico de mudanças de remédios (quando doses mudaram, remedios foram interrompidos, etc.).
- - [ ] Adicionar `Prescription` à primeira aba da tela de `Pacient` via `EditableTable`.
+ - [ ] Adicionar `Prescription` à primeira aba da tela de `Pacient`.
    - [ ] Mostrando apenas os atuais.
    - [ ] Linkando para o histórico daquele paciente.
    - [ ] Permitindo imprimir a receita atual.

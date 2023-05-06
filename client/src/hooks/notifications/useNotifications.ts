@@ -1,10 +1,10 @@
 import { Reducer, useReducer } from "react";
-import Notification, { NotificationId } from "./type";
+import Notification from "./type";
 
 type NotificationAction =
   | { type: 'add', payload: Notification }
   | { type: 'update', payload: Notification }
-  | { type: 'remove', id: NotificationId }
+  | { type: 'remove', id: string }
   | { type: 'clear' }
 
 type NotificationState = Map<string, Notification>

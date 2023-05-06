@@ -1,26 +1,30 @@
-import BaseModel from "./base";
+import { z } from "zod"
 
-interface Phone extends BaseModel {
-  id: number
+const PhoneSchema = z.object({
+  id: z.number(),
 
-  label?: string
-  number: string
-}
+  label: z.string().nullable(),
+  number: z.string(),
+})
 
-interface Pacient extends BaseModel {
-  id: number
+const PacientSchema = z.object({
+  id: z.number(),
 
-  name: string
-  birthday: string
-  cpf?: string
+  name: z.string(),
+  birthday: z.string(),
+  cpf: z.string().nullable(),
 
-  address?: string
+  address: z.string().nullable(),
 
-  phones: Phone[]
+  phones: z.array(PhoneSchema).optional(),
 
-  updatedAt: string
-  createdAt: string
-}
+  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+})
+
+type Phone = z.infer<typeof PhoneSchema>
+type Pacient = z.infer<typeof PacientSchema>
 
 export type { Phone }
+export { PhoneSchema, PacientSchema }
 export default Pacient

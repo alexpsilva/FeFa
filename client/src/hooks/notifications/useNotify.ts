@@ -1,7 +1,7 @@
 import useNotificationContext from "./context"
-import Notification, { NotificationId } from "./type"
+import Notification from "./type"
 
-const timeouts = new Map<NotificationId, NodeJS.Timeout>()
+const timeouts = new Map<string, NodeJS.Timeout>()
 const useNotify = () => {
   const dispatch = useNotificationContext()
 

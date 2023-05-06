@@ -10,6 +10,7 @@ import { UpdatePacientBody, UpdatePacientParams } from "./types/update.dto"
 import { CreatePacientBody } from "./types/create.dto"
 import { ListPacientQuery } from "./types/list.dto"
 import { PAGINATION_PAGE_SIZE_LIMIT } from "../../utils/env"
+import { logger } from "../../utils/logger"
 
 const router = express.Router()
 
