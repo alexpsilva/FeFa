@@ -5,7 +5,7 @@ import authenticatedRequest from "@/auth/authenticated-request"
 import Button from "@/components/ui/button"
 import Table from "@/components/layout/table/table"
 import Trash from "@/components/icons/trash"
-import useNotify from "@/hooks/notifications/useNotify"
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import useDraft from "@/hooks/useDraft"
 import useArray from "@/hooks/useArray"
 import { updateArray } from "@/utils/array"
@@ -14,7 +14,7 @@ import stringifyDate from "@/utils/date/stringify-date"
 
 type Props = { insurances: Insurance[] }
 const ListInsurances: NextPage<Props> = ({ insurances }) => {
-  const notify = useNotify()
+  const requestWhileLoading = useRequestWhileLoading()
   const [{ isDrafting, draft }, draftDispatch] = useDraft<Partial<Insurance>[]>(insurances)
   const [{ data: toDelete }, toDeleteDispatch] = useArray<Insurance['id']>()
 
@@ -25,18 +25,18 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
   const canSave = isDrafting || toDelete.length
 
   const onSaveHandler = async () => {
-    notify({ id: 'INSURANCE_SAVE', text: 'Salvando...' })
-    const { response: data } = await authenticatedRequest('/insurances/batch', {
+    const { response: data } = await requestWhileLoading(() => authenticatedRequest(
+      '/insurances/batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ create: toCreate, update: toUpdate, delete: toDelete }),
-    })
+    }
+    ))
 
     const sorted = data.sort((a: Insurance, b: Insurance) => a.id - b.id)
 
     draftDispatch({ type: 'save', payload: sorted })
     toDeleteDispatch({ type: 'clear' })
-    notify({ id: 'INSURANCE_SAVE', text: 'Salvo com sucesso', expiresInSeconds: 3 })
   }
 
   const onCancelHandler = () => {
@@ -101,11 +101,11 @@ const ListInsurances: NextPage<Props> = ({ insurances }) => {
 }
 
 ListInsurances.getInitialProps = async (ctx) => {
-  const { response: data, error } = await authenticatedRequest('/insurances', { method: 'GET' }, ctx)
+  const { response, error } = await authenticatedRequest('/insurances', { method: 'GET' }, ctx)
 
   if (error) { throw new Error(error.message) }
   return {
-    insurances: data.sort((a: Insurance, b: Insurance) => a.id - b.id),
+    insurances: response.sort((a: Insurance, b: Insurance) => a.id - b.id),
   }
 }
 

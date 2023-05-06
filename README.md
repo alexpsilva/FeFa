@@ -88,7 +88,10 @@
 
  - [ ] Preferir max-width, min-width e min-height ao invés de width e height
 
- - [ ] Refatorar `fetchPacientWithAuth` para tornar mais legível (ex: resolver data.data)
+ - [x] Refatorar `fetchPacientWithAuth` para tornar mais legível (ex: resolver data.data)
+ - [ ] Considerar tRPC e/ou Zod. Código typesafe entre cliente e servidor?
+  > tRPC: Muito interessante mas não faz sentido migrar tudo o que ja foi feito agora
+  > Zod: Talvez? Pode substituir class-validator (que acho bem +/-). Seria um refactor relativamente pequeno
  - [ ] Centralizar tratamento de erros e integrar com o sistema de notificação
 
  - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 

@@ -1,13 +1,18 @@
 import Stringifiable from "@/types/stringifiable"
 import { StatusCodes } from "http-status-codes"
 
+type JSONPrimitive = string | number | boolean | null
+interface Nested<T> { [key: string]: T | T[] | Nested<T> }
+
+type HttpResponse = JSONPrimitive | JSONPrimitive[] | Nested<JSONPrimitive>
 type HttpError = { message: string, status: number }
-type Result = { response: any, error: null } | { response: null, error: HttpError }
+type RequestResult = { response: HttpResponse, error: null } | { response: null, error: HttpError }
+
 interface QueryStringOption {
   query?: { [key: string]: Stringifiable }
 }
 
-const request = async (path: string, options?: RequestInit & QueryStringOption): Promise<Result> => {
+const request = async (path: string, options?: RequestInit & QueryStringOption): Promise<RequestResult> => {
   const base = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
   let url = `${base}${path}`
 
@@ -34,5 +39,5 @@ const request = async (path: string, options?: RequestInit & QueryStringOption):
   return { response: await response.json(), error: null }
 }
 
-export type { QueryStringOption }
+export type { QueryStringOption, RequestResult }
 export default request

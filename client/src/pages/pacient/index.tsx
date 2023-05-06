@@ -13,9 +13,11 @@ import Table from "@/components/layout/table/table"
 import SearchIcon from "@/components/icons/search"
 import PaginationControls from "@/components/features/pagination"
 import SearchInput from "@/components/features/search-input"
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 
 type Props = { initialPacients: Pacient[], initialTotalPacients: number }
 const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }) => {
+  const requestWhileLoading = useRequestWhileLoading()
 
   const [pacients, setPacients] = useState<Pacient[]>(initialPacients)
   const [totalPacients, setTotalPacients] = useState<number>(initialTotalPacients)
@@ -32,14 +34,15 @@ const ListPacients: NextPage<Props> = ({ initialPacients, initialTotalPacients }
       ...(pageOffset && { pageOffset })
     }
 
-    const { response, error } = await authenticatedRequest(
+    const { response } = await requestWhileLoading(() => authenticatedRequest(
       '/pacients',
       { method: 'GET', query }
-    )
-    if (error) { throw new Error(error.message) }
+    ))
 
-    setPacients(response.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
-    setTotalPacients(response.total)
+    if (response) {
+      setPacients(response.data.sort((a: Pacient, b: Pacient) => a.id - b.id))
+      setTotalPacients(response.total)
+    }
   }
 
   const onSearch = (newTerm: string) => {
