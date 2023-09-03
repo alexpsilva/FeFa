@@ -1,5 +1,5 @@
 import Table from "@/components/layout/table/table";
-import ModelTextInput from "@/components/model/text-input";
+import Input from "@/components/ui/input";
 import { Phone } from "@/types/model/pacient";
 import { updateArray, deleteFromArray } from "@/utils/array";
 import { usePacientSheetContext } from "./context";
@@ -28,7 +28,7 @@ export default function PacientSheetContact() {
 
   return (
     <div>
-      <label>Rua <ModelTextInput model={pacient} field='address' setValue={setPacient} /></label>
+      <label>Rua <Input value={pacient.address ?? ''} onChange={(address) => setPacient({ ...pacient, address })} /></label>
       <label> Phones:
         <Table
           columns={[

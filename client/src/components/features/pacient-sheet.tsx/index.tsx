@@ -1,7 +1,6 @@
 import Pacient from "@/types/model/pacient"
 import Appointment from "@/types/model/appointment"
 
-import ModelTextInput from "@/components/model/text-input"
 import MultitabFrame from "@/components/layout/multitab-frame"
 import TabItem from "@/components/layout/multitab-frame/tab-item"
 

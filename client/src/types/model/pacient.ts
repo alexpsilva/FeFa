@@ -11,7 +11,7 @@ const PacientSchema = z.object({
   id: z.number(),
 
   name: z.string(),
-  birthday: z.string(),
+  birthday: z.coerce.date(),
   cpf: z.string().nullable(),
 
   address: z.string().nullable(),

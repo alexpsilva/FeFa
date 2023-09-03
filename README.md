@@ -94,6 +94,7 @@
   > Zod: Talvez? Pode substituir class-validator (que acho bem +/-). Seria um refactor relativamente pequeno
  - [x] Centralizar tratamento de erros e integrar com o sistema de notificação
 
+ - [ ] Considerar uma lib para estilização de texto (https://github.com/facebook/lexical)
  - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 
  HTML no banco, que é parseado para uma arvore de JSON server-side. O client-side só itera a arvore e renderiza as tags correspondentes
   - [ ] Suporte a negrito
@@ -107,6 +108,7 @@
   - [ ] Suporte a alinhamento à direita
   - [ ] Suporte a alinhamento ao centro
   - [ ] Suporte a alinhamento justificado
+ - [ ] Estilizar tela de `Appointment`
 
  - [ ] Permitir criação de `Appointment` através da tela de `Pacient`
 
