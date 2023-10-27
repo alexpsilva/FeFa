@@ -1,40 +1,6 @@
 version: "3"
 
 services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    volumes:
-      - ./client/src:/app/src
-    ports:
-      - "3000:3000"
-    environment:
-      - API_URL=http://api:3000
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
-    depends_on:
-      - expense-api
-  api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    volumes:
-      - ./api/src:/app/src
-    ports:
-      - "3001:3000"
-    environment:
-      - PORT=3000
-      - LOG_LEVEL=debug
-      - DATABASE_URL=postgresql://username:password@db:5432/fefa-db?schema=public
-      - GOOGLE_CLIENT_ID=865925412334-benne30r9q0c6m8amgsf23beg9kq9r2h.apps.googleusercontent.com
-      - ACCESS_TOKEN_SECRET=123
-      - ACCESS_TOKEN_EXPIRES_SECONDS=3600
-      - REFRESH_TOKEN_SECRET=123
-      - REFRESH_TOKEN_EXPIRES_SECONDS=7200
-      - PAGINATION_PAGE_SIZE_LIMIT=50
-    depends_on:
-      - db
   db:
     image: postgres
     restart: always

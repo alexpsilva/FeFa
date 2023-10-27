@@ -1,0 +1,27 @@
+import useNotifications from "./context"
+import Notification from "./type"
+
+const timeouts = new Map<string, NodeJS.Timeout>()
+const useNotify = () => {
+  const { dispatch } = useNotifications()
+
+  return (payload: Notification & { expiresInSeconds?: number }) => {
+    const { expiresInSeconds, ...notification } = payload
+
+    dispatch({ type: 'add', payload: notification })
+    if (expiresInSeconds) {
+      const currentTimeout = timeouts.get(notification.id)
+      if (currentTimeout) { clearTimeout(currentTimeout) }
+
+      timeouts.set(
+        notification.id,
+        setTimeout(
+          () => dispatch({ type: 'remove', id: notification.id }),
+          expiresInSeconds * 1000
+        )
+      )
+    }
+  }
+}
+
+export default useNotify

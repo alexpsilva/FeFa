@@ -94,6 +94,19 @@
   > Zod: Talvez? Pode substituir class-validator (que acho bem +/-). Seria um refactor relativamente pequeno
  - [x] Centralizar tratamento de erros e integrar com o sistema de notificação
 
+ - [ ] Migrar projeto para o modelo Nextjs13 App Router + Server Components
+  - [ ] Estudar se faz sentido refatorar o fluxo de autenticação/autorização para demandar menos lógica client-side. Podemos trabalhar com cookies HTTP-Only, preenchidos pelo server durante o login. Em teoria, toda nova request passaria a conter estes cookies, sem demandar nenhum tratamento do lado do cliente. Tendo em mãos o AcessToken (válido ou expirado) e RefreshToken, o server pode decidir liberar o acesso, revalidar o AcessToken ou redirecionar para a rota de login. Desta forma, poderiamos descartar toda a lógica client-side de tratamento destes cookies, facilitando manter nossos componentes como server components
+
+
+  - [ ] Trocar authorização para funcionar via headers de cookie:
+    O modelo de autenticação via cookies funciona de forma geral mas a presença de Server Components complica ele um pouco. Os cookies são setados normalmente quando a requisição sai do browser e estão presentes durante a renderização do server component. O problema é que durante esta renderização, fazemos uma nova request para a API, que parte de um código React (ao invés de um browser) e, consequentemente não seta os cookies na requisição
+    - [ ] Em nosso helper 'request()' podemos setar manualmente os headers de cookie. Isso é redundante vindo do client (pois o browser ja faz este trabalho naturalmente) mas necessário vindo de um server component
+    - [ ] Em nosso middleware, precisamos adiantar qualquer trabalho de criação de novos cookies (como refresh de tokens expirados), pois o server component não conseguirá
+
+
+  - [ ] Mover estado da listagem de pacientes para a URL (query, pageSize, pageOffset)
+  - [ ] Tornar o SideMenu um server component puro. Não tem justificativa para ele precisar de nenhuma lógica client-side
+
  - [ ] Considerar uma lib para estilização de texto (https://github.com/facebook/lexical)
  - [ ] Desenvolver componente de estilização do texto e adicionar à tela de `Appointment`. 
  HTML no banco, que é parseado para uma arvore de JSON server-side. O client-side só itera a arvore e renderiza as tags correspondentes
