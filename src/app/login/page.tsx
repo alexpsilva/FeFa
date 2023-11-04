@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { POST_LOGIN_REDIRECT_QUERY } from "@/constants"
-import { z } from "zod"
 import Script from "next/script"
 import requestFromClient from "@/utils/request/fromClient"
 
@@ -13,9 +12,8 @@ export default function Login() {
   const query = useSearchParams()
 
   const onSignIn = async (credentials: google.accounts.id.CredentialResponse) => {
-    const { response, error } = await requestFromClient(
+    const { error } = await requestFromClient(
       `/api/auth/login`,
-      z.object({ accessToken: z.string(), refreshToken: z.string() }),
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,7 +34,6 @@ export default function Login() {
     <>
       <Script
         src="https://accounts.google.com/gsi/client"
-        strategy="beforeInteractive"
         async defer
       />
       <main className="h-screen flex justify-center items-center">

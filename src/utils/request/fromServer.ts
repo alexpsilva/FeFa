@@ -1,17 +1,22 @@
 import { headers } from "next/headers"
 import { TypeOf, z } from "zod"
-import requestFromClient from "./fromClient"
+import request from "./request"
 import { RequestOptions, RequestResult } from "./types"
 
 const requestFromServer = async <T extends z.ZodTypeAny>(
   path: string,
-  schema: T | null,
-  options?: RequestOptions
-): Promise<RequestResult<null extends T ? null : TypeOf<T>>> => {
-  return requestFromClient(path, schema, {
-    ...options,
-    headers: headers(),
-  })
+  options?: RequestOptions,
+  schema?: T,
+): Promise<RequestResult<TypeOf<T>>> => {
+  console.log('requestFromServer')
+  return request(
+    path,
+    {
+      ...options,
+      headers: headers(),
+    },
+    schema
+  )
 }
 
 export default requestFromServer

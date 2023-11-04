@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext } from "react"
 import InlineButton from "./inline-button"
-import Input from "@/components/ui/input"
+import Input from "@/components/ui/input/input"
 import InlineIcon from "./inline-icon"
 
 type TableContextType =

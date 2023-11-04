@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ACCESS_TOKEN_COOKIE, COOKIE_OPTIONS, IS_ACTIVE_COOKIE, POST_LOGIN_REDIRECT_QUERY } from "./constants";
-import { IS_ACTIVE_COOKIE_EXPIRES_SECONDS } from "./env";
+import { ACCESS_TOKEN_COOKIE, COOKIE_OPTIONS, IS_ACTIVE_COOKIE, IS_ACTIVE_COOKIE_EXPIRES_SECONDS, POST_LOGIN_REDIRECT_QUERY } from "./constants";
 
 export async function middleware(request: NextRequest) {
-  console.log(`middleware: ${request.url}`)
+  console.log(`middleware: ${request.method} ${request.url}`)
 
   const isAuthorized = !!request.cookies.get(ACCESS_TOKEN_COOKIE)?.value
   const isActive = !!request.cookies.get(IS_ACTIVE_COOKIE)?.value

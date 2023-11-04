@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { ACCESS_TOKEN_SECRET } from '@/env'
+import { ACCESS_TOKEN_SECRET } from '@/env/server'
 
 const encodingAlgorithm: jwt.Algorithm = 'HS256'
 

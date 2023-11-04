@@ -1,4 +1,4 @@
-import { GOOGLE_CLIENT_ID } from "@/env"
+import { GOOGLE_CLIENT_ID } from "@/env/client"
 import { OAuth2Client, TokenPayload } from "google-auth-library"
 
 const verifyGoogleToken = async (token: string)

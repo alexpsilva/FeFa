@@ -1,16 +1,18 @@
 'use client'
 
-import { FormEvent } from "react"
+import { DetailedHTMLProps, FormEvent, FormHTMLAttributes } from "react"
+import { twMerge } from "tailwind-merge"
 import SearchIcon from "../../icons/search"
 import SearchInputSubmit from "./search-submit"
 
-interface Props {
+type FormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>
+type Props = {
   onSearch: (term: string) => void
   defaultValue?: string
   placeholder?: string
-}
+} & FormProps
 
-const SearchInput = ({ onSearch, defaultValue, placeholder }: Props) => {
+const SearchInput = ({ onSearch, defaultValue, placeholder, className, ...props }: Props) => {
   const onSearchAction = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.target as HTMLFormElement)
@@ -18,13 +20,19 @@ const SearchInput = ({ onSearch, defaultValue, placeholder }: Props) => {
     onSearch(searchTerm ? String(searchTerm) : '')
   }
 
-  return <form className="
-    flex gap-1
-    items-center justify-center 
-    max-w-md 
-    rounded-lg bg-gray-200"
+  return <form className={twMerge(
+    'flex gap-1 items-center justify-center',
+    className
+  )}
     onSubmit={onSearchAction}
+    {...props}
   >
+    <SearchInputSubmit className="p-2">
+      <SearchIcon
+        width="22"
+        height="22"
+      />
+    </SearchInputSubmit>
     <input
       className="flex-grow bg-transparent focus:outline-none"
       type='text'
@@ -32,13 +40,6 @@ const SearchInput = ({ onSearch, defaultValue, placeholder }: Props) => {
       defaultValue={defaultValue}
       placeholder={placeholder ?? ''}
     />
-    <SearchInputSubmit>
-      <SearchIcon
-        className="stroke-skin-base"
-        width="22"
-        height="22"
-      />
-    </SearchInputSubmit>
   </form>
 }
 

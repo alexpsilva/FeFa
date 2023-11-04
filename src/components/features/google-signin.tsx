@@ -1,3 +1,4 @@
+import { GOOGLE_CLIENT_ID } from "@/env/client"
 import { useEffect } from "react"
 
 interface Props {
@@ -5,19 +6,17 @@ interface Props {
 }
 
 const GoogleSignIn = ({ onSignIn }: Props) => {
-  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string
-  const loginUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`
-
   const initializeGoogleSignIn = () => {
+
     google.accounts.id.initialize({
-      client_id: googleClientId,
+      client_id: GOOGLE_CLIENT_ID,
       callback: onSignIn,
       prompt_parent_id: "google_signin_container",
     })
     google.accounts.id.prompt()
   }
 
-  useEffect(() => initializeGoogleSignIn(), [])
+  useEffect(() => initializeGoogleSignIn())
 
   return <div id="google_signin_container" />
 }

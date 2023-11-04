@@ -1,18 +1,33 @@
-import React from "react"
+import Link from "next/link"
+import React, { ButtonHTMLAttributes, ComponentProps, DetailedHTMLProps } from "react"
+import { twMerge } from "tailwind-merge"
 
-interface Props {
-  text: string
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
-  disabled?: boolean
-}
+type ButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+type Props = { type?: ButtonProps['type'], href?: never } & Omit<ButtonProps, 'type'>
+  | { type: 'link', href: ComponentProps<typeof Link>['href'] } & Omit<ButtonProps, 'type'>
 
-const Button = ({ text, onClick, disabled }: Props) => {
+const Button = ({ children, type, href, ...props }: Props) => {
+  props.className = twMerge(
+    "px-4 py-1 min-w-[12ch] bg-white text-skin-base drop-shadow-md rounded cursor-pointer",
+    props.className
+  )
+
+  if (type === 'link') {
+    return <Link href={href} passHref>
+      <button
+        type='button'
+        {...props}
+      >
+        {children}
+      </button>
+    </Link>
+  }
+
   return <button
-    className="px-2 bg-slate-200 hover:bg-slate-400 cursor-pointer"
-    type="button"
-    onClick={onClick}
-    disabled={disabled}>
-    {text}
+    type={type || "button"}
+    {...props}
+  >
+    {children}
   </button>
 }
 

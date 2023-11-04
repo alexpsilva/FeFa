@@ -1,13 +1,17 @@
-export default function Trash() {
+import { SVGProps } from "react"
+
+type Props = SVGProps<SVGSVGElement>
+
+export default function TrashIcon(props: Props) {
   return (
     <svg
-      width='22'
-      height='22'
       viewBox='0 0 24 24'
-      strokeWidth='1.5'
+      strokeWidth='2'
       fill='none'
       strokeLinecap='round'
-      strokeLinejoin='round'>
+      strokeLinejoin='round'
+      {...props}
+    >
       <line x1='4' y1='7' x2='20' y2='7' />
       <line x1='10' y1='11' x2='10' y2='17' />
       <line x1='14' y1='11' x2='14' y2='17' />

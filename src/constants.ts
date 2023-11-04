@@ -1,8 +1,8 @@
-const USER_ID_HTTP_HEADER = 'fefa-user-id'
 const ACCESS_TOKEN_COOKIE = 'fefaAccess'
+const ACCESS_TOKEN_EXPIRES_SECONDS = 43200 // 12 hours
 const IS_ACTIVE_COOKIE = 'fefaActive'
+const IS_ACTIVE_COOKIE_EXPIRES_SECONDS = 3600 // 1 hour
 const POST_LOGIN_REDIRECT_QUERY = 'redirect_to'
-const DEBOUNCER_TOLERANCE_MILLISECONDS = 600
 const PAGINATION_PAGE_SIZE = 4
 
 const COOKIE_OPTIONS = {
@@ -12,17 +12,17 @@ const COOKIE_OPTIONS = {
 } as const
 
 const MENU_ROUTE_MAPPING = [
-  { title: 'Pacientes', path: '/workspace/pacient' },
-  // { title: 'Consultas', path: '/appointment' },
+  { title: 'Pacientes', path: '/pacient' },
+  { title: 'Consultas', path: '/appointment' },
   { title: 'Planos de Saúde', path: '/insurance' },
 ]
 
 export {
-  USER_ID_HTTP_HEADER,
   ACCESS_TOKEN_COOKIE,
+  ACCESS_TOKEN_EXPIRES_SECONDS,
   IS_ACTIVE_COOKIE,
+  IS_ACTIVE_COOKIE_EXPIRES_SECONDS,
   POST_LOGIN_REDIRECT_QUERY,
-  DEBOUNCER_TOLERANCE_MILLISECONDS,
   PAGINATION_PAGE_SIZE,
   MENU_ROUTE_MAPPING,
   COOKIE_OPTIONS,

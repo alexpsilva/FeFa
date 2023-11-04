@@ -1,4 +1,5 @@
 import { PAGINATION_PAGE_SIZE } from "@/constants";
+import { WritablePacientSchema } from "@/types/model/pacient";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
@@ -31,4 +32,30 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) =
   )
 })
 
-export { GET }
+
+const POST = authenticatedEndpoint(async (request: NextRequest, userId: number) => {
+  const body = WritablePacientSchema.parse(await request.json())
+
+  const args: Prisma.PacientCreateArgs = {
+    data: {
+      userId,
+      name: body.name,
+      birthday: new Date(body.birthday),
+      cpf: body.cpf,
+      note: body.note,
+      address: body.address,
+    }
+  }
+
+  const phones = body.phones
+  if (phones) { args.data.phones = { createMany: { data: phones } } }
+
+  const pacient = await prisma.pacient.create(args)
+
+  return NextResponse.json(
+    pacient,
+    { status: StatusCodes.CREATED },
+  )
+})
+
+export { GET, POST }

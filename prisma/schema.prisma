@@ -19,10 +19,8 @@ model Pacient {
   name     String
   birthday DateTime
   cpf      String?
+  note     String?
 
-  country String?
-  city    String?
-  state   String?
   address String?
 
   phones       Phone[]
@@ -38,7 +36,6 @@ model Phone {
   pacient   Pacient @relation(fields: [pacientId], references: [id], onDelete: Cascade)
   pacientId Int
 
-  label  String?
   number String
 
   createdAt DateTime @default(now())

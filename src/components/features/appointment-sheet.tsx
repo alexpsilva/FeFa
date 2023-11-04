@@ -1,7 +1,7 @@
 import Appointment from "@/types/model/appointment"
 import Pacient from "@/types/model/pacient"
 import { useState } from "react"
-import DateInput from "../ui/date-input"
+import DateInput from "../ui/input/date"
 import Dropdown from "../ui/dropdown"
 import StyledTextArea from "../ui/styled-text-area"
 

@@ -1,28 +1,31 @@
 'use client'
 
-import ArrowIcon from "@/components/icons/arrow"
-import Link from "next/link"
+import ArrowHeadIcon from "@/components/icons/arrowHead"
+import { useRouter } from "next/navigation"
 import { ComponentProps } from "react"
+import { twMerge } from "tailwind-merge"
 import { usePaginationContext } from "./context"
 
-type Props = Omit<ComponentProps<typeof Link>, 'href' | 'hidden'>
+type Props = Omit<ComponentProps<typeof ArrowHeadIcon>, 'direction'>
 
-const NextPage = (props: Props) => {
+const NextPage = ({ className, ...props }: Props) => {
   const { totalElements, pageSize, pageOffset, targetUrl } = usePaginationContext()
   const hasNextPage = pageOffset + pageSize < totalElements
   const nextPageOffset = pageOffset + pageSize
 
-  return <Link
-    href={targetUrl(pageSize, nextPageOffset)}
-    hidden={!hasNextPage}
+  const router = useRouter()
+  const handleClick = () => router.push(targetUrl(pageSize, nextPageOffset))
+
+  if (!hasNextPage) return null
+
+  return <ArrowHeadIcon
+    width="18"
+    height="18"
+    direction="right"
+    onClick={handleClick}
+    className={twMerge('hover:cursor-pointer', className)}
     {...props}
-  >
-    <ArrowIcon
-      width="18"
-      height="18"
-      direction="right"
-    />
-  </Link>
+  />
 }
 
 export default NextPage

@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../prisma";
 import { encodeAccessToken } from "@/utils/jwt";
 import verifyGoogleToken from "../verify-google-token";
-import { ACCESS_TOKEN_COOKIE, COOKIE_OPTIONS, IS_ACTIVE_COOKIE } from "@/constants";
-import { ACCESS_TOKEN_EXPIRES_SECONDS, IS_ACTIVE_COOKIE_EXPIRES_SECONDS } from "@/env";
+import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_EXPIRES_SECONDS, COOKIE_OPTIONS, IS_ACTIVE_COOKIE, IS_ACTIVE_COOKIE_EXPIRES_SECONDS } from "@/constants";
 
 export async function POST(request: Request) {
   const body = await request.json()

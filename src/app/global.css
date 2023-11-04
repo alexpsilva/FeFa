@@ -5,20 +5,22 @@
 
 @layer base {
   :root {
-    --color-text-muted: 148, 163, 184;
-    --color-text-base: 55, 65, 81;
+    --color-base: 68, 68, 68;
 
     /* EMERALD */
-    /* --color-text-selected: 5, 150, 105; */
+    /* --color-selected: 5, 150, 105; */
 
     /* CYAN */
-    --color-text-selected: 8, 145, 178;
+    --color-selected: 8, 145, 178;
 
     /* SKY */
-    /* --color-text-selected: 2, 132, 199; */
+    /* --color-selected: 2, 132, 199; */
 
     /* INDIGO */
-    /* --color-text-selected: 99, 102, 241; */
+    /* --color-selected: 99, 102, 241; */
+
+    /* BLUE-ISH GRAY */
+    --color-offwhite: 240, 242, 245;
   }
 }
 
