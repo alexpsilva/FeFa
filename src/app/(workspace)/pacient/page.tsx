@@ -60,9 +60,7 @@ export default async function ListPacients(props: Props) {
       <div className="h-8"></div>
       <ContentCard className="flex flex-col gap-3">
         <div className="flex flex-row justify-between pr-3">
-          <h1
-            className="text-sm text-skin-base"
-          >
+          <h1 className="text-sm">
             Pacientes
           </h1>
           <Link
@@ -80,7 +78,6 @@ export default async function ListPacients(props: Props) {
               className="
                 py-2 
                 border-b-2 last:border-0 border-slate-100
-                text-skin-base
                 hover:cursor-pointer
               "
             >
@@ -95,15 +92,9 @@ export default async function ListPacients(props: Props) {
           pageSize={pageSize}
           pageOffset={pageOffset}
         >
-          <PreviousPage
-            className="stroke-skin-selected"
-          />
-          <CurrentPage
-            className="text-skin-base"
-          />
-          <NextPage
-            className="stroke-skin-selected"
-          />
+          <PreviousPage className="stroke-skin-selected" />
+          <CurrentPage />
+          <NextPage className="stroke-skin-selected" />
         </PacientPaginationControls>
       </ContentCard>
     </main>

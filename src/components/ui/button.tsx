@@ -8,7 +8,7 @@ type Props = { type?: ButtonProps['type'], href?: never } & Omit<ButtonProps, 't
 
 const Button = ({ children, type, href, ...props }: Props) => {
   props.className = twMerge(
-    "px-4 py-1 min-w-[12ch] bg-white text-skin-base drop-shadow-md rounded cursor-pointer",
+    "px-4 py-1 min-w-[12ch] bg-white drop-shadow-md rounded cursor-pointer",
     props.className
   )
 

@@ -1,6 +1,6 @@
 'use client'
 
-import SearchInput from "@/components/features/search/search-input"
+import SearchInput from "@/components/features/search/input"
 import { useRouter } from "next/navigation"
 import { ComponentProps } from "react"
 

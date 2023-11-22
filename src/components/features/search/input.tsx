@@ -3,7 +3,7 @@
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes } from "react"
 import { twMerge } from "tailwind-merge"
 import SearchIcon from "../../icons/search"
-import SearchInputSubmit from "./search-submit"
+import SearchInputSubmit from "./submit"
 
 type FormProps = Omit<DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>, 'onSubmit'>
 type Props = {

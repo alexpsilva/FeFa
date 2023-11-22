@@ -11,8 +11,9 @@ const Input = forwardRef<HTMLInputElement, Props>(({ type, className, ...props }
   return <input
     ref={ref}
     className={twMerge(
-      `text-lg border-b-2 border-b-skin-base
+      `text-lg 
       autofill:bg-transparent outline-none 
+      border-b-2 border-b-skin-base
       focus:border-b-skin-selected
       read-only:border-b-0
       `,

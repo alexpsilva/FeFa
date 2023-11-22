@@ -7,7 +7,10 @@ export default function WorkspaceLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className='flex h-full bg-skin-offwhite'>
+    <div className='
+      flex h-full bg-skin-offwhite 
+      text-skin-base stroke-skin-base border-skin-base'
+    >
       <SideMenu
         className='flex-grow max-w-[25ch]'
         routes={MENU_ROUTE_MAPPING}

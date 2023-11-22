@@ -6,10 +6,12 @@ import PhoneInput from "@/components/ui/input/phone"
 import Label from "@/components/ui/label"
 import { ComponentProps, useState } from "react"
 
-type Props = ComponentProps<typeof Stacked>
+type Props = {
+  readOnly?: boolean
+} & ComponentProps<typeof Stacked>
 
-const PhoneList = (props: Props) => {
-  const [indices, setIndices] = useState([0])
+const PhoneList = ({ readOnly, ...props }: Props) => {
+  const [indices, setIndices] = useState(readOnly ? [] : [0])
   const lastIndex = indices.at(-1)
 
   const addIndex = () => {
@@ -32,24 +34,31 @@ const PhoneList = (props: Props) => {
             <PhoneInput
               name={`phone.${i}`}
               className="w-[13.5ch]"
+              readOnly={readOnly}
             />
-            <TrashIcon
-              width="24"
-              height="24"
-              className="stroke-skin-selected cursor-pointer"
-              onClick={() => removeIndice(i)}
-            />
+            {readOnly
+              ? null
+              : <TrashIcon
+                width="24"
+                height="24"
+                className="stroke-skin-selected cursor-pointer"
+                onClick={() => removeIndice(i)}
+              />
+            }
           </div>
         ))}
-        <span
-          className="
+        {readOnly
+          ? null
+          : <span
+            className="
             inline-block w-fit
             text-skin-selected font-bold 
             cursor-pointer"
-          onClick={addIndex}
-        >
-          + Novo Telefone
-        </span>
+            onClick={addIndex}
+          >
+            + Novo Telefone
+          </span>
+        }
       </Stacked>
     </Stacked>
   )
