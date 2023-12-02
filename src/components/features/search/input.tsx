@@ -21,7 +21,7 @@ const SearchInput = ({ onSearch, defaultValue, placeholder, className, ...props 
   }
 
   return <form className={twMerge(
-    'flex gap-1 items-center justify-center',
+    'flex gap-1 items-center justify-center drop-shadow-md',
     className
   )}
     onSubmit={onSearchAction}

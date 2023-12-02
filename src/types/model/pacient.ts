@@ -1,8 +1,11 @@
 import { z } from "zod"
 
-const PhoneSchema = z.object({
-  id: z.number(),
+const WritablePhoneSchema = z.object({
   number: z.string(),
+})
+
+const PhoneSchema = WritablePhoneSchema.extend({
+  id: z.number(),
 })
 
 const WritablePacientSchema = z.object({
@@ -13,21 +16,21 @@ const WritablePacientSchema = z.object({
 
   address: z.string().nullish(),
 
-  phones: z.array(PhoneSchema).nullish(),
+  phones: z.array(WritablePhoneSchema).nullish(),
 })
 
-const ReadonlyPacientSchema = z.object({
+const PacientSchema = WritablePacientSchema.extend({
   id: z.number(),
+
+  phones: z.array(PhoneSchema).nullish(),
 
   updatedAt: z.coerce.date(),
   createdAt: z.coerce.date(),
 })
 
-const PacientSchema = ReadonlyPacientSchema.merge(WritablePacientSchema)
-
 type Phone = z.infer<typeof PhoneSchema>
+
 type WritablePacient = z.infer<typeof WritablePacientSchema>
-type ReadonlyPacient = z.infer<typeof ReadonlyPacientSchema>
 type Pacient = z.infer<typeof PacientSchema>
 
 export type { Phone, WritablePacient }

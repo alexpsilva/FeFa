@@ -16,16 +16,16 @@ export default function ArrowHeadIcon({ direction, ...props }: Props & SVGProps)
 
   return (
     <svg
-      viewBox='0 0 30 30'
-      strokeWidth='3'
+      viewBox='0 0 40 20'
+      strokeWidth='4'
       fill='none'
       strokeLinecap='round'
       strokeLinejoin='round'
       {...props}
     >
       <path
-        transform={`rotate(${rotation}, 13, 13)`}
-        d='M1 14 L13 2 L25 14'
+        transform={`rotate(${rotation}, 20, 10)`}
+        d='M1 19 L20 1 L39 19'
         fill='none'
       />
     </svg>

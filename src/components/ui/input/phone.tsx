@@ -2,7 +2,7 @@
 
 import { ComponentProps, useState } from "react"
 import applyMask from "./applyMask"
-import Input from "./input"
+import Input from "."
 
 type InputProps = ComponentProps<typeof Input>
 type Props = Omit<InputProps, 'value' | 'onChange'>

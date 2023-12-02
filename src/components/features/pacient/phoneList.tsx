@@ -32,7 +32,7 @@ const PhoneList = ({ readOnly, ...props }: Props) => {
         {indices.map(i => (
           <div key={i} className="flex flex-row gap-2 items-center">
             <PhoneInput
-              name={`phone.${i}`}
+              name={`phones[${i}][number]`}
               className="w-[13.5ch]"
               readOnly={readOnly}
             />

@@ -38,9 +38,9 @@ const CollapsibleContentCard = ({
       {permanent}
       {collapsible}
       <ArrowHeadIcon
-        width="24"
-        height="24"
-        className="absolute right-4 bottom-2 stroke-skin-selected cursor-pointer"
+        width="20"
+        height="10"
+        className="absolute right-4 bottom-3 stroke-skin-selected cursor-pointer"
         direction="up"
         onClick={() => setCollapsed(true)}
       />

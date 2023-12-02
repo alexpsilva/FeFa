@@ -52,51 +52,53 @@ export default async function ListPacients(props: Props) {
   const pacientsResponse = await fetchPacients(term, pageSize, pageOffset)
 
   return (
-    <main className="p-4 flex flex-col gap-2">
-      <SearchPacient
-        defaultValue={term}
-        className="self-center w-full max-w-lg rounded-lg bg-white stroke-skin-selected"
-      />
-      <div className="h-8"></div>
-      <ContentCard className="flex flex-col gap-3">
-        <div className="flex flex-row justify-between pr-3">
-          <h1 className="text-sm">
-            Pacientes
-          </h1>
-          <Link
-            href='/pacient/create'
-            className="text-sm font-bold text-skin-selected"
-          >
-            + Novo Paciente
-          </Link>
-        </div>
-        <ul className="pl-2">
-          {pacientsResponse.data.map(pacient => (
-            <ClientLinkLI
-              key={pacient.id}
-              href={`/pacient/${pacient.id}`}
-              className="
-                py-2 
-                border-b-2 last:border-0 border-slate-100
-                hover:cursor-pointer
-              "
+    <main className="p-4">
+      <div className="flex flex-col gap-2 mx-auto max-w-5xl">
+        <SearchPacient
+          defaultValue={term}
+          className="self-center w-full max-w-lg rounded-lg bg-white stroke-skin-selected"
+        />
+        <div className="h-8"></div>
+        <ContentCard className="flex flex-col gap-3">
+          <div className="flex flex-row justify-between pr-3">
+            <h1 className="text-sm">
+              Pacientes
+            </h1>
+            <Link
+              href='/pacient/create'
+              className="text-sm font-bold text-skin-selected"
             >
-              {pacient.name}
-            </ClientLinkLI>
-          ))}
-        </ul>
-        <PacientPaginationControls
-          className="flex items-center justify-end gap-2"
-          term={term}
-          totalElements={pacientsResponse.total}
-          pageSize={pageSize}
-          pageOffset={pageOffset}
-        >
-          <PreviousPage className="stroke-skin-selected" />
-          <CurrentPage />
-          <NextPage className="stroke-skin-selected" />
-        </PacientPaginationControls>
-      </ContentCard>
+              + Novo Paciente
+            </Link>
+          </div>
+          <ul className="pl-2">
+            {pacientsResponse.data.map(pacient => (
+              <ClientLinkLI
+                key={pacient.id}
+                href={`/pacient/${pacient.id}`}
+                className="
+                  py-2 
+                  border-b-2 last:border-0 border-slate-100
+                  hover:cursor-pointer
+                "
+              >
+                {pacient.name}
+              </ClientLinkLI>
+            ))}
+          </ul>
+          <PacientPaginationControls
+            className="flex items-center justify-end gap-2"
+            term={term}
+            totalElements={pacientsResponse.total}
+            pageSize={pageSize}
+            pageOffset={pageOffset}
+          >
+            <PreviousPage className="stroke-skin-selected" />
+            <CurrentPage />
+            <NextPage className="stroke-skin-selected" />
+          </PacientPaginationControls>
+        </ContentCard>
+      </div>
     </main>
   )
 }

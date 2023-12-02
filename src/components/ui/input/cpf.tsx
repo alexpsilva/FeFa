@@ -1,8 +1,8 @@
 'use client'
 
 import { ComponentProps, useState } from "react"
+import Input from "."
 import applyMask from "./applyMask"
-import Input from "./input"
 
 type InputProps = ComponentProps<typeof Input>
 type Props = Omit<InputProps, 'value' | 'onChange'>

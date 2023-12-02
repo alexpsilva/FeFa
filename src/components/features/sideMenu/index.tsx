@@ -19,7 +19,7 @@ const SideMenu = ({ routes, className, ...props }: Props & DivProps) => {
   return (
     <CollapsibleSideMenu
       className={twMerge(
-        `relative bg-white drop-shadow`,
+        `relative bg-white drop-shadow-md`,
         className
       )}
       logo={

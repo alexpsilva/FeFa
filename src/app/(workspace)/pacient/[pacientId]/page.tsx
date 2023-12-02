@@ -42,13 +42,6 @@ const ViewPacient = async (props: Props) => {
         readOnly={true}
         className="mx-auto max-w-5xl"
       />
-      {/* <ClientLink href={`/pacient/${params.pacientId}/edit`}>
-          <PenIcon
-            width="21"
-            height="21"
-            className="stroke-skin-selected cursor-pointer"
-          />
-        </ClientLink> */}
     </main>
   )
 }

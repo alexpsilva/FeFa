@@ -1,6 +1,6 @@
 import Stacked from "@/components/layout/stacked"
 import CpfInput from "@/components/ui/input/cpf"
-import Input from "@/components/ui/input/input"
+import Input from "@/components/ui/input"
 import Label from "@/components/ui/label"
 import Pacient from "@/types/model/pacient"
 import PhoneList from "./phoneList"
@@ -12,7 +12,7 @@ type Props = {
 const PacientDetails = ({ cpf, address, phones, readOnly }: Props) => {
   return (
     <>
-      <Stacked>
+      <Stacked className="col-start-1 row-start-3">
         <Label htmlFor="cpf">CPF</Label>
         <CpfInput
           name="cpf"
@@ -21,7 +21,7 @@ const PacientDetails = ({ cpf, address, phones, readOnly }: Props) => {
           readOnly={readOnly}
         />
       </Stacked>
-      <Stacked>
+      <Stacked className="col-start-1 row-start-4">
         <Label htmlFor="address">Endereço</Label>
         <Input
           name="address"
@@ -30,7 +30,7 @@ const PacientDetails = ({ cpf, address, phones, readOnly }: Props) => {
         />
       </Stacked>
       <PhoneList
-        className="row-start-3 col-start-2 row-span-3 "
+        className="row-start-3 col-start-2 row-span-3"
         readOnly={readOnly}
       />
     </>

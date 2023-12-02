@@ -1,6 +1,6 @@
 import stringifyDateISO from "@/utils/date/stringify-date-iso"
 import React, { DetailedHTMLProps, InputHTMLAttributes } from "react"
-import Input from "./input"
+import Input from "."
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
