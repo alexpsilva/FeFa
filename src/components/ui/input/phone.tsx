@@ -5,14 +5,14 @@ import applyMask from "./applyMask"
 import Input from "."
 
 type InputProps = ComponentProps<typeof Input>
-type Props = Omit<InputProps, 'value' | 'onChange'>
+type Props = { initial?: string } & Omit<InputProps, 'value' | 'onChange'>
 
 const maskSlot = '*'
 const phoneShortMask = "(**) ****-****"
 const phoneLongMask = "(**) *****-****"
 
-const PhoneInput = ({ children, ...props }: Props) => {
-  const [value, setValue] = useState<string>('')
+const PhoneInput = ({ initial, children, ...props }: Props) => {
+  const [value, setValue] = useState<string>(initial ?? '')
   const applyPhoneMask = (newValue: string) => applyMask(
     newValue.length <= 14 ? phoneShortMask : phoneLongMask,
     maskSlot,

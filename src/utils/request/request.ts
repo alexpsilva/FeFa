@@ -41,7 +41,6 @@ const requestOrThrow = async <T extends z.ZodTypeAny>(
   schema?: T,
 ): Promise<RequestResult<TypeOf<T>>> => {
   const url = buildUrl(API_URL, path, options?.query)
-  console.log(`request: ${options?.method} ${url}`)
 
   const response = await fetch(url, options)
 

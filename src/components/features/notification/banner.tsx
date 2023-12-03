@@ -1,15 +1,15 @@
 'use client'
 
 import CrossIcon from "@/components/icons/cross"
-import { useNotifications } from "@/hooks/notifications"
+import { useNotificationContext } from "@/hooks/notifications"
 
 
-const NotificationBanner = () => {
-  const { notifications, dispatch } = useNotifications()
+const NotificationBanners = () => {
+  const { notifications, dispatch } = useNotificationContext()
   const notificationsArray = Array.from(notifications.values())
 
   return (
-    <div className="fixed bottom-0 right-3">
+    <>
       {notificationsArray.map((notification, index) => (
         <div
           key={index}
@@ -29,8 +29,8 @@ const NotificationBanner = () => {
           />
         </div>
       ))}
-    </div>
+    </>
   )
 }
 
-export default NotificationBanner
+export default NotificationBanners

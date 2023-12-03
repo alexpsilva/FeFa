@@ -8,7 +8,7 @@ const NotificationContext = createContext<{
   dispatch: Dispatch<NotificationAction>,
 } | null>(null)
 
-function useNotifications() {
+function useNotificationContext() {
   const context = useContext(NotificationContext)
   if (!context) throw new Error("NotificationContext wasn't initialized")
 
@@ -16,4 +16,4 @@ function useNotifications() {
 }
 
 export { NotificationContext }
-export default useNotifications
+export default useNotificationContext

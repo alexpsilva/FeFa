@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 const WritablePhoneSchema = z.object({
+  id: z.coerce.number().nullish(),
   number: z.string(),
 })
 
@@ -28,11 +29,12 @@ const PacientSchema = WritablePacientSchema.extend({
   createdAt: z.coerce.date(),
 })
 
+type WritablePhone = z.infer<typeof WritablePhoneSchema>
 type Phone = z.infer<typeof PhoneSchema>
 
 type WritablePacient = z.infer<typeof WritablePacientSchema>
 type Pacient = z.infer<typeof PacientSchema>
 
-export type { Phone, WritablePacient }
+export type { Phone, WritablePhone, WritablePacient }
 export { PhoneSchema, WritablePacientSchema, PacientSchema }
 export default Pacient

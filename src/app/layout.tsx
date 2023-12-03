@@ -1,4 +1,4 @@
-import NotificationBanner from "@/components/features/notification/banner"
+import NotificationBanners from "@/components/features/notification/banner"
 import { NotificationProvider } from "@/hooks/notifications"
 import { Metadata } from "next"
 
@@ -17,8 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <NotificationProvider>
         <body>
           {children}
-          <aside>
-            <NotificationBanner />
+          <aside className="fixed bottom-0 right-3">
+            <NotificationBanners />
           </aside>
         </body>
       </NotificationProvider>

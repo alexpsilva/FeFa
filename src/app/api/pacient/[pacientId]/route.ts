@@ -1,4 +1,4 @@
-import { WritablePacientSchema } from "@/types/model/pacient";
+import { Phone, WritablePacientSchema } from "@/types/model/pacient";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
@@ -52,10 +52,16 @@ const PATCH = authenticatedEndpoint(async (request: NextRequest, userId: number,
     include: { phones: true },
   }
 
-  const phones = body.phones
+  const phones = body.phones?.filter(phone => phone.number)
   if (phones) {
-    const phonesToUpdate = phones.filter(phone => phone.id)
-    const phonesToCreate = phones.filter(phone => !phone.id)
+    const phonesToUpdate = phones.reduce(
+      (acc, phone) => !!phone.id ? [...acc, phone as Phone] : acc,
+      [] as Phone[],
+    )
+    const phonesToCreate = phones.reduce(
+      (acc, phone) => !phone.id ? [...acc, { number: phone.number }] : acc,
+      [] as Pick<Phone, 'number'>[],
+    )
 
     args.data.phones = {
       deleteMany: { id: { notIn: phonesToUpdate.map(phone => phone.id!) } },
@@ -75,4 +81,23 @@ const PATCH = authenticatedEndpoint(async (request: NextRequest, userId: number,
   return NextResponse.json(newPacient)
 })
 
-export { GET, PATCH }
+const DELETE = authenticatedEndpoint(async (request: NextRequest, userId: number, params: Params) => {
+  const { params: { pacientId } } = Params.parse(params)
+
+  const pacient = await prisma.pacient.findUnique({
+    where: { id: pacientId, userId },
+    include: { phones: true },
+  })
+
+  if (!pacient) {
+    return NextResponse.json(
+      `Pacient #${pacientId} not found`,
+      { status: StatusCodes.NOT_FOUND },
+    )
+  }
+
+  await prisma.pacient.delete({ where: { id: pacient.id } })
+  return new NextResponse()
+})
+
+export { GET, PATCH, DELETE }

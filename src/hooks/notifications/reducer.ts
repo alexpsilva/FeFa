@@ -5,7 +5,6 @@ type NotificationAction =
   | { type: 'add', payload: Notification }
   | { type: 'update', payload: Notification }
   | { type: 'remove', id: string }
-  | { type: 'clear' }
 
 type NotificationState = Map<string, Notification>
 
@@ -32,7 +31,6 @@ const useNotificationsReducer = (): [NotificationState, Dispatch<NotificationAct
         nextState.delete(action.id)
         return nextState
       }
-      case 'clear': return new Map()
     }
   }
 

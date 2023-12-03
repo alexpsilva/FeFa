@@ -31,6 +31,7 @@ const PacientDetails = ({ cpf, address, phones, readOnly }: Props) => {
       </Stacked>
       <PhoneList
         className="row-start-3 col-start-2 row-span-3"
+        defaultValues={phones ?? undefined}
         readOnly={readOnly}
       />
     </>

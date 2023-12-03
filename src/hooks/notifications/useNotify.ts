@@ -1,9 +1,9 @@
-import useNotifications from "./context"
+import useNotificationContext from "./context"
 import Notification from "./type"
 
 const timeouts = new Map<string, NodeJS.Timeout>()
 const useNotify = () => {
-  const { dispatch } = useNotifications()
+  const { dispatch } = useNotificationContext()
 
   return (payload: Notification & { expiresInSeconds?: number }) => {
     const { expiresInSeconds, ...notification } = payload

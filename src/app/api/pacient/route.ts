@@ -1,5 +1,5 @@
 import { PAGINATION_PAGE_SIZE } from "@/constants";
-import { WritablePacientSchema } from "@/types/model/pacient";
+import { Phone, WritablePacientSchema } from "@/types/model/pacient";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
@@ -21,7 +21,7 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) =
       skip: Number(pageOffset) || 0,
       take: Number(pageSize) || PAGINATION_PAGE_SIZE,
       where,
-      orderBy: { updatedAt: 'asc' }
+      orderBy: { updatedAt: 'desc' }
     }),
     prisma.pacient.count({ where })
   ])
@@ -47,8 +47,14 @@ const POST = authenticatedEndpoint(async (request: NextRequest, userId: number) 
     }
   }
 
-  const phones = body.phones
-  if (phones) { args.data.phones = { createMany: { data: phones } } }
+  const phones = body.phones?.filter(phone => phone.number)
+  if (phones) {
+    const phonesToCreate = phones.reduce(
+      (acc, phone) => !phone.id ? [...acc, { number: phone.number }] : acc,
+      [] as Pick<Phone, 'number'>[],
+    )
+    args.data.phones = { createMany: { data: phonesToCreate } }
+  }
 
   const pacient = await prisma.pacient.create(args)
 

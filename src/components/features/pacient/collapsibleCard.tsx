@@ -24,7 +24,7 @@ const PacientCollapsibleCard = ({
     <CollapsibleContentCard
       className={twMerge(`
         grid grid-flow-row
-        grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_21px]
+        grid-cols-[repeat(2,minmax(0,_1fr))_21px]
         gap-y-4 gap-x-8`,
         className
       )}

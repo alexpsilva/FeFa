@@ -6,6 +6,7 @@ import PacientCard from "@/components/features/pacient/card"
 import requestFromServer from "@/utils/request/fromServer"
 import { PacientSchema } from "@/types/model/pacient"
 import { z } from "zod"
+import DeleteButton from "./delete"
 
 export const metadata: Metadata = { title: 'Editar Paciente' }
 
@@ -33,8 +34,14 @@ export default async function EditPacient(props: Props) {
 
   return (
     <main className="p-6 pt-8">
-      <EditForm className="flex flex-col gap-4 mx-auto max-w-5xl">
-        <PacientCard pacient={pacient} />
+      <EditForm
+        pacientId={pacient.id}
+        className="flex flex-col gap-4 mx-auto max-w-5xl"
+      >
+        <PacientCard
+          pacient={pacient}
+          action={<DeleteButton pacientId={pacient.id} />}
+        />
         <div className="self-end flex gap-2 pr-2">
           <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
           <Button type='link' href={`/pacient/${pacient.id}`}>Cancelar</Button>

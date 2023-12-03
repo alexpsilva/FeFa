@@ -7,7 +7,7 @@ const requestFromClient = async <T extends z.ZodTypeAny>(
   options?: RequestOptions,
   schema?: T,
 ): Promise<RequestResult<TypeOf<T>>> => {
-  console.log('requestFromClient')
+  console.log(`fromClient: ${options?.method} ${path}`)
   return request(path, options, schema)
 }
 

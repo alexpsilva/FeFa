@@ -7,6 +7,7 @@ const authenticatedEndpoint = <T>(
   handler: (req: NextRequest, userId: number, params: T) => Promise<NextResponse>
 ) => {
   return async (request: NextRequest, params: T) => {
+    console.log(`API: ${request.method} ${(new URL(request.url)).pathname}`)
     const accessToken = await request.cookies.get(ACCESS_TOKEN_COOKIE)
     if (!accessToken) {
       return NextResponse.json('Unauthorized', { status: StatusCodes.UNAUTHORIZED })

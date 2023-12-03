@@ -1,15 +1,15 @@
 'use client'
 
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import { PacientSchema, WritablePacientSchema } from "@/types/model/pacient"
 import { formDataToJSON } from "@/utils/form/formDataToJSON"
 import requestFromClient from "@/utils/request/fromClient"
-import { useRouter } from "next/navigation"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes, ReactNode } from "react"
 
-const editPacient = async (formData: FormData) => {
+const editPacient = async (pacientId: number, formData: FormData) => {
   const data = WritablePacientSchema.parse(formDataToJSON(formData))
-  const { response, error } = await requestFromClient(
-    `/api/pacient`,
+  return requestFromClient(
+    `/api/pacient/${pacientId}`,
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
@@ -17,20 +17,26 @@ const editPacient = async (formData: FormData) => {
     },
     PacientSchema,
   )
-
-  if (error) { throw new Error(error.message) }
-  return response
 }
 
 type FormProps = DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
-type Props = { children: ReactNode } & Omit<FormProps, 'onSubmit'>
-const EditForm = ({ children, ...props }: Props) => {
-  const router = useRouter()
+type Props = { pacientId: number } & Omit<FormProps, 'onSubmit'>
+const EditForm = ({ pacientId, children, ...props }: Props) => {
+  const whileLoading = useRequestWhileLoading()
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const pacient = await editPacient(new FormData(event.target as HTMLFormElement))
-    router.push(`/pacient/${pacient.id}`)
+    whileLoading(
+      editPacient(
+        pacientId,
+        new FormData(event.target as HTMLFormElement),
+      ),
+      {
+        loading: 'Salvando...',
+        success: 'Salvo com sucesso',
+        failure: 'Falha ao salvar alterações',
+      }
+    )
   }
 
   return (

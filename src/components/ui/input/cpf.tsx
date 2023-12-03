@@ -11,11 +11,11 @@ const maskSlot = '*'
 const cpfMask = "***.***.***-**"
 
 const CpfInput = ({ children, defaultValue, ...props }: Props) => {
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState<string>(defaultValue?.toString() ?? '')
   const applyCpfMask = (newValue: string) => applyMask(cpfMask, maskSlot, newValue, 'numbers')
 
   return <Input
-    value={value ?? defaultValue}
+    value={value}
     onChange={(e) => setValue(applyCpfMask(e.target.value))}
     placeholder="000.000.000-00"
     {...props}

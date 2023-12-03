@@ -1,7 +1,7 @@
 import '../styles/global.css'
 import SideMenu from '@/components/side-menu'
 import { AppProps } from 'next/app'
-import NotificationBanner from '@/components/features/notification/banner'
+import NotificationBanners from '@/components/features/notification/banner'
 import { NotificationContext } from '@/hooks/notifications/context'
 import { useNotifications } from '@/hooks/notifications'
 
@@ -26,7 +26,7 @@ const CustomApp = ({ Component, pageProps, ...appProps }: AppProps) => {
         <NotificationContext.Provider value={dispatchNotification}>
           <div>
             <Component {...pageProps} />
-            <NotificationBanner
+            <NotificationBanners
               notifications={Array.from(notifications.values())}
             />
           </div>
