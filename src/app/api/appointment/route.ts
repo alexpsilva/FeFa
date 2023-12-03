@@ -1,3 +1,4 @@
+import { WritableAppointmentSchema } from "@/types/model/appointment";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
@@ -34,4 +35,35 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) =
   )
 })
 
-export { GET }
+
+const POST = authenticatedEndpoint(async (request: NextRequest, userId: number) => {
+  const body = WritableAppointmentSchema.parse(await request.json())
+
+  const pacient = await prisma.pacient.findUnique({
+    where: { id: body.pacientId, userId }
+  })
+
+  if (!pacient) {
+    return NextResponse.json(
+      `Pacient #${body.pacientId} not found`,
+      { status: StatusCodes.NOT_FOUND },
+    )
+  }
+
+  const args: Prisma.AppointmentCreateArgs = {
+    data: {
+      pacientId: body.pacientId,
+      date: body.date,
+      description: body.description
+    }
+  }
+
+  const appointment = await prisma.appointment.create(args)
+
+  return NextResponse.json(
+    appointment,
+    { status: StatusCodes.CREATED },
+  )
+})
+
+export { GET, POST }

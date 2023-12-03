@@ -1,12 +1,12 @@
 import { Metadata } from "next"
 
+import DeleteButton from "./delete"
 import EditForm from "./form"
 import Button from "@/components/ui/button"
 import PacientCard from "@/components/features/pacient/card"
 import requestFromServer from "@/utils/request/fromServer"
 import { PacientSchema } from "@/types/model/pacient"
 import { z } from "zod"
-import DeleteButton from "./delete"
 
 export const metadata: Metadata = { title: 'Editar Paciente' }
 

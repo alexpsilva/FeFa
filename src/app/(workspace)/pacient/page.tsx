@@ -53,12 +53,12 @@ export default async function ListPacients(props: Props) {
 
   return (
     <main className="p-4">
-      <div className="flex flex-col gap-2 mx-auto max-w-5xl">
+      <div className="flex flex-col mx-auto max-w-5xl">
         <SearchPacient
           defaultValue={term}
           className="self-center w-full max-w-lg rounded-lg bg-white stroke-skin-selected"
         />
-        <div className="h-8"></div>
+        <div className="h-12"></div>
         <ContentCard className="flex flex-col gap-3">
           <div className="flex flex-row justify-between pr-3">
             <h1 className="text-sm">

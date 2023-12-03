@@ -31,7 +31,6 @@ const PacientCard = ({
       )}
       {...props}
     >
-      {action ? <div className="col-start-3 row-start-1">{action}</div> : null}
       <PacientSummary
         name={pacient?.name}
         birthday={pacient?.birthday}
@@ -44,6 +43,7 @@ const PacientCard = ({
         phones={pacient?.phones}
         readOnly={readOnly}
       />
+      {action ? <div className="col-start-3 row-start-1">{action}</div> : null}
     </ContentCard>
   )
 }

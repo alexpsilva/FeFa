@@ -14,8 +14,6 @@ const COOKIE_OPTIONS = {
 
 const MENU_ROUTE_MAPPING = [
   { title: 'Pacientes', path: '/pacient' },
-  { title: 'Consultas', path: '/appointment' },
-  { title: 'Planos de Saúde', path: '/insurance' },
 ]
 
 export {
