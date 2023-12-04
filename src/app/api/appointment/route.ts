@@ -1,3 +1,4 @@
+import { PAGINATION_PAGE_SIZE } from "@/constants";
 import { WritableAppointmentSchema } from "@/types/model/appointment";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
@@ -9,23 +10,19 @@ import prisma from "../prisma";
 const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) => {
   const { searchParams } = new URL(request.url)
   const pacientId = searchParams.get('pacientId')
-  const includePacient = searchParams.get('includePacient') === 'true'
   const pageSize = searchParams.get('pageSize')
   const pageOffset = searchParams.get('pageOffset')
 
   const where: Prisma.AppointmentWhereInput = { pacient: { userId } }
   if (pacientId) where.pacient!.id = Number(pacientId)
 
-  const findManyArgs: Prisma.AppointmentFindManyArgs = {
-    where,
-    include: { pacient: includePacient },
-    orderBy: { updatedAt: 'asc' },
-  }
-  if (pageSize) findManyArgs.take = Number(pageSize)
-  if (pageOffset) findManyArgs.skip = Number(pageOffset)
-
   const [appointments, count] = await Promise.all([
-    prisma.appointment.findMany(findManyArgs),
+    prisma.appointment.findMany({
+      skip: Number(pageOffset) || 0,
+      take: Number(pageSize) || PAGINATION_PAGE_SIZE,
+      where,
+      orderBy: { date: 'desc' },
+    }),
     prisma.appointment.count({ where })
   ])
 

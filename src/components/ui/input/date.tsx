@@ -4,17 +4,23 @@ import Input from "."
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
-interface Props {
+type Props = {
+  value?: Date,
   defaultValue?: Date,
-}
+} & Omit<InputProps, 'defaultValue' | 'value'>
 
 const DateInput = ({
   defaultValue,
+  value,
   ...props
-}: Props & Omit<InputProps, 'defaultValue'>) => {
+}: Props) => {
+  const args: { value?: string, defaultValue?: string } = {}
+  if (value) { args.value = stringifyDateISO(value) }
+  if (defaultValue) { args.defaultValue = stringifyDateISO(defaultValue) }
+
   return <Input
     type='date'
-    defaultValue={defaultValue ? stringifyDateISO(defaultValue) : ''}
+    {...args}
     {...props}
   />
 }

@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react"
+import { DetailedHTMLProps, InputHTMLAttributes } from "react"
 import { twMerge } from "tailwind-merge"
 
 type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
@@ -7,9 +7,8 @@ type Props = {
   type?: InputProps['type']
 } & Omit<InputProps, 'type'>
 
-const Input = forwardRef<HTMLInputElement, Props>(({ type, className, ...props }: Props, ref) => {
+const Input = ({ type, className, ...props }: Props) => {
   return <input
-    ref={ref}
     className={twMerge(
       `text-lg 
       autofill:bg-transparent outline-none 
@@ -22,6 +21,6 @@ const Input = forwardRef<HTMLInputElement, Props>(({ type, className, ...props }
     type={type || 'text'}
     {...props}
   />
-})
+}
 
 export default Input
