@@ -1,17 +1,30 @@
 version: "3"
 
 services:
-  db:
-    image: postgres
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_USER=username
+  #     - POSTGRES_DB=fefa-db
+  #   ports:
+  #     - "5432:5432"
+  mysql:
+    image: mysql
     restart: always
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_USER=username
-      - POSTGRES_DB=fefa-db
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=password
+      - MYSQL_USER=username
+      - MYSQL_DATABASE=fefa-mysql
     ports:
-      - "5432:5432"
+      - "3306:3306"
 
 volumes:
-  db-data:
+  # db-data:
+  mysql-data:
