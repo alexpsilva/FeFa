@@ -3,6 +3,7 @@ import { Phone, WritablePacientSchema } from "@/types/model/pacient";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 
@@ -57,6 +58,7 @@ const POST = authenticatedEndpoint(async (request: NextRequest, userId: number) 
   }
 
   const pacient = await prisma.pacient.create(args)
+  revalidatePath('/(workspace)/pacient', 'page')
 
   return NextResponse.json(
     pacient,

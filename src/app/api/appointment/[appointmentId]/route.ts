@@ -2,6 +2,7 @@ import { WritableAppointmentSchema } from "@/types/model/appointment";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "../../prisma";
@@ -29,7 +30,10 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number, p
 
 const PATCH = authenticatedEndpoint(async (request: NextRequest, userId: number, params: Params) => {
   const { params: { appointmentId } } = Params.parse(params)
-  const body = WritableAppointmentSchema.omit({ pacientId: true }).parse(await request.json())
+  const {
+    date,
+    description,
+  } = WritableAppointmentSchema.omit({ pacientId: true }).parse(await request.json())
 
   const appointment = await prisma.appointment.findUnique({
     where: { id: appointmentId, pacient: { userId } }
@@ -44,12 +48,15 @@ const PATCH = authenticatedEndpoint(async (request: NextRequest, userId: number,
   const args: Prisma.AppointmentUpdateArgs = {
     where: { id: appointmentId },
     data: {
-      date: body.date,
-      description: body.description
+      date,
+      description,
     }
   }
 
   const newAppointment = await prisma.appointment.update(args)
+  revalidatePath(`/(workspace)/pacient/${appointment.pacientId}`, 'page')
+  revalidatePath(`/(workspace)/pacient/${appointment.pacientId}/appointment/${appointment.id}`, 'page')
+
   return NextResponse.json(newAppointment)
 })
 
@@ -68,6 +75,8 @@ const DELETE = authenticatedEndpoint(async (request: NextRequest, userId: number
   }
 
   await prisma.appointment.delete({ where: { id: appointment.id } })
+  revalidatePath(`/(workspace)/pacient/${appointment.pacientId}`, 'page')
+
   return new NextResponse()
 })
 

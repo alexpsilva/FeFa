@@ -2,6 +2,7 @@ import { Phone, WritablePacientSchema } from "@/types/model/pacient";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "../../prisma";
@@ -78,6 +79,9 @@ const PATCH = authenticatedEndpoint(async (request: NextRequest, userId: number,
   }
 
   const newPacient = await prisma.pacient.update(args)
+  revalidatePath('/(workspace)/pacient', 'page')
+  revalidatePath(`/(workspace)/pacient/${pacientId}`, 'page')
+
   return NextResponse.json(newPacient)
 })
 
@@ -97,6 +101,8 @@ const DELETE = authenticatedEndpoint(async (request: NextRequest, userId: number
   }
 
   await prisma.pacient.delete({ where: { id: pacient.id } })
+  revalidatePath('/(workspace)/pacient', 'page')
+
   return new NextResponse()
 })
 

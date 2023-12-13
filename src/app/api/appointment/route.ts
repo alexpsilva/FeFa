@@ -3,6 +3,7 @@ import { WritableAppointmentSchema } from "@/types/model/appointment";
 import authenticatedEndpoint from "@/utils/api/authenticatedEndpoint";
 import { Prisma } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../prisma";
 
@@ -34,28 +35,33 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) =
 
 
 const POST = authenticatedEndpoint(async (request: NextRequest, userId: number) => {
-  const body = WritableAppointmentSchema.parse(await request.json())
+  const {
+    pacientId,
+    date,
+    description,
+  } = WritableAppointmentSchema.parse(await request.json())
 
   const pacient = await prisma.pacient.findUnique({
-    where: { id: body.pacientId, userId }
+    where: { id: pacientId, userId }
   })
 
   if (!pacient) {
     return NextResponse.json(
-      `Pacient #${body.pacientId} not found`,
+      `Pacient #${pacientId} not found`,
       { status: StatusCodes.NOT_FOUND },
     )
   }
 
   const args: Prisma.AppointmentCreateArgs = {
     data: {
-      pacientId: body.pacientId,
-      date: body.date,
-      description: body.description
+      pacientId,
+      date,
+      description,
     }
   }
 
   const appointment = await prisma.appointment.create(args)
+  revalidatePath(`/(workspace)/pacient/${pacientId}`, 'page')
 
   return NextResponse.json(
     appointment,
