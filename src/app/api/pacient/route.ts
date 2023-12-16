@@ -15,7 +15,7 @@ const GET = authenticatedEndpoint(async (request: NextRequest, userId: number) =
   const pageOffset = searchParams.get('pageOffset')
 
   const where: Prisma.PacientWhereInput = { userId }
-  if (term) where.name = { contains: term, mode: 'insensitive' }
+  if (term) where.name = { contains: term }
 
   const [pacients, count] = await Promise.all([
     prisma.pacient.findMany({

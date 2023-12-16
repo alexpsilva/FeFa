@@ -75,6 +75,7 @@ const ViewPacient = async (props: Props) => {
                 description={appointment.description}
                 actions={[
                   <ClientLink
+                    key={appointment.id}
                     href={`/pacient/${pacient.id}/appointment/${appointment.id}`}
                   >
                     <PenIcon
