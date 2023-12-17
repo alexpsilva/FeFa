@@ -1,6 +1,7 @@
 import NotificationBanners from "@/components/features/notification/banner"
 import { NotificationProvider } from "@/hooks/notifications"
 import { Metadata } from "next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import './global.css'
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <aside className="fixed bottom-0 right-3">
             <NotificationBanners />
           </aside>
+          <SpeedInsights />
         </body>
       </NotificationProvider>
     </html>
