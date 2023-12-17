@@ -7,7 +7,7 @@ import request from "@/utils/request/request"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes } from "react"
 
 const editAppointment = async (appointmentId: number, formData: FormData) => {
-  const data = WritableAppointmentSchema.omit({ pacientId: true }).parse(formDataToJSON(formData))
+  const data = WritableAppointmentSchema.parse(formDataToJSON(formData))
   return request(
     `/api/appointment/${appointmentId}`,
     {
