@@ -29,8 +29,8 @@ const CreateAppointment = protectedPage(async (props: Props, userId) => {
         <AppointmentHeader pacientName={pacient.name} />
         <AppointmentDescription />
         <div className="self-end flex gap-2 pr-2">
-          <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
           <Button type='link' href={`/pacient/${pacientId}`}>Cancelar</Button>
+          <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
         </div>
       </CreateForm>
     </main>
