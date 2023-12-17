@@ -1,5 +1,6 @@
 'use client'
 
+import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import { PacientSchema, WritablePacientSchema } from "@/types/model/pacient"
 import request from "@/utils/request/request"
 import { useRouter } from "next/navigation"
@@ -7,7 +8,7 @@ import { DetailedHTMLProps, FormEvent, FormHTMLAttributes, ReactNode } from "rea
 
 const createPacient = async (formData: FormData) => {
   const data = WritablePacientSchema.parse(Object.fromEntries(formData))
-  const { response, error } = await request(
+  return request(
     `/api/pacient`,
     {
       method: 'POST',
@@ -16,20 +17,28 @@ const createPacient = async (formData: FormData) => {
     },
     PacientSchema,
   )
-
-  if (error) { throw new Error(error.message) }
-  return response
 }
 
 type FormProps = DetailedHTMLProps<FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>
 type Props = { children: ReactNode } & Omit<FormProps, 'onSubmit'>
 const CreateForm = ({ children, ...props }: Props) => {
   const router = useRouter()
+  const whileLoading = useRequestWhileLoading()
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const pacient = await createPacient(new FormData(event.target as HTMLFormElement))
-    router.push(`/pacient/${pacient.id}`)
+
+    const { response, error } = await whileLoading(
+      createPacient(new FormData(event.target as HTMLFormElement)),
+      {
+        loading: 'Salvando...',
+        success: 'Criado com sucesso',
+        failure: 'Falha ao criar paciente',
+      }
+    )
+
+    if (error) { throw new Error(error.message) }
+    router.push(`/pacient/${response.id}`)
   }
 
   return (

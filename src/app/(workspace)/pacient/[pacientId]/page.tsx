@@ -1,32 +1,44 @@
 import AppointmentSummary from "@/components/features/appointment/summary"
 import PacientCollapsibleCard from "@/components/features/pacient/collapsibleCard"
+import CurrentPage from "@/components/features/pagination/current-page"
+import NextPage from "@/components/features/pagination/next-page"
+import PreviousPage from "@/components/features/pagination/previous-page"
 import PenIcon from "@/components/icons/pen"
 import ContentCard from "@/components/layout/contentCard"
 import BackButton from "@/components/ui/back-button"
 import Label from "@/components/ui/label"
+import { PAGINATION_PAGE_SIZE } from "@/constants"
 import { listAppointments } from "@/database/appointment"
 import { getPacient } from "@/database/pacient"
 import protectedPage from "@/utils/auth/protected-page"
 import { Metadata } from "next"
 import Link from "next/link"
 import { z } from "zod"
+import AppointmentPaginationControls from "./pagination"
 
 export const metadata: Metadata = { title: 'Paciente' }
 
 const Props = z.object({
   params: z.object({
     pacientId: z.coerce.number()
-  })
+  }),
+  searchParams: z.object({
+    pageSize: z.optional(z.coerce.number()),
+    pageOffset: z.optional(z.coerce.number()),
+  }),
 })
 type Props = z.infer<typeof Props>
 
 const ViewPacient = protectedPage(async (props: Props, userId: number) => {
-  const { params } = Props.parse(props)
+  const { params, searchParams } = Props.parse(props)
+
+  const pageSize = searchParams.pageSize || PAGINATION_PAGE_SIZE
+  const pageOffset = searchParams.pageOffset || 0
 
   const pacient = await getPacient(userId, params.pacientId)
   if (!pacient) { throw Error(`Pacient #${params.pacientId} not found`) }
 
-  const { appointments } = await listAppointments(userId, params.pacientId)
+  const { appointments, total } = await listAppointments(userId, params.pacientId, pageSize, pageOffset)
   const sortedAppointments = appointments.sort((a, b) => a.date < b.date ? 1 : -1)
 
   return (
@@ -70,6 +82,18 @@ const ViewPacient = protectedPage(async (props: Props, userId: number) => {
               />
             ))}
           </div>
+          <div className="h-5"></div>
+          <AppointmentPaginationControls
+            className="flex items-center justify-end gap-2"
+            pacientId={pacient.id}
+            totalElements={total}
+            pageSize={pageSize}
+            pageOffset={pageOffset}
+          >
+            <PreviousPage className="stroke-skin-selected" />
+            <CurrentPage />
+            <NextPage className="stroke-skin-selected" />
+          </AppointmentPaginationControls>
         </ContentCard>
       </div>
     </main>

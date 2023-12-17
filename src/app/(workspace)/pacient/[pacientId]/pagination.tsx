@@ -3,18 +3,14 @@
 import PaginationControls from "@/components/features/pagination"
 import { ComponentProps } from "react"
 
-type Props = { term: string } & Omit<
+type Props = { pacientId: number } & Omit<
   ComponentProps<typeof PaginationControls>,
   'targetUrl'
 >
 
-const PacientPaginationControls = ({ term, ...props }: Props) => {
+const AppointmentPaginationControls = ({ pacientId, ...props }: Props) => {
   const targetUrl = (newPageSize: number, newPageOffset: number) => {
-    let url = '/pacient'
-
-    if (term) { url = `${url}?term=${term}&` }
-    else { url = `${url}?` }
-
+    let url = `/pacient/${pacientId}?`
     url = `${url}pageSize=${newPageSize}&pageOffset=${newPageOffset}`
 
     return url
@@ -28,4 +24,4 @@ const PacientPaginationControls = ({ term, ...props }: Props) => {
   )
 }
 
-export default PacientPaginationControls
+export default AppointmentPaginationControls
