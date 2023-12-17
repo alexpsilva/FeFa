@@ -2,6 +2,7 @@ import AppointmentSummary from "@/components/features/appointment/summary"
 import PacientCollapsibleCard from "@/components/features/pacient/collapsibleCard"
 import PenIcon from "@/components/icons/pen"
 import ContentCard from "@/components/layout/contentCard"
+import BackButton from "@/components/ui/back-button"
 import Label from "@/components/ui/label"
 import { listAppointments } from "@/database/appointment"
 import { getPacient } from "@/database/pacient"
@@ -31,6 +32,7 @@ const ViewPacient = protectedPage(async (props: Props, userId: number) => {
   return (
     <main className="p-6 pt-8">
       <div className="flex flex-col gap-4 mx-auto max-w-5xl">
+        <BackButton href="/pacient" className="self-end" />
         <PacientCollapsibleCard
           pacient={pacient}
           initial="collapsed"

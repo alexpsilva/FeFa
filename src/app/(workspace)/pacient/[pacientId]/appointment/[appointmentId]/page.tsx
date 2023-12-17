@@ -9,6 +9,7 @@ import EditForm from "./form"
 import protectedPage from "@/utils/auth/protected-page"
 import { getPacient } from "@/database/pacient"
 import { getAppointment } from "@/database/appointment"
+import BackButton from "@/components/ui/back-button"
 
 export const metadata: Metadata = { title: 'Editar Consulta' }
 
@@ -39,6 +40,7 @@ const EditAppointment = protectedPage(async (props: Props, userId: number) => {
         appointmentId={appointment.id}
         className="flex flex-col gap-4 mx-auto max-w-5xl"
       >
+        <BackButton href={`/pacient/${pacient.id}`} className="self-end" />
         <AppointmentHeader
           pacientName={pacient.name}
           date={appointment.date}
