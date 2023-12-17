@@ -9,7 +9,6 @@ import PreviousPage from "@/components/features/pagination/previous-page"
 import CurrentPage from "@/components/features/pagination/current-page"
 import NextPage from "@/components/features/pagination/next-page"
 import ContentCard from "@/components/layout/contentCard"
-import ClientLinkLI from "@/components/features/link/li"
 import protectedPage from "@/utils/auth/protected-page"
 import { listPacients } from "@/database/pacient"
 
@@ -55,17 +54,12 @@ const ListPacients = protectedPage(async (props: Props, userId: number) => {
           </div>
           <ul className="pl-2">
             {pacients.map(pacient => (
-              <ClientLinkLI
+              <Link
                 key={pacient.id}
                 href={`/pacient/${pacient.id}`}
-                className="
-                  py-2 
-                  border-b-2 last:border-0 border-slate-100
-                  hover:cursor-pointer
-                "
               >
-                {pacient.name}
-              </ClientLinkLI>
+                <li className="py-2">{pacient.name}</li>
+              </Link>
             ))}
           </ul>
           <PacientPaginationControls

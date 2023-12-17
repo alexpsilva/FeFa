@@ -1,5 +1,4 @@
 import AppointmentSummary from "@/components/features/appointment/summary"
-import ClientLink from "@/components/features/link"
 import PacientCollapsibleCard from "@/components/features/pacient/collapsibleCard"
 import PenIcon from "@/components/icons/pen"
 import ContentCard from "@/components/layout/contentCard"
@@ -55,16 +54,16 @@ const ViewPacient = protectedPage(async (props: Props, userId: number) => {
                 date={appointment.date}
                 description={appointment.description}
                 actions={[
-                  <ClientLink
+                  <Link
                     key={appointment.id}
                     href={`/pacient/${pacient.id}/appointment/${appointment.id}`}
                   >
                     <PenIcon
                       width="21"
                       height="21"
-                      className="stroke-skin-selected cursor-pointer"
+                      className="stroke-skin-selected"
                     />
-                  </ClientLink>
+                  </Link>
                 ]}
               />
             ))}

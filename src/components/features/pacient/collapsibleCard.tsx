@@ -1,9 +1,9 @@
 import PenIcon from "@/components/icons/pen"
 import CollapsibleContentCard from "@/components/layout/contentCard/collapsible"
 import Pacient from "@/types/model/pacient"
+import Link from "next/link"
 import { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
-import ClientLink from "../link"
 import PacientDetails from "./details"
 import PacientSummary from "./summary"
 
@@ -37,16 +37,16 @@ const PacientCollapsibleCard = ({
             note={pacient?.note}
             readOnly={readOnly}
           />
-          <ClientLink
+          <Link
             href={`/pacient/${pacient?.id}/edit`}
             className='col-start-3 row-start-1'
           >
             <PenIcon
               width="21"
               height="21"
-              className="stroke-skin-selected cursor-pointer"
+              className="stroke-skin-selected"
             />
-          </ClientLink>
+          </Link>
         </>
       }
       collapsible={
