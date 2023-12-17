@@ -1,13 +1,13 @@
 'use client'
 
 import { PacientSchema, WritablePacientSchema } from "@/types/model/pacient"
-import requestFromClient from "@/utils/request/fromClient"
+import request from "@/utils/request/request"
 import { useRouter } from "next/navigation"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes, ReactNode } from "react"
 
 const createPacient = async (formData: FormData) => {
   const data = WritablePacientSchema.parse(Object.fromEntries(formData))
-  const { response, error } = await requestFromClient(
+  const { response, error } = await request(
     `/api/pacient`,
     {
       method: 'POST',

@@ -3,10 +3,11 @@ import { Metadata } from "next"
 import CreateForm from "./form"
 import Button from "@/components/ui/button"
 import PacientCard from "@/components/features/pacient/card"
+import protectedPage from "@/utils/auth/protected-page"
 
 export const metadata: Metadata = { title: 'Criar Paciente' }
 
-export default async function CreatePacient() {
+const CreatePacient = protectedPage(() => {
   return (
     <main className="p-6 pt-8">
       <CreateForm className="flex flex-col gap-4 mx-auto max-w-5xl">
@@ -18,4 +19,6 @@ export default async function CreatePacient() {
       </CreateForm>
     </main>
   )
-}
+})
+
+export default CreatePacient

@@ -2,10 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 
 import { PAGINATION_PAGE_SIZE } from "@/constants"
-import { PacientSchema } from "@/types/model/pacient"
 import { z } from "zod"
-import requestFromServer from "@/utils/request/fromServer"
-import { RequestOptions } from "@/utils/request/types"
 import SearchPacient from "./search"
 import PacientPaginationControls from "./pagination"
 import PreviousPage from "@/components/features/pagination/previous-page"
@@ -13,25 +10,10 @@ import CurrentPage from "@/components/features/pagination/current-page"
 import NextPage from "@/components/features/pagination/next-page"
 import ContentCard from "@/components/layout/contentCard"
 import ClientLinkLI from "@/components/features/link/li"
+import protectedPage from "@/utils/auth/protected-page"
+import { listPacients } from "@/database/pacient"
 
 export const metadata: Metadata = { title: 'Pacientes' }
-
-const fetchPacients = async (term?: string, pageSize?: number, pageOffset?: number) => {
-  const options: RequestOptions = { method: 'GET' }
-
-  options.query = { pageSize: pageSize || PAGINATION_PAGE_SIZE }
-  if (term) { options.query.term = term }
-  if (pageOffset) { options.query.pageOffset = pageOffset }
-
-  const { response, error } = await requestFromServer(
-    '/api/pacient',
-    options,
-    z.object({ data: z.array(PacientSchema), total: z.number() }),
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
 
 const Props = z.object({
   searchParams: z.object({
@@ -42,14 +24,14 @@ const Props = z.object({
 })
 type Props = z.infer<typeof Props>
 
-export default async function ListPacients(props: Props) {
+const ListPacients = protectedPage(async (props: Props, userId: number) => {
   const { searchParams } = Props.parse(props)
 
   const term = searchParams.term || ''
   const pageSize = searchParams.pageSize || PAGINATION_PAGE_SIZE
   const pageOffset = searchParams.pageOffset || 0
 
-  const pacientsResponse = await fetchPacients(term, pageSize, pageOffset)
+  const { pacients, total } = await listPacients(userId, term, pageSize, pageOffset)
 
   return (
     <main className="p-4">
@@ -72,7 +54,7 @@ export default async function ListPacients(props: Props) {
             </Link>
           </div>
           <ul className="pl-2">
-            {pacientsResponse.data.map(pacient => (
+            {pacients.map(pacient => (
               <ClientLinkLI
                 key={pacient.id}
                 href={`/pacient/${pacient.id}`}
@@ -89,7 +71,7 @@ export default async function ListPacients(props: Props) {
           <PacientPaginationControls
             className="flex items-center justify-end gap-2"
             term={term}
-            totalElements={pacientsResponse.total}
+            totalElements={total}
             pageSize={pageSize}
             pageOffset={pageOffset}
           >
@@ -101,4 +83,6 @@ export default async function ListPacients(props: Props) {
       </div>
     </main>
   )
-}
+})
+
+export default ListPacients

@@ -1,38 +1,16 @@
 import { Metadata } from "next"
 
 import Button from "@/components/ui/button"
-import requestFromServer from "@/utils/request/fromServer"
-import { PacientSchema } from "@/types/model/pacient"
 import { z } from "zod"
 import DeleteButton from "./delete"
-import { AppointmentSchema } from "@/types/model/appointment"
 import AppointmentHeader from "@/components/features/appointment/header"
 import AppointmentDescription from "@/components/features/appointment/description"
 import EditForm from "./form"
+import protectedPage from "@/utils/auth/protected-page"
+import { getPacient } from "@/database/pacient"
+import { getAppointment } from "@/database/appointment"
 
 export const metadata: Metadata = { title: 'Editar Consulta' }
-
-const fetchPacient = async (id: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/pacient/${id}`,
-    { method: 'GET' },
-    PacientSchema
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
-
-const fetchAppointment = async (id: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/appointment/${id}`,
-    { method: 'GET' },
-    AppointmentSchema
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
 
 const Props = z.object({
   params: z.object({
@@ -42,10 +20,14 @@ const Props = z.object({
 })
 type Props = z.infer<typeof Props>
 
-export default async function EditAppointment(props: Props) {
+const EditAppointment = protectedPage(async (props: Props, userId: number) => {
   const { params } = Props.parse(props)
-  const pacient = await fetchPacient(params.pacientId)
-  const appointment = await fetchAppointment(params.appointmentId)
+
+  const pacient = await getPacient(userId, params.pacientId)
+  if (!pacient) { throw Error(`Pacient #${params.pacientId} not found`) }
+
+  const appointment = await getAppointment(userId, params.appointmentId)
+  if (!appointment) { throw Error(`Appointment #${params.appointmentId} not found`) }
 
   if (appointment.pacientId != pacient.id) {
     throw new Error(`Pacient #${pacient.id} does not have a Appointment #${appointment.id}`)
@@ -70,4 +52,6 @@ export default async function EditAppointment(props: Props) {
       </EditForm>
     </main>
   )
-}
+})
+
+export default EditAppointment

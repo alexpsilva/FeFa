@@ -2,12 +2,12 @@
 
 import TrashIcon from "@/components/icons/trash"
 import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
-import requestFromClient from "@/utils/request/fromClient"
+import request from "@/utils/request/request"
 import { useRouter } from "next/navigation"
 import { ComponentProps } from "react"
 
 const deletePacient = async (pacientId: number) => {
-  return requestFromClient(
+  return request(
     `/api/pacient/${pacientId}`,
     { method: 'DELETE' },
   )

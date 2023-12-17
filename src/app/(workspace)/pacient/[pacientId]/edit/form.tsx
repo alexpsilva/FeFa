@@ -3,12 +3,12 @@
 import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import { PacientSchema, WritablePacientSchema } from "@/types/model/pacient"
 import { formDataToJSON } from "@/utils/form/formDataToJSON"
-import requestFromClient from "@/utils/request/fromClient"
+import request from "@/utils/request/request"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes, ReactNode } from "react"
 
 const editPacient = async (pacientId: number, formData: FormData) => {
   const data = WritablePacientSchema.parse(formDataToJSON(formData))
-  return requestFromClient(
+  return request(
     `/api/pacient/${pacientId}`,
     {
       method: 'PATCH',

@@ -4,22 +4,11 @@ import DeleteButton from "./delete"
 import EditForm from "./form"
 import Button from "@/components/ui/button"
 import PacientCard from "@/components/features/pacient/card"
-import requestFromServer from "@/utils/request/fromServer"
-import { PacientSchema } from "@/types/model/pacient"
 import { z } from "zod"
+import protectedPage from "@/utils/auth/protected-page"
+import { getPacient } from "@/database/pacient"
 
 export const metadata: Metadata = { title: 'Editar Paciente' }
-
-const fetchPacient = async (id: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/pacient/${id}`,
-    { method: 'GET' },
-    PacientSchema
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
 
 const Props = z.object({
   params: z.object({
@@ -28,9 +17,11 @@ const Props = z.object({
 })
 type Props = z.infer<typeof Props>
 
-export default async function EditPacient(props: Props) {
+const EditPacient = protectedPage(async (props: Props, userId: number) => {
   const { params } = Props.parse(props)
-  const pacient = await fetchPacient(params.pacientId)
+
+  const pacient = await getPacient(userId, params.pacientId)
+  if (!pacient) { throw Error(`Pacient #${params.pacientId} not found`) }
 
   return (
     <main className="p-6 pt-8">
@@ -49,4 +40,6 @@ export default async function EditPacient(props: Props) {
       </EditForm>
     </main>
   )
-}
+})
+
+export default EditPacient

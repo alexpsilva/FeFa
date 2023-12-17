@@ -4,36 +4,14 @@ import PacientCollapsibleCard from "@/components/features/pacient/collapsibleCar
 import PenIcon from "@/components/icons/pen"
 import ContentCard from "@/components/layout/contentCard"
 import Label from "@/components/ui/label"
-import { AppointmentSchema } from "@/types/model/appointment"
-import { PacientSchema } from "@/types/model/pacient"
-import requestFromServer from "@/utils/request/fromServer"
+import { listAppointments } from "@/database/appointment"
+import { getPacient } from "@/database/pacient"
+import protectedPage from "@/utils/auth/protected-page"
 import { Metadata } from "next"
 import Link from "next/link"
 import { z } from "zod"
 
 export const metadata: Metadata = { title: 'Paciente' }
-
-const fetchPacient = async (id: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/pacient/${id}`,
-    { method: 'GET' },
-    PacientSchema
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
-
-const fetchAppointments = async (pacientId: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/appointment?pacientId=${pacientId}`,
-    { method: 'GET' },
-    z.object({ data: z.array(AppointmentSchema), total: z.number() }),
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
 
 const Props = z.object({
   params: z.object({
@@ -42,10 +20,13 @@ const Props = z.object({
 })
 type Props = z.infer<typeof Props>
 
-const ViewPacient = async (props: Props) => {
+const ViewPacient = protectedPage(async (props: Props, userId: number) => {
   const { params } = Props.parse(props)
-  const pacient = await fetchPacient(params.pacientId)
-  const { data: appointments } = await fetchAppointments(params.pacientId)
+
+  const pacient = await getPacient(userId, params.pacientId)
+  if (!pacient) { throw Error(`Pacient #${params.pacientId} not found`) }
+
+  const { appointments } = await listAppointments(userId, params.pacientId)
   const sortedAppointments = appointments.sort((a, b) => a.date < b.date ? 1 : -1)
 
   return (
@@ -92,6 +73,6 @@ const ViewPacient = async (props: Props) => {
       </div>
     </main>
   )
-}
+})
 
 export default ViewPacient

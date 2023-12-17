@@ -4,7 +4,7 @@ import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { POST_LOGIN_REDIRECT_QUERY } from "@/constants"
 import Script from "next/script"
-import requestFromClient from "@/utils/request/fromClient"
+import request from "@/utils/request/request"
 
 export default function Login() {
   const GoogleSignIn = dynamic(() => import('@/components/features/google-signin'), { ssr: false })
@@ -12,7 +12,7 @@ export default function Login() {
   const query = useSearchParams()
 
   const onSignIn = async (credentials: google.accounts.id.CredentialResponse) => {
-    const { error } = await requestFromClient(
+    const { error } = await request(
       `/api/auth/login`,
       {
         method: 'POST',

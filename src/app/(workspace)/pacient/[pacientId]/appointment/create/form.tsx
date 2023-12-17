@@ -1,16 +1,17 @@
 'use client'
 
-import { AppointmentSchema, WritableAppointmentSchema } from "@/types/model/appointment"
-import requestFromClient from "@/utils/request/fromClient"
+import { AppointmentSchema, WritableAppointmentWithPacientIdSchema } from "@/types/model/appointment"
+import request from "@/utils/request/request"
 import { useRouter } from "next/navigation"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes, ReactNode } from "react"
 
 const createAppointment = async (pacientId: number, formData: FormData) => {
-  const data = WritableAppointmentSchema.parse({
-    ...Object.fromEntries(formData),
-    pacientId
-  })
-  const { response, error } = await requestFromClient(
+  const data = WritableAppointmentWithPacientIdSchema
+    .parse({
+      ...Object.fromEntries(formData),
+      pacientId
+    })
+  const { response, error } = await request(
     `/api/appointment`,
     {
       method: 'POST',

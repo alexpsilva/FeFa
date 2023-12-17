@@ -3,12 +3,12 @@
 import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import { AppointmentSchema, WritableAppointmentSchema } from "@/types/model/appointment"
 import { formDataToJSON } from "@/utils/form/formDataToJSON"
-import requestFromClient from "@/utils/request/fromClient"
+import request from "@/utils/request/request"
 import { DetailedHTMLProps, FormEvent, FormHTMLAttributes } from "react"
 
 const editAppointment = async (appointmentId: number, formData: FormData) => {
   const data = WritableAppointmentSchema.omit({ pacientId: true }).parse(formDataToJSON(formData))
-  return requestFromClient(
+  return request(
     `/api/appointment/${appointmentId}`,
     {
       method: 'PATCH',

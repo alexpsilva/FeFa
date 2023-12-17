@@ -2,25 +2,13 @@ import { Metadata } from "next"
 
 import CreateForm from "./form"
 import Button from "@/components/ui/button"
-import PacientCard from "@/components/features/pacient/card"
 import AppointmentHeader from "@/components/features/appointment/header"
 import { z } from "zod"
-import { PacientSchema } from "@/types/model/pacient"
-import requestFromServer from "@/utils/request/fromServer"
 import AppointmentDescription from "@/components/features/appointment/description"
+import protectedPage from "@/utils/auth/protected-page"
+import { getPacient } from "@/database/pacient"
 
 export const metadata: Metadata = { title: 'Criar Consulta' }
-
-const fetchPacient = async (id: number) => {
-  const { response, error } = await requestFromServer(
-    `/api/pacient/${id}`,
-    { method: 'GET' },
-    PacientSchema
-  )
-
-  if (error) { throw new Error(error.message) }
-  return response
-}
 
 const Props = z.object({
   params: z.object({
@@ -29,9 +17,11 @@ const Props = z.object({
 })
 type Props = z.infer<typeof Props>
 
-export default async function CreatePacient(props: Props) {
+const CreateAppointment = protectedPage(async (props: Props, userId) => {
   const { params: { pacientId } } = Props.parse(props)
-  const pacient = await fetchPacient(pacientId)
+
+  const pacient = await getPacient(userId, pacientId)
+  if (!pacient) { throw Error(`Pacient #${pacientId} not found`) }
 
   return (
     <main className="p-6 pt-8">
@@ -45,4 +35,6 @@ export default async function CreatePacient(props: Props) {
       </CreateForm>
     </main>
   )
-}
+})
+
+export default CreateAppointment
