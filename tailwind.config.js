@@ -1,4 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+const formatColorString = (color) => ({ opacityValue }) => opacityValue === undefined
+  ? `rgb(var(${color}))`
+  : `rgba(var(${color}), ${opacityValue})`
+
+const colorVariations = {
+  base: formatColorString('--color-base'),
+  selected: formatColorString('--color-selected'),
+  offwhite: formatColorString('--color-offwhite'),
+  alert: formatColorString('--color-alert'),
+}
+
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -6,52 +17,16 @@ module.exports = {
   theme: {
     extend: {
       textColor: {
-        skin: {
-          base: ({ opacityValue }) => opacityValue === undefined
-            ? 'rgb(var(--color-base))'
-            : `rgba(var(--color-base), ${opacityValue})`,
-          selected:
-            ({ opacityValue }) => opacityValue === undefined
-              ? 'rgb(var(--color-selected))'
-              : `rgba(var(--color-selected), ${opacityValue})`,
-        }
+        skin: colorVariations
       },
       stroke: {
-        skin: {
-          base: ({ opacityValue }) => opacityValue === undefined
-            ? 'rgb(var(--color-base))'
-            : `rgba(var(--color-base), ${opacityValue})`,
-          selected:
-            ({ opacityValue }) => opacityValue === undefined
-              ? 'rgb(var(--color-selected))'
-              : `rgba(var(--color-selected), ${opacityValue})`,
-        }
+        skin: colorVariations
       },
       borderColor: {
-        skin: {
-          base: ({ opacityValue }) => opacityValue === undefined
-            ? 'rgb(var(--color-base))'
-            : `rgba(var(--color-base), ${opacityValue})`,
-          selected:
-            ({ opacityValue }) => opacityValue === undefined
-              ? 'rgb(var(--color-selected))'
-              : `rgba(var(--color-selected), ${opacityValue})`,
-        }
+        skin: colorVariations
       },
       backgroundColor: {
-        skin: {
-          base: ({ opacityValue }) => opacityValue === undefined
-            ? 'rgb(var(--color-base))'
-            : `rgba(var(--color-base), ${opacityValue})`,
-          selected:
-            ({ opacityValue }) => opacityValue === undefined
-              ? 'rgb(var(--color-selected))'
-              : `rgba(var(--color-selected), ${opacityValue})`,
-          offwhite:
-            ({ opacityValue }) => opacityValue === undefined
-              ? 'rgb(var(--color-offwhite))'
-              : `rgba(var(--color-offwhite), ${opacityValue})`,
-        }
+        skin: colorVariations
       }
     },
   },

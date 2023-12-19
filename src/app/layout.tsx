@@ -1,4 +1,4 @@
-import NotificationBanners from "@/components/features/notification/banner"
+import NotificationBanners from "@/components/features/notification/banners"
 import { NotificationProvider } from "@/hooks/notifications"
 import { Metadata } from "next"
 import { SpeedInsights } from "@vercel/speed-insights/next"

@@ -21,6 +21,9 @@
 
     /* BLUE-ISH GRAY */
     --color-offwhite: 240, 242, 245;
+
+    /* LIGHT RED */
+    --color-alert: 244, 114, 114;
   }
 }
 
