@@ -17,7 +17,7 @@ const useNotify = () => {
         notification.id,
         setTimeout(
           () => dispatch({ type: 'remove', id: notification.id }),
-          expiresInSeconds * 1000000
+          expiresInSeconds * 1000
         )
       )
     }
