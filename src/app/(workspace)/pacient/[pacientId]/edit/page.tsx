@@ -29,13 +29,15 @@ const EditPacient = protectedPage(async (props: Props, userId: number) => {
         pacientId={pacient.id}
         className="flex flex-col gap-4 mx-auto max-w-5xl"
       >
-        <PacientCard
-          pacient={pacient}
-          action={<DeleteButton pacientId={pacient.id} />}
-        />
-        <div className="self-end flex gap-2 pr-2">
-          <Button type='link' href={`/pacient/${pacient.id}`}>Cancelar</Button>
-          <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
+        <PacientCard pacient={pacient} />
+        <div className="flex flex-row justify-between px-2">
+          <DeleteButton pacientId={pacient.id}>
+            Deletar
+          </DeleteButton>
+          <div className="flex flex-row gap-2">
+            <Button type='link' href={`/pacient/${pacient.id}`}>Cancelar</Button>
+            <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
+          </div>
         </div>
       </EditForm>
     </main>

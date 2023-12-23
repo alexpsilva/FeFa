@@ -44,12 +44,16 @@ const EditAppointment = protectedPage(async (props: Props, userId: number) => {
         <AppointmentHeader
           pacientName={pacient.name}
           date={appointment.date}
-          action={<DeleteButton pacientId={pacient.id} appointmentId={appointment.id} />}
         />
         <AppointmentDescription description={appointment.description} />
-        <div className="self-end flex gap-2 pr-2">
-          <Button type='link' href={`/pacient/${pacient.id}`}>Cancelar</Button>
-          <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
+        <div className="flex flex-row justify-between px-2">
+          <DeleteButton pacientId={pacient.id} appointmentId={appointment.id}>
+            Deletar
+          </DeleteButton>
+          <div className="flex flex-row gap-2">
+            <Button type='link' href={`/pacient/${pacient.id}`}>Cancelar</Button>
+            <Button type='submit' className="bg-skin-selected text-white">Salvar</Button>
+          </div>
         </div>
       </EditForm>
     </main>

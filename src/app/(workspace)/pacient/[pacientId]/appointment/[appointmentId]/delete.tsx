@@ -1,10 +1,12 @@
 'use client'
 
-import TrashIcon from "@/components/icons/trash"
+import Button, { ButtonProps } from "@/components/ui/button"
 import useRequestWhileLoading from "@/hooks/useRequestWhileLoading"
 import request from "@/utils/request/request"
 import { useRouter } from "next/navigation"
-import { ComponentProps } from "react"
+import { MouseEvent } from "react"
+import { twMerge } from "tailwind-merge"
+
 
 const deleteAppointment = async (appointmentId: number) => {
   return request(
@@ -13,13 +15,19 @@ const deleteAppointment = async (appointmentId: number) => {
   )
 }
 
-type IconProps = ComponentProps<typeof TrashIcon>
-type Props = { appointmentId: number, pacientId: number } & Omit<IconProps, 'onClick'>
-const DeleteButton = ({ appointmentId, pacientId, ...props }: Props) => {
+type Props = { appointmentId: number, pacientId: number } & ButtonProps
+const DeleteButton = ({
+  appointmentId,
+  pacientId,
+  onClick,
+  className,
+  children,
+  ...props
+}: Props) => {
   const router = useRouter()
   const whileLoading = useRequestWhileLoading()
 
-  const onClick = async () => {
+  const _onClick = async (event: MouseEvent<HTMLButtonElement>) => {
     await whileLoading(
       deleteAppointment(appointmentId),
       {
@@ -29,16 +37,20 @@ const DeleteButton = ({ appointmentId, pacientId, ...props }: Props) => {
       }
     )
     router.push(`/pacient/${pacientId}`)
+    onClick ? onClick(event) : null
   }
 
   return (
-    <TrashIcon
-      width="21"
-      height="21"
-      className="stroke-skin-selected cursor-pointer"
-      onClick={onClick}
+    <Button
+      className={twMerge(
+        'bg-skin-alert text-white',
+        className,
+      )}
+      onClick={_onClick}
       {...props}
-    />
+    >
+      {children}
+    </Button>
   )
 }
 
