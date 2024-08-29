@@ -8,7 +8,7 @@ const fsMock = fs as jest.Mocked<typeof fs>;
 
 
 describe('TemplateRenderer', () => {
-    afterEach(() => {
+    beforeEach(() => {
         jest.resetAllMocks();
     })
 
@@ -30,6 +30,7 @@ describe('TemplateRenderer', () => {
             const result = (new TemplateRenderer(templateFolderPath)).render(fileName);
 
             expect(result).toBe(fileContents);
+            expect(fsMock.readFileSync).toHaveBeenCalledTimes(1);
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/${fileName}`, 'utf-8');
         });
 
@@ -58,6 +59,7 @@ describe('TemplateRenderer', () => {
             const result = (new TemplateRenderer(templateFolderPath)).render(fileName);
 
             expect(result).toBe('Hello world !');
+            expect(fsMock.readFileSync).toHaveBeenCalledTimes(2);
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/test.html`, 'utf-8');
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/other-test.html`, 'utf-8');
         })
@@ -79,6 +81,7 @@ describe('TemplateRenderer', () => {
             const result = (new TemplateRenderer(templateFolderPath)).render(fileName);
 
             expect(result).toBe('Hello world !!!');
+            expect(fsMock.readFileSync).toHaveBeenCalledTimes(3);
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/test.html`, 'utf-8');
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/other-test.html`, 'utf-8');
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/other-other-test.html`, 'utf-8');
@@ -98,7 +101,9 @@ describe('TemplateRenderer', () => {
             const result = (new TemplateRenderer(templateFolderPath)).render(fileName);
 
             expect(result).toBe('Hello world !');
+            expect(fsMock.readFileSync).toHaveBeenCalledTimes(1);
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/test.html`, 'utf-8');
+            expect(fsMock.readFileSync).toHaveBeenCalledTimes(1);
             expect(fsMock.readFileSync).toHaveBeenCalledWith(`${templateFolderPath}/folder/other-test.html`, 'utf-8');
         })
 

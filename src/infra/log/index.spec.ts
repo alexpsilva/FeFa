@@ -7,7 +7,7 @@ describe('Logger', () => {
         consoleMock = jest.spyOn(console, 'log').mockImplementation(() => {});
     })
 
-    afterEach(() => {
+    beforeEach(() => {
         jest.resetAllMocks();
     })
 
@@ -37,6 +37,7 @@ describe('Logger', () => {
         it('should emit a log if the current level is "debug"', () => {
             const logger = new Logger('debug');
             logger.debug('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(blueTextMask, 'debug message');
         })
 
@@ -71,12 +72,14 @@ describe('Logger', () => {
         it('should emit a log if the current level is "debug"', () => {
             const logger = new Logger('debug');
             logger.info('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(defaultTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "info"', () => {
             const logger = new Logger('info');
             logger.info('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(defaultTextMask, 'debug message');
         })
 
@@ -105,18 +108,21 @@ describe('Logger', () => {
         it('should emit a log if the current level is "debug"', () => {
             const logger = new Logger('debug');
             logger.warn('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(yellowTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "info"', () => {
             const logger = new Logger('info');
             logger.warn('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(yellowTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "warn"', () => {
             const logger = new Logger('warn');
             logger.warn('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(yellowTextMask, 'debug message');
         })
 
@@ -139,24 +145,28 @@ describe('Logger', () => {
         it('should emit a log if the current level is "debug"', () => {
             const logger = new Logger('debug');
             logger.error('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(redTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "info"', () => {
             const logger = new Logger('info');
             logger.error('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(redTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "warn"', () => {
             const logger = new Logger('warn');
             logger.error('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(redTextMask, 'debug message');
         })
 
         it('should emit a log if the current level is "error"', () => {
             const logger = new Logger('error');
             logger.error('debug message');
+            expect(consoleMock).toHaveBeenCalledTimes(1);
             expect(consoleMock).toHaveBeenCalledWith(redTextMask, 'debug message');
         })
 

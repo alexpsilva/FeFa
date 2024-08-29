@@ -7,7 +7,6 @@ type JwtContent = Record<string, any>;
 const GOOGLE_JWT_KEYS: (keyof TokenPayload)[] = ['email'];
 type GoogleJwtContent = {email: string};
 
-//to-do: unit tests
 export default class JwtParser {
     private readonly googleClient = new OAuth2Client();
 
@@ -53,14 +52,6 @@ export default class JwtParser {
         }
 
         return JwtParser.stripKeys(payload, INTERNAL_JWT_KEYS);
-    }
-
-    validate(token: string): boolean {
-        try {
-            return !!this.decode(token);
-        } catch (e) {
-            return false;
-        }
     }
 
     async decodeGoogle(token: string): Promise<[GoogleJwtContent, null] | [null, Error]> {

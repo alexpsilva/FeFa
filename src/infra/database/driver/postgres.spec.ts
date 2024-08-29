@@ -12,9 +12,14 @@ import Logger from "../../log";
 import PostgresDriver from './postgres';
 
 describe('PostgresDriver', () => {
+    beforeEach(() => {
+        jest.resetAllMocks();
+    })
+
     describe('constructor()', () => {
         it('should instantiate a new connection pool', () => {
             new PostgresDriver({} as Logger, 'url');
+            expect(pgMock.Pool).toHaveBeenCalledTimes(1);
             expect(pgMock.Pool).toHaveBeenCalledWith({ connectionString: 'url' });
         })
     })
@@ -30,6 +35,7 @@ describe('PostgresDriver', () => {
             const postgresDriver = new PostgresDriver({} as Logger, 'url');
             const result = await postgresDriver.query('sql', ['param1', 'param2']);
 
+            expect(poolMock.query).toHaveBeenCalledTimes(1);
             expect(poolMock.query).toHaveBeenCalledWith('sql', ['param1', 'param2']);
             expect(result).toEqual(['row1', 'row2']);
         })
@@ -52,8 +58,17 @@ describe('PostgresDriver', () => {
             const postgresDriver = new PostgresDriver({} as Logger, 'url');
             const result = postgresDriver.format('sql', 'param1', 'param2');
 
+            expect(pgFormatMock).toHaveBeenCalledTimes(1);
             expect(pgFormatMock).toHaveBeenCalledWith('sql', 'param1', 'param2');
             expect(result).toEqual('formatted sql');
+        })
+
+        it('should throw an error if pg-format fails', () => {
+            pgFormatMock.mockImplementation(() => {
+                throw new Error('format failed');
+            });
+            const postgresDriver = new PostgresDriver({} as Logger, 'url');
+            expect(() => postgresDriver.format('sql', 'param1', 'param2')).toThrow('format failed');
         })
     })
 })
