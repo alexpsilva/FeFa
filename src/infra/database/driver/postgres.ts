@@ -13,8 +13,13 @@ export default class PostgresDriver implements DatabaseDriver {
     }
 
     async query<T>(sql: string, params?: DatabaseDriverParam[]): Promise<T[]> {
-        const result = await this.pool.query(sql, params)
-        return result.rows as T[];
+        try {
+            const result = await this.pool.query(sql, params)
+            return result.rows as T[];
+        } catch (e) {
+            // @ts-ignore
+            throw new Error(`Failed to execute query "${sql}"\nError: ${e.message}`);
+        }
     }
 
     format(sql: string, ...params: DatabaseDriverParam[]): string {

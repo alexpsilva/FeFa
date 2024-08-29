@@ -4,12 +4,11 @@ import Logger from "../../infra/log";
 import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
 
 import PacientRepository from "./repository";
-import { CreatePacientDto, GetPacientDto, ListPacientsDto } from "./type";
-import ListPacientsShell from "./components/list_shell";
-import ListPacients from "./components/list";
-import CreatePacient from "./components/create";
-import GetPacient from "./components/get";
-import GetPacientShell from "./components/get_shell";
+import { CreatePacientDto, GetPacientDto, ListPacientsDto, UpdatePacientDto } from "./type";
+
+import CreatePacientPage from "./components/pages/create";
+import { ListPacientsPageShell, ListPacientsPageContent } from "./components/pages/list";
+import { GetPacientPageShell, GetPacientPageContent } from "./components/pages/get";
 
 export default class PacientRouter extends HTTPRouter {
     constructor(
@@ -21,8 +20,9 @@ export default class PacientRouter extends HTTPRouter {
 
         this.addRoute('GET', '/', this.listPacientsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getPacientPage);
+        this.addRoute('POST', '/:id(\\d+)', this.updatePacientAction, { urlEncoded: true });
         this.addRoute('GET', '/new', this.createPacientPage);
-        this.addRoute('POST', '/new', this.createPacient, { urlEncoded: true });
+        this.addRoute('POST', '/new', this.createPacientAction, { urlEncoded: true });
     }
 
     async listPacientsPage(req: HTTPRequest, res: HTTPResponse) {
@@ -30,13 +30,13 @@ export default class PacientRouter extends HTTPRouter {
         const { userId } = ListPacientsDto.parse({ userId: res.locals.userId });
         const listPacients = async () => {
             const pacients = await this.pacientRepository.findAll(userId);
-            return ListPacients(pacients, 'pacient-list');
+            return ListPacientsPageContent(pacients, 'pacient-list');
         }
 
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderStream(
-            ListPacientsShell(), 
-            listPacients()
+            ListPacientsPageShell(), 
+            listPacients() // to-do: Handle errors on streaming elements (after the initial shell and http status have already been set)
         ));
     }
 
@@ -46,26 +46,34 @@ export default class PacientRouter extends HTTPRouter {
 
         const getPacient = async () => {
             const pacient = await this.pacientRepository.findById(userId, id);
-            return GetPacient(pacient, 'pacient');
+            return GetPacientPageContent(pacient, 'pacient');
         }
 
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderStream(
-            GetPacientShell(),
-            getPacient(),
+            GetPacientPageShell(),
+            getPacient(), // to-do: Handle errors on streaming elements (after the initial shell and http status have already been set)
         ))
     }
 
     async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
         res.set('Content-Type', 'text/html');
-        res.send(this.renderer.render(CreatePacient()));
+        res.send(this.renderer.render(CreatePacientPage()));
     }
 
-    async createPacient(req: HTTPRequest, res: HTTPResponse) {
+    async createPacientAction(req: HTTPRequest, res: HTTPResponse) {
         // to-do: Use safeParse and set htto status code instead
-        const pacient = CreatePacientDto.parse({...req.body, userId: res.locals.userId});  
+        const data = CreatePacientDto.parse({...req.body, userId: res.locals.userId});  
 
-        await this.pacientRepository.create(pacient);
-        res.redirect('/pacient')
+        const pacient = await this.pacientRepository.create(data);
+        res.redirect(`/pacient/${pacient.id}`);
+    }
+
+    async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = UpdatePacientDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const pacient = await this.pacientRepository.update(data);
+        res.redirect(`/pacient/${pacient.id}`);
     }
 }

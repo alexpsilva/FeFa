@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { BaseRepository } from '../../infra/database/repository';
 import { User } from '../user/type';
-import { CreatePacientDto, DbPacient, Pacient } from './type';
+import { CreatePacientDto, DbPacient, Pacient, UpdatePacientDto } from './type';
 
 export default class PacientRepository extends BaseRepository<Pacient>{
     readonly tableName = 'pacients';
@@ -46,6 +46,23 @@ export default class PacientRepository extends BaseRepository<Pacient>{
             'INSERT INTO %I (user_id, name, birthday, cpf, address) VALUES (%L) RETURNING *', 
             this.tableName, 
             [entity.userId, entity.name, entity.birthday, entity.cpf, entity.address],
+        );
+        const result = await this.databaseDriver.query<DbPacient>(sql);
+        const dbPacients = z.array(DbPacient).parse(result);
+        return this.dbPacientsToPacients(dbPacients)[0];
+    }
+
+    async update(entity: UpdatePacientDto): Promise<Pacient> {
+        const sql = this.databaseDriver.format(
+            'UPDATE %I SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L WHERE id = %L AND user_id = %L RETURNING *', 
+            this.tableName, 
+            entity.name, 
+            entity.birthday, 
+            entity.cpf, 
+            entity.address, 
+            new Date(),
+            entity.id,
+            entity.userId,
         );
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);

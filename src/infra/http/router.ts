@@ -80,8 +80,12 @@ export default class HTTPRouter {
 
     private loggerMiddleware(req: express.Request, res: express.Response, next: express.NextFunction): void {
         this.logger.info(HTTPRouter.formatRequest(req, res));
+        const startAt = process.hrtime()
+
         res.on('close', () => {
-            this.logger.info(`${HTTPRouter.formatRequest(req, res)} => ${res.statusCode} ${res.statusMessage}`)
+            const diff = process.hrtime(startAt)
+            const time = diff[0] * 1e3 + diff[1] * 1e-6
+            this.logger.info(`${HTTPRouter.formatRequest(req, res)} => (${time.toFixed()}ms) => ${res.statusCode} ${res.statusMessage}`)
         })
         next();
     }

@@ -27,12 +27,13 @@ const ListPacientsDto = Pacient.pick({
     userId: true,
 });
 
-const CreatePacientDto = Pacient.pick({
-    userId: true,
-    name: true,
-    birthday: true,
-    cpf: true,
-    address: true,
+const UpdatePacientDto = Pacient.omit({
+    updatedAt: true,
+    createdAt: true,
+});
+
+const CreatePacientDto = UpdatePacientDto.omit({
+    id: true,
 });
 
 
@@ -41,6 +42,7 @@ export {
     DbPacient,
     GetPacientDto,
     ListPacientsDto,
+    UpdatePacientDto,
     CreatePacientDto,
 }
 
@@ -48,4 +50,5 @@ export type Pacient = z.infer<typeof Pacient>;
 export type DbPacient = z.infer<typeof DbPacient>;
 export type GetPacientDto = z.infer<typeof GetPacientDto>;
 export type ListPacientsDto = z.infer<typeof ListPacientsDto>;
+export type UpdatePacientDto = z.infer<typeof UpdatePacientDto>;
 export type CreatePacientDto = z.infer<typeof CreatePacientDto>;

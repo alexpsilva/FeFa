@@ -1,16 +1,15 @@
-import { ReactNode } from "react";
 import Menu from "./menu";
 import Page from "./page";
 
-export default function LoggedInPage({ title, head, children, ...props }: { 
-    title: string, 
-    head?: ReactNode, 
-    children?: ReactNode,
-}) {
+type PageProps = Pick<React.ComponentProps<typeof Page>, "title" | "head">;
+
+export default function LoggedInPage({ title, head, children, ...props }: PageProps & React.ComponentProps<'div'>) {
     return (
         <Page title={title} head={head} className="flex-row">
             <Menu/>
-            {children}
+            <main {...props}>
+                {children}
+            </main>
         </Page>
     )
 }
