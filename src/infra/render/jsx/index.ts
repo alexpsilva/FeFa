@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import RenderStreamScript from "./render_stream";
+import JSXWithSlots from "./jsx_with_slots";
 
 declare module 'react' {
     interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
@@ -9,16 +10,20 @@ declare module 'react' {
 }
 
 export default class JSXRenderer {
+    private readonly contentSourceDiv = '<div id="content-source" style="display: none">';
+
     render (jsx: JSX.Element): string {
         return renderToStaticMarkup(jsx);
     }
 
-    renderStream(initialElement: JSX.Element, ...elementsToStream: Promise<JSX.Element>[]): Promise<string>[] {
+    renderStream(elementWithSlots: JSXWithSlots): Promise<string>[] {
         return [
-            Promise.resolve(this.render(initialElement) + '<div id="content-source" style="display: none">'),
+            Promise.resolve(this.render(elementWithSlots.loading()) + this.contentSourceDiv),
             Promise.resolve(this.render(RenderStreamScript())),
-            ...elementsToStream.map(async element => this.render(await element))
-        ];
+            ...elementWithSlots.resolveSlots().map(async element => {
+                return this.render(await element)
+            })
+        ]
     }
 }
 
