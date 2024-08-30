@@ -39,8 +39,7 @@ const protectedHttpRouter = new HTTPRouter(logger);
 publicHttpRouter.addRouter(protectedHttpRouter);
 protectedHttpRouter.addMiddleware(new AuthMiddleware(logger, jwtParser));
 
-const baseRouter = new HomeRouter(logger, renderer);
-protectedHttpRouter.addRouter(baseRouter);
+protectedHttpRouter.addRouter(new HomeRouter(logger, renderer));
 
 protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository));
 

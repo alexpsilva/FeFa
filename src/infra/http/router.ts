@@ -59,16 +59,16 @@ export default class HTTPRouter {
 
     addMiddleware(middleware: HTTPMiddleware) {
         const expressMiddleware = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        let result: HTTPMiddlewareResult
-        try {
-            result = await middleware.resolve(req, res);
-        } catch (e) {
-            return next(e);
-        }
+            let result: HTTPMiddlewareResult
+            try {
+                result = await middleware.resolve(req, res);
+            } catch (e) {
+                return next(e);
+            }
 
-        if(result.type === 'continue'){
-            next();
-        }
+            if(result.type === 'continue'){
+                next();
+            }
         }
 
         this.expressRouter.use(expressMiddleware);

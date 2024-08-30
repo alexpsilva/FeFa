@@ -26,7 +26,6 @@ export default class PacientRouter extends HTTPRouter {
     }
 
     async listPacientsPage(req: HTTPRequest, res: HTTPResponse) {
-        // to-do: Use safeParse and set htto status code instead
         const { userId } = ListPacientsDto.parse({ userId: res.locals.userId });
         
         res.set('Content-Type', 'text/html');
@@ -36,8 +35,7 @@ export default class PacientRouter extends HTTPRouter {
     }
 
     async getPacientPage(req: HTTPRequest, res: HTTPResponse) {
-        // to-do: Use safeParse and set htto status code instead
-        const { userId, id } = GetPacientDto.parse({...req.params, userId: res.locals.userId});
+        const { userId, id } = GetPacientDto.parse({userId: res.locals.userId, id: req.params.id});
 
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderStream(

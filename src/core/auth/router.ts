@@ -4,6 +4,7 @@ import Logger from "../../infra/log";
 import JwtParser from "../../infra/jwt";
 import GoogleLogin from "./components/google_login";
 import UserRepository from "../user/repository";
+import { GoogleSSORedirectRequest } from "./type";
 
 export default class AuthRouter extends HTTPRouter {
     constructor(
@@ -31,12 +32,12 @@ export default class AuthRouter extends HTTPRouter {
     }
 
     async redirectWithAccessToken(req: HTTPRequest, res: HTTPResponse) {
-        //to-do: validate body
+        const { body, cookies } = GoogleSSORedirectRequest.parse(req);
         
         // Validate the Verify the Cross-Site Request Forgery (CSRF) token as specified by Google in the following doc
         // https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
-        const bodyCsrfToken = req.body.g_csrf_token;        
-        const cookieCsrfToken = req.cookies.g_csrf_token;
+        const bodyCsrfToken = body.g_csrf_token;        
+        const cookieCsrfToken = cookies.g_csrf_token;
         if (bodyCsrfToken === undefined || cookieCsrfToken === undefined || bodyCsrfToken !== cookieCsrfToken) {
             this.logger.error(`Invalid CSRF token: ${bodyCsrfToken} !== ${cookieCsrfToken}`);
             res.status(403)
@@ -44,7 +45,7 @@ export default class AuthRouter extends HTTPRouter {
             return;
         }
         
-        const credential = req.body.credential;
+        const credential = body.credential;
         const [payload, error] = await this.jwtParser.decodeGoogle(credential);
         if (error) {
             this.logger.error(String(error));
