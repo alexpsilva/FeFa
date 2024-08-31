@@ -2,13 +2,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 import RenderStreamScript from "./render_stream";
 import JSXWithSlots from "./jsx_with_slots";
 
-declare module 'react' {
-    interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
-        // extends React's HTMLAttributes
-        ['stream-to']?: string;
-    }
-}
-
 export default class JSXRenderer {
     private readonly contentSourceDiv = '<div id="content-source" style="display: none">';
 

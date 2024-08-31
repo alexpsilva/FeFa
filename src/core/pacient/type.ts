@@ -25,6 +25,7 @@ const GetPacientDto = Pacient.pick({
 
 const ListPacientsDto = Pacient.pick({
     userId: true,
+    name: true,
 });
 
 const UpdatePacientDto = Pacient.omit({

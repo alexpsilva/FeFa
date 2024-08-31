@@ -63,11 +63,15 @@ describe('JwtParser', () => {
             expect(decoded).toBeNull();
         })
 
-        it('should throw an error if jwt.verfiry throws an error', async () => {
+        it('should return null if jwt.verify throws an error', async () => {
             jwtMock.verify.mockImplementation(() => { throw new Error('error'); });
 
             const jwtParser = new JwtParser('secret', '1h', 'googleClientId');
-            expect(() => jwtParser.decode('token')).toThrow('error');
+            const decoded = jwtParser.decode('token');
+
+            expect(jwtMock.verify).toHaveBeenCalledTimes(1);
+            expect(jwtMock.verify).toHaveBeenCalledWith('token', 'secret')
+            expect(decoded).toBeNull();
         })
 
         it('should remove internal keys from the payload', async () => {

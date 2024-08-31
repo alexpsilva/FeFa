@@ -34,8 +34,12 @@ export default class PacientRepository extends BaseRepository<Pacient>{
         return this.dbPacientsToPacients(dbPacients)[0];
     }
 
-    async findAll(userId: User['id']): Promise<Pacient[]> {
+    async findAll(userId: User['id'], name: Pacient['name']): Promise<Pacient[]> {
         let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %L', this.tableName, userId);
+        if (name) {
+            sql = this.databaseDriver.format('%s AND name LIKE %L', sql, `%${name}%`);
+        }
+
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
         return this.dbPacientsToPacients(dbPacients);

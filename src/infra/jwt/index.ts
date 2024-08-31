@@ -45,7 +45,12 @@ export default class JwtParser {
     }
 
     decode(token: string): JwtContent | null {
-        const payload = jwt.verify(token, this.secret);
+        let payload
+        try {
+            payload = jwt.verify(token, this.secret);
+        } catch (e) {
+            return null
+        }
 
         if(!(payload instanceof Object)) {
             return null;

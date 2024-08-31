@@ -7,7 +7,7 @@ function removeAllChildren(node) {
 }
 
 function copyToTarget (node) {
-    const contentTargetId = node.getAttribute('stream-to')
+    const contentTargetId = node.getAttribute('data-stream-to')
     const contentTarget = document.getElementById(contentTargetId)
     if (!contentTarget) {
         console.error(`Target not found: ${contentTargetId}`)

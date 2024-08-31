@@ -2,10 +2,15 @@ import { IncomingHttpHeaders } from "http";
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
+interface QueryString {
+  [key: string]: undefined | string | string[] | QueryString | QueryString[];
+}
+
 export type HTTPRequest = {
   headers: IncomingHttpHeaders;
   cookies: Record<string, string>;
   params: Record<string, string>;
+  query: QueryString;
   body: Record<string, string>;
 };
 

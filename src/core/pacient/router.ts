@@ -26,11 +26,14 @@ export default class PacientRouter extends HTTPRouter {
     }
 
     async listPacientsPage(req: HTTPRequest, res: HTTPResponse) {
-        const { userId } = ListPacientsDto.parse({ userId: res.locals.userId });
+        const { userId, name } = ListPacientsDto.parse({ userId: res.locals.userId, name: req.query.name ?? '' });
         
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderStream(
-            new ListPacientsPage(async () => this.pacientRepository.findAll(userId))
+            new ListPacientsPage(
+                async () => this.pacientRepository.findAll(userId, name),
+                name,
+            )
         ));
     }
 

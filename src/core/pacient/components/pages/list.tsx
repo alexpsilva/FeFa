@@ -3,7 +3,10 @@ import LoggedInPage from "../../../../shared/components/logged_in_page";
 import { Pacient } from "../../type";
 
 export default class ListPacientsPage extends JSXWithSlots {
-    constructor(private readonly getPacients: () => Promise<Pacient[]>) {
+    constructor(
+        private readonly getPacients: () => Promise<Pacient[]>,
+        private readonly searchTerm?: string,
+    ) {
         super();
     }
 
@@ -18,6 +21,10 @@ export default class ListPacientsPage extends JSXWithSlots {
     protected shell(pacientListSlot: JSX.Element): JSX.Element {
         return <LoggedInPage title="Pacientes">
             <h2>Pacientes</h2>
+            <form data-redirect-to="/pacient">
+                <input type="text" name="name" placeholder="Pesquisar" defaultValue={this.searchTerm} />
+                <button type="submit">Pesquisar</button>
+            </form>
             {pacientListSlot}
             <a href="/pacient/new">+ Novo Paciente</a>
         </LoggedInPage>

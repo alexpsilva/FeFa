@@ -21,7 +21,7 @@ export default abstract class JSXWithSlots {
 
     private streamSourceWrapper(index: number, children: JSX.Element): JSX.Element {
         const streamTargetId = this.streamTargetWrapperId(index);
-        return <div stream-to={streamTargetId}>{children}</div>
+        return <div data-stream-to={streamTargetId}>{children}</div>
     }
 
     loading(): JSX.Element {
