@@ -1,4 +1,5 @@
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
+import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
 import { Pacient } from "../../type";
 import PacientForm from "../pacient_form";
@@ -10,7 +11,7 @@ export default class GetPacientPage extends JSXWithSlots {
 
     protected slots = [
         { 
-            loading: <p>Loading...</p>,
+            loading: <Loading/>,
             error: <b>Error</b>,
             content: this.content.bind(this),
         }

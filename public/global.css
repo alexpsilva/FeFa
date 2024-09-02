@@ -1,24 +1,52 @@
-/* Base setup */
+* {
+    box-sizing: border-box;
+}
 
-html, body {
-    height: 100%;
+/* Global: Colors */
+
+:root {
+    --color-off-white: rgb(240, 242, 245);
+    --color-faded: rgb(190, 190, 190);
+    --color-base: rgb(68, 68, 68);
+    --color-base-background: white;
+    --color-evidence: rgb(8, 145, 178);
 }
 
 body {
-    background-color: #f0f0f0;
+    background-color: var(--color-off-white);
+    
+    border-color: var(--color-base);
+
+    stroke: var(--color-base);
+}
+
+/* Global: Typography */
+
+body, header, input, button, a {
     font-family: Arial, sans-serif;
-    font-size: large;
-    margin: 0;
-    padding: 0;
+    font-weight: 400;
+    line-height: 1.6;
+
+    --_text-size: var(--text-size, 18px);
+    font-size: var(--_text-size);
+
+    --_text-color: var(--text-color, var(--color-base));
+    color: var(--_text-color);
+
+    outline-color: var(--color-evidence);
 }
 
-body > main {
-    width: 100%;
-    height: 100%;
-    padding: 1rem;
+a {
+    text-decoration: none;
 }
 
-/* Layout */
+/* Utility: Typography */
+
+.text-lg {
+    --text-size: 20px;
+}
+
+/* Utility: Positioning */
 
 .flex-row {
     display: flex;
@@ -36,24 +64,161 @@ body > main {
     justify-content: center;
 }
 
-/* Menu */
-
-menu {
+.flex-space-between {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flex-items-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex-self-start{
+    align-self: start;
+}
+
+.flex-self-end{
+    align-self: end;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.gap-sm {
+    gap: 0.5rem;
+}
+
+.gap-lg {
+    gap: 3rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Utility: Box Model */
+
+:root {
+    --padding-x-sm: 0.5rem;
+    --padding-y-sm: 0.25rem;
+    --padding-sm: var(--padding-y-sm) var(--padding-x-sm);
+
+    --padding-x-md: 1rem;
+    --padding-y-md: 0.75rem;
+    --padding-md: var(--padding-y-md) var(--padding-x-md);
+    --border-radius-md: 0.5rem;
+}
+
+.padding-sm {
+    padding: var(--padding-sm);
+}
+
+.padding-x-sm {
+    padding-left: var(--padding-x-sm);
+    padding-right: var(--padding-x-sm);
+}
+
+.padding-md {
+    padding: var(--padding-md);
+}
+
+.padding-x-md {
+    padding-left: var(--padding-x-md);
+    padding-right: var(--padding-x-md);
+}
+
+.items-padding-md > * {
+    padding: var(--padding-md);
+}
+
+.card-md {
+    max-width: 32rem;
+    width: 100%;
+    border-radius: var(--border-radius-md);
+}
+
+.card-lg {
+    max-width: 50rem;
+    width: 100%;
+    border-radius: var(--border-radius-md);
+}
+
+.border-radius {
+    border-radius: var(--border-radius-md);
+}
+
+.border-bottom {
+    border-bottom: 1px solid;
+}
+
+/* Utility: Color */
+
+.content-wrapper {
+    --text-color: var(--color-base);
+    stroke: var(--color-base);
+    border-color: var(--color-base);
+    background-color: var(--color-base-background);
+    box-shadow: 4px 4px 10px 0 rgb(0 0 0 / 0.1);
+}
+
+.content-faded {
+    --text-color: var(--color-faded);
+    stroke: var(--color-faded);
+    border-color: var(--color-faded);
+}
+
+.content-evidence {
+    --text-color: var(--color-evidence);
+    stroke: var(--color-evidence);
+    border-color: var(--color-evidence);
+}
+
+.items-hover-invert a:hover, .items-hover-invert button:hover {
+    --text-color: var(--color-base-background);
+    stroke: var(--color-base-background);
+    border-color: var(--color-base-background);
+    background-color: var(--color-evidence);
+    background-clip: border-box;
+}
+
+.transparent {
+    background: transparent;
+    border: none;
+}
+
+/* Utility: Misc */
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Specifc: Page */
+
+html, body {
     margin: 0;
     padding: 0;
-    list-style: none;
-    border: 2px solid #000;
-    min-width: 200px;
+    height: 100%;
 }
 
-menu > li > a {
+main {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+}
+
+/* Specific: Menu */
+
+menu {
+    margin: 0;
+    padding: 0;
+    min-width: 15rem;
+}
+
+menu a {
     display: block;
-    padding: 0.5rem 1rem;
-}
 
-menu > li#logout {
-    margin-top: auto;
-    margin-bottom: 1rem
+    font-weight: 700;
+    padding: var(--padding-md);
 }

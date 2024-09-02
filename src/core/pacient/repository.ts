@@ -37,7 +37,7 @@ export default class PacientRepository extends BaseRepository<Pacient>{
     async findAll(userId: User['id'], name: Pacient['name']): Promise<Pacient[]> {
         let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %L', this.tableName, userId);
         if (name) {
-            sql = this.databaseDriver.format('%s AND name LIKE %L', sql, `%${name}%`);
+            sql = this.databaseDriver.format('%s AND LOWER(name) LIKE LOWER(%L)', sql, `%${name}%`);
         }
 
         const result = await this.databaseDriver.query<DbPacient>(sql);
