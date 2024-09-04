@@ -17,8 +17,9 @@ export default class PostgresDriver implements DatabaseDriver {
             const result = await this.pool.query(sql, params)
             return result.rows as T[];
         } catch (e) {
-            // @ts-ignore
-            throw new Error(`Failed to execute query "${sql}"\nError: ${e.message}`);
+            const message = `Failed to execute query "${sql}"\nError: ${e instanceof Error ? e.message : String(e)}`;
+            this.logger.error(message);
+            throw new Error(message);
         }
     }
 

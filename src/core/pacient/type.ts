@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { CpfString } from '../../shared/validators/cpf';
+import { CpfString } from '../../shared/schemas/cpf';
+import { PaginationDto } from '../../shared/schemas/pagination';
 
 const Pacient = z.object({
     id: z.coerce.number(),
@@ -23,10 +24,9 @@ const GetPacientDto = Pacient.pick({
     id: true,
 });
 
-const ListPacientsDto = Pacient.pick({
-    userId: true,
-    name: true,
-});
+const ListPacientsDto = Pacient.pick({ userId: true })
+    .merge(z.object({name: Pacient.shape.name.default('') }))
+    .merge(PaginationDto.partial());
 
 const UpdatePacientDto = Pacient.omit({
     updatedAt: true,

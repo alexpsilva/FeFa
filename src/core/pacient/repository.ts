@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { BaseRepository } from '../../infra/database/repository';
+import { BaseRepository, WithCount } from '../../infra/database/repository';
 import { User } from '../user/type';
 import { CreatePacientDto, DbPacient, Pacient, UpdatePacientDto } from './type';
 
@@ -34,15 +34,28 @@ export default class PacientRepository extends BaseRepository<Pacient>{
         return this.dbPacientsToPacients(dbPacients)[0];
     }
 
-    async findAll(userId: User['id'], name: Pacient['name']): Promise<Pacient[]> {
-        let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %L', this.tableName, userId);
-        if (name) {
-            sql = this.databaseDriver.format('%s AND LOWER(name) LIKE LOWER(%L)', sql, `%${name}%`);
-        }
+    async findAll(userId: User['id'], name: Pacient['name'], pagination?: { number: number, size: number }): Promise<WithCount<Pacient[]>> {
+        const { limit, offset } = this.computePagination(pagination?.number ?? 1, pagination?.size ?? 10);
 
-        const result = await this.databaseDriver.query<DbPacient>(sql);
+        const sql = this.databaseDriver.format(`
+            SELECT *, COUNT(*) OVER() count 
+            FROM %I 
+            WHERE 
+                user_id = %L
+                ${name ? this.databaseDriver.format('AND LOWER(name) LIKE LOWER(%L)', `%${name}%`) : ''}
+            GROUP BY id 
+            ORDER BY name
+            ${limit ? this.databaseDriver.format('LIMIT %s', limit) : ''}
+            ${offset ? this.databaseDriver.format('OFFSET %s', offset) : ''}
+        `, this.tableName, userId);
+
+        const result = await this.databaseDriver.query<DbPacient & {count: number}>(sql);
+        const count = result.length ? result[0].count : 0;
         const dbPacients = z.array(DbPacient).parse(result);
-        return this.dbPacientsToPacients(dbPacients);
+        return {
+            data: this.dbPacientsToPacients(dbPacients),
+            count,
+        };
     }
 
     async create(entity: CreatePacientDto): Promise<Pacient> {

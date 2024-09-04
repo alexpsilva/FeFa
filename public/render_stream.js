@@ -21,10 +21,11 @@ function copyToTarget (node) {
 
     // Copy each element from the source to the target
     while (node.firstChild) {
-        contentTarget.appendChild(node.firstChild)
+        contentTarget.parentNode.insertBefore(node.firstChild, contentTarget)
     }
 
-    // Remove the source wrapper
+    // Clean up wrappers
+    contentTarget.parentNode.removeChild(contentTarget)
     contentSource.removeChild(node)
 }
 

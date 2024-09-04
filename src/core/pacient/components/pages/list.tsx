@@ -1,14 +1,17 @@
+import { WithCount } from "../../../../infra/database/repository";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
-import ArrowIcon from "../../../../shared/components/icons/arrow";
 import SearchIcon from "../../../../shared/components/icons/search";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
+import PaginationControls from "../../../../shared/components/pagination_controls";
 import { Pacient } from "../../type";
 
 export default class ListPacientsPage extends JSXWithSlots {
     constructor(
-        private readonly getPacients: () => Promise<Pacient[]>,
-        private readonly searchTerm?: string,
+        private readonly getPacients: () => Promise<WithCount<Pacient[]>>,
+        private readonly searchTerm: string,
+        private readonly pageNumber: number,
+        private readonly pageSize: number,
     ) {
         super();
     }
@@ -44,36 +47,35 @@ export default class ListPacientsPage extends JSXWithSlots {
             </form>
             <div className="content-wrapper card-lg flex-column items-hover-invert">
                 {pacientListSlot}
-                <div className="flex-row flex-space-between">
-                    <a 
-                        href="/pacient/new" 
-                        className="padding-md border-radius content-evidence"
-                    >
-                        + Novo Paciente
-                    </a>
-                    <div className="flex-row gap-sm ">
-                        <a href={`/pacient`} className="padding-x-md border-radius content-evidence flex-items-center">
-                            <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>
-                        </a>
-                        <span className="flex-items-center">1/0</span>
-                        <a href={`/pacient`} className="padding-x-md border-radius content-evidence flex-items-center">
-                            <ArrowIcon direction="right" width="1.5rem" height="1.5rem"/>
-                        </a>
-                    </div>
-                </div>
             </div>
         </LoggedInPage>
     }
 
     protected async content() {
-        const pacients = await this.getPacients();
-        return <div className="flex-column items-padding-md">
-            <header className="content-faded border-bottom">
+        const { count, data: pacients} = await this.getPacients();
+        return <>
+            <header className="content-faded padding-md border-bottom">
                 Nome
             </header>
-            {pacients.map(pacient => (
-                <a key={pacient.id} href={`/pacient/${pacient.id}`}>{pacient.name}</a>
-            ))}
-        </div>
+            <div className="flex-column items-padding-md">
+                {pacients.map(pacient => (
+                    <a key={pacient.id} href={`/pacient/${pacient.id}`}>{pacient.name}</a>
+                ))}
+            </div>
+            <div className="flex-row flex-space-between">
+                <a 
+                    href="/pacient/new" 
+                    className="border-radius padding-md content-evidence"
+                >
+                    + Novo Paciente
+                </a>
+                <PaginationControls 
+                    pageNumber={this.pageNumber}
+                    pageSize={this.pageSize}
+                    totalCount={count}
+                    href={`/pacient?name=${this.searchTerm}`}
+                />
+            </div>
+        </>
     }
 }
