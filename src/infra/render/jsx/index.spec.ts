@@ -9,19 +9,22 @@ jest.mock('./render_stream');
 const streamScriptMock = streamScript as jest.MockedFunction<typeof streamScript>;
 
 import JSXRenderer from ".";
+import Logger from "../../log";
 
 describe('JSXRenderer', () => {
     
     describe('render()', () => {
+        let loggerMock = {} as Logger
         beforeEach(() => {
             jest.resetAllMocks();
+            loggerMock.error = jest.fn();
         })
 
         it("should call react-dom's renderToStaticMarkup method", async () => {
             reactDOMMock.renderToStaticMarkup.mockReturnValue('html');
             const jsxMock = {} as JSX.Element
             
-            const renderer = new JSXRenderer();
+            const renderer = new JSXRenderer(loggerMock);
             const result = renderer.render(jsxMock);
 
             expect(reactDOMMock.renderToStaticMarkup).toHaveBeenCalledWith(jsxMock);
@@ -33,7 +36,7 @@ describe('JSXRenderer', () => {
             reactDOMMock.renderToStaticMarkup.mockImplementation(() => { throw new Error('render failed') });
             const jsxMock = {} as JSX.Element
             
-            const renderer = new JSXRenderer();
+            const renderer = new JSXRenderer(loggerMock);
             expect(() => renderer.render(jsxMock)).toThrow('render failed');
         })
     })

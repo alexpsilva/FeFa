@@ -22,7 +22,7 @@ const logger = new Logger(config.logLevel);
 
 const jwtParser = new JwtParser(config.jwtSecret, config.jwtExpiresIn, config.googleClientId);
 
-const renderer = new JSXRenderer();
+const renderer = new JSXRenderer(logger);
 
 const databaseDriver = new PostgresDriver(logger, config.databaseUrl);
 

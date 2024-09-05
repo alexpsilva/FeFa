@@ -1,3 +1,4 @@
+import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
@@ -5,8 +6,11 @@ import { Pacient } from "../../type";
 import PacientForm from "../pacient_form";
 
 export default class GetPacientPage extends JSXWithSlots {
-    constructor(private readonly getPacient: () => Promise<Pacient>) {
-        super();
+    constructor(
+        protected logger: Logger,
+        private readonly getPacient: () => Promise<Pacient>
+    ) {
+        super(logger);
     }
 
     protected slots = [

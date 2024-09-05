@@ -1,4 +1,5 @@
 import { WithCount } from "../../../../infra/database/repository";
+import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
 import SearchIcon from "../../../../shared/components/icons/search";
 import Loading from "../../../../shared/components/loading";
@@ -8,12 +9,13 @@ import { Pacient } from "../../type";
 
 export default class ListPacientsPage extends JSXWithSlots {
     constructor(
+        protected logger: Logger,
         private readonly getPacients: () => Promise<WithCount<Pacient[]>>,
         private readonly searchTerm: string,
         private readonly pageNumber: number,
         private readonly pageSize: number,
     ) {
-        super();
+        super(logger);
     }
 
     protected slots = [

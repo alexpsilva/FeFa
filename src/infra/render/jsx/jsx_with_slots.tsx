@@ -1,3 +1,10 @@
+import Logger from "../../log";
+
+export interface JSXWithSlotsInterface {
+    loading(): JSX.Element;
+    resolveSlots(): Promise<JSX.Element>[];
+}
+
 type SlotContent = () => Promise<JSX.Element>
 type SlotDetails = {
     loading?: JSX.Element,
@@ -5,7 +12,9 @@ type SlotDetails = {
     content: SlotContent,
 };
 
-export default abstract class JSXWithSlots {
+export default abstract class JSXWithSlots implements JSXWithSlotsInterface {
+    constructor(protected readonly logger: Logger) {}
+
     protected abstract slots: (SlotDetails | SlotContent)[]
 
     protected abstract shell(...filledSlots: JSX.Element[]): JSX.Element;
@@ -39,7 +48,7 @@ export default abstract class JSXWithSlots {
             try {
                 return this.streamSourceWrapper(index, await content());
             } catch (error) {
-                // to-do: Log the error
+                this.logger.error(error instanceof Error ? error.message : String(error));
                 if ('error' in slot && slot.error) {
                     return this.streamSourceWrapper(index, slot.error);
                 }
