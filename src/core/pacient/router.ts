@@ -4,11 +4,12 @@ import Logger from "../../infra/log";
 import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
 
 import PacientRepository from "./repository";
-import { CreatePacientDto, GetPacientDto, ListPacientsDto, UpdatePacientDto } from "./type";
+import { CreatePacientActionDto, CreatePacientDto, GetPacientDto, ListPacientsDto, UpdatePacientActionDto, UpdatePacientDto } from "./type";
 
 import CreatePacientPage from "./components/pages/create";
 import ListPacientsPage from "./components/pages/list";
 import GetPacientPage from "./components/pages/get";
+import UpdatePacientPage from "./components/pages/update";
 
 export default class PacientRouter extends HTTPRouter {
     constructor(
@@ -20,7 +21,8 @@ export default class PacientRouter extends HTTPRouter {
 
         this.addRoute('GET', '/', this.listPacientsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getPacientPage);
-        this.addRoute('POST', '/:id(\\d+)', this.updatePacientAction, { urlEncoded: true });
+        this.addRoute('GET', '/:id(\\d+)/edit', this.updatePacientPage);
+        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction, { urlEncoded: true });
         this.addRoute('GET', '/new', this.createPacientPage);
         this.addRoute('POST', '/new', this.createPacientAction, { urlEncoded: true });
     }
@@ -49,24 +51,36 @@ export default class PacientRouter extends HTTPRouter {
         ))
     }
 
+    async updatePacientPage(req: HTTPRequest, res: HTTPResponse) {
+        const { userId, id } = UpdatePacientDto.parse({userId: res.locals.userId, id: req.params.id});
+
+        res.set('Content-Type', 'text/html');
+        this.pipeStream(res, this.renderer.renderAsync(
+            UpdatePacientPage,
+            async () => this.pacientRepository.findById(userId, id),
+        ))
+    }
+
+    async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = UpdatePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const pacient = await this.pacientRepository.update(data);
+        res.redirect(`/pacient/${pacient.id}`);
+    }
+
     async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
+        CreatePacientDto.parse({userId: res.locals.userId});
+
         res.set('Content-Type', 'text/html');
         res.send(this.renderer.render(CreatePacientPage()));
     }
 
     async createPacientAction(req: HTTPRequest, res: HTTPResponse) {
         // to-do: Use safeParse and set htto status code instead
-        const data = CreatePacientDto.parse({...req.body, userId: res.locals.userId});  
+        const data = CreatePacientActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const pacient = await this.pacientRepository.create(data);
-        res.redirect(`/pacient/${pacient.id}`);
-    }
-
-    async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
-        // to-do: Use safeParse and set htto status code instead
-        const data = UpdatePacientDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
-
-        const pacient = await this.pacientRepository.update(data);
         res.redirect(`/pacient/${pacient.id}`);
     }
 }

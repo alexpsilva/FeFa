@@ -1,14 +1,11 @@
 export default function Menu() {
     return (
-        <menu className="content-wrapper flex-column text-lg content-evidence items-hover-invert">
-            <div className="flex-column flex-grow">
-                <a href="/">Home</a>
-                <a href="/pacient">Pacientes</a>
-                <a href="/appointments">Consultas</a>
-            </div>
-            <div style={{marginBottom: '1rem'}}>
-                <a href="/logout">Sair</a>
-            </div>
+        <menu className="content-wrapper flex-column text-lg content-evidence">
+            <a href="/">Home</a>
+            <a href="/pacient">Pacientes</a>
+            <a href="/appointments">Consultas</a>
+            <div className="flex-grow"/>
+            <a href="/logout" style={{marginBottom: '1rem'}}>Sair</a>
         </menu>
     )
 }

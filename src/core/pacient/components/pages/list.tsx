@@ -1,6 +1,7 @@
 import { WithCount } from "../../../../infra/database/repository";
 import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
+import Button from "../../../../shared/components/button";
 import SearchIcon from "../../../../shared/components/icons/search";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
@@ -31,23 +32,23 @@ export default class ListPacientsPage extends JSXWithSlots {
             <form 
                 action="/pacient" 
                 method="get" 
-                className="content-wrapper card-md flex-row items-hover-invert"
+                className="content-wrapper card-md flex-row"
             >
                 <input 
                     type="text" 
                     name="name" 
                     placeholder="Pesquisar" 
                     defaultValue={this.searchTerm} 
-                    className="flex-grow padding-md transparent"
+                    className="flex-grow padding-md border-none"
                 />
                 <button 
                     type="submit" 
-                    className="padding-x-md border-radius transparent cursor-pointer content-evidence"
+                    className="padding-x-md border-radius content-evidence"
                 >
                     <SearchIcon width="1.5rem" height="1.5rem"/>
                 </button>
             </form>
-            <div className="content-wrapper card-lg flex-column items-hover-invert">
+            <div className="content-wrapper card-lg flex-column">
                 {pacientListSlot}
             </div>
         </LoggedInPage>
@@ -65,12 +66,9 @@ export default class ListPacientsPage extends JSXWithSlots {
                 ))}
             </div>
             <div className="flex-row flex-space-between">
-                <a 
-                    href="/pacient/new" 
-                    className="border-radius padding-md content-evidence"
-                >
+                <Button htmlTag="a" href="/pacient/new" >                    
                     + Novo Paciente
-                </a>
+                </Button>
                 <PaginationControls 
                     pageNumber={this.pageNumber}
                     pageSize={this.pageSize}

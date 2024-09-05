@@ -20,12 +20,29 @@ body {
     stroke: var(--color-base);
 }
 
+input {
+    background: transparent;
+    border: none;
+}
+
+a, button {
+    background: transparent;
+    border: none;
+}
+
+a:hover, button:hover {
+    --text-color: var(--color-base-background);
+    stroke: var(--color-base-background);
+    background-color: var(--color-evidence);
+    background-clip: border-box;
+}
+
 /* Global: Typography */
 
-body, header, input, button, a {
+body, header, label, input, button, span, a {
     font-family: Arial, sans-serif;
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.4;
 
     --_text-size: var(--text-size, 18px);
     font-size: var(--_text-size);
@@ -40,7 +57,40 @@ a {
     text-decoration: none;
 }
 
+/* Global: Box Model */
+
+:root {
+    --padding-x-sm: 0.5rem;
+    --padding-y-sm: 0.25rem;
+    --padding-sm: var(--padding-y-sm) var(--padding-x-sm);
+
+    --padding-x-md: 1rem;
+    --padding-y-md: 0.75rem;
+    --padding-md: var(--padding-y-md) var(--padding-x-md);
+    --border-radius-md: 0.5rem;
+}
+
+fieldset {
+    margin: 0;
+    border: none;
+}
+
+input:disabled {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Global: Misc */
+
+a, button {
+    cursor: pointer;
+}
+
 /* Utility: Typography */
+
+.text-sm {
+    --text-size: 16px;
+}
 
 .text-lg {
     --text-size: 20px;
@@ -90,6 +140,10 @@ a {
     gap: 0.5rem;
 }
 
+.gap-md {
+    gap: 1.5rem;
+}
+
 .gap-lg {
     gap: 3rem;
 }
@@ -98,18 +152,16 @@ a {
     text-align: center;
 }
 
-/* Utility: Box Model */
-
-:root {
-    --padding-x-sm: 0.5rem;
-    --padding-y-sm: 0.25rem;
-    --padding-sm: var(--padding-y-sm) var(--padding-x-sm);
-
-    --padding-x-md: 1rem;
-    --padding-y-md: 0.75rem;
-    --padding-md: var(--padding-y-md) var(--padding-x-md);
-    --border-radius-md: 0.5rem;
+.grid-flow-row {
+    grid-auto-flow: row;
 }
+
+.grid-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Utility: Box Model */
 
 .padding-sm {
     padding: var(--padding-sm);
@@ -140,13 +192,17 @@ a {
 }
 
 .card-lg {
-    max-width: 50rem;
+    max-width: 64rem;
     width: 100%;
     border-radius: var(--border-radius-md);
 }
 
 .border-radius {
     border-radius: var(--border-radius-md);
+}
+
+.border-none {
+    border: none;
 }
 
 .border-bottom {
@@ -163,35 +219,16 @@ a {
     box-shadow: 4px 4px 10px 0 rgb(0 0 0 / 0.1);
 }
 
-.content-faded {
-    --text-color: var(--color-faded);
-    stroke: var(--color-faded);
-    border-color: var(--color-faded);
-}
-
 .content-evidence {
     --text-color: var(--color-evidence);
     stroke: var(--color-evidence);
     border-color: var(--color-evidence);
 }
 
-.items-hover-invert a:hover, .items-hover-invert button:hover {
-    --text-color: var(--color-base-background);
-    stroke: var(--color-base-background);
-    border-color: var(--color-base-background);
-    background-color: var(--color-evidence);
-    background-clip: border-box;
-}
-
-.transparent {
-    background: transparent;
-    border: none;
-}
-
-/* Utility: Misc */
-
-.cursor-pointer {
-    cursor: pointer;
+.content-faded {
+    --text-color: var(--color-faded);
+    stroke: var(--color-faded);
+    border-color: var(--color-faded);
 }
 
 /* Specifc: Page */

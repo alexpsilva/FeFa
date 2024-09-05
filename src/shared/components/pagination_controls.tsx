@@ -11,7 +11,7 @@ export default function PaginationControls({ pageNumber, pageSize, totalCount, h
     const nextPageUrl = pageNumber === numPages ? null : buildUrl(href, pageNumber + 1, pageSize)
 
     return (
-        <div className="flex-row items-hover-invert">
+        <div className="flex-row">
             {!previousPageUrl ? null : (
                 <a href={previousPageUrl} className="padding-x-md border-radius content-evidence flex-items-center">
                     <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>

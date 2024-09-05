@@ -28,12 +28,16 @@ const ListPacientsDto = Pacient.pick({ userId: true })
     .merge(z.object({name: Pacient.shape.name.default('') }))
     .merge(PaginationDto.partial());
 
-const UpdatePacientDto = Pacient.omit({
+const UpdatePacientDto = GetPacientDto;
+
+const UpdatePacientActionDto = Pacient.omit({
     updatedAt: true,
     createdAt: true,
 });
 
-const CreatePacientDto = UpdatePacientDto.omit({
+const CreatePacientDto = Pacient.pick({ userId: true })
+
+const CreatePacientActionDto = UpdatePacientActionDto.omit({
     id: true,
 });
 
@@ -44,7 +48,9 @@ export {
     GetPacientDto,
     ListPacientsDto,
     UpdatePacientDto,
+    UpdatePacientActionDto,
     CreatePacientDto,
+    CreatePacientActionDto,
 }
 
 export type Pacient = z.infer<typeof Pacient>;
@@ -52,4 +58,6 @@ export type DbPacient = z.infer<typeof DbPacient>;
 export type GetPacientDto = z.infer<typeof GetPacientDto>;
 export type ListPacientsDto = z.infer<typeof ListPacientsDto>;
 export type UpdatePacientDto = z.infer<typeof UpdatePacientDto>;
+export type UpdatePacientActionDto = z.infer<typeof UpdatePacientActionDto>;
 export type CreatePacientDto = z.infer<typeof CreatePacientDto>;
+export type CreatePacientActionDto = z.infer<typeof CreatePacientActionDto>;

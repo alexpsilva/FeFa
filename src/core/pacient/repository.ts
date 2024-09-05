@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { BaseRepository, WithCount } from '../../infra/database/repository';
 import { User } from '../user/type';
-import { CreatePacientDto, DbPacient, Pacient, UpdatePacientDto } from './type';
+import { DbPacient, Pacient, UpdatePacientActionDto, CreatePacientActionDto } from './type';
 
 export default class PacientRepository extends BaseRepository<Pacient>{
     readonly tableName = 'pacients';
@@ -58,7 +58,7 @@ export default class PacientRepository extends BaseRepository<Pacient>{
         };
     }
 
-    async create(entity: CreatePacientDto): Promise<Pacient> {
+    async create(entity: CreatePacientActionDto): Promise<Pacient> {
         const sql = this.databaseDriver.format(
             'INSERT INTO %I (user_id, name, birthday, cpf, address) VALUES (%L) RETURNING *', 
             this.tableName, 
@@ -69,7 +69,7 @@ export default class PacientRepository extends BaseRepository<Pacient>{
         return this.dbPacientsToPacients(dbPacients)[0];
     }
 
-    async update(entity: UpdatePacientDto): Promise<Pacient> {
+    async update(entity: UpdatePacientActionDto): Promise<Pacient> {
         const sql = this.databaseDriver.format(
             'UPDATE %I SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L WHERE id = %L AND user_id = %L RETURNING *', 
             this.tableName, 
