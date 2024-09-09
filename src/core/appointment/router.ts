@@ -16,17 +16,21 @@ export default class AppointmentRouter extends HTTPRouter {
     ) {
         super(logger, '/appointment');
 
+        this.addRoute('GET', '/pacient/:pacient_id(\\d+)/new', this.createAppointmentPage);
         // this.addRoute('GET', '/', this.listAppointmentsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getAppointmentPage);
         this.addRoute('GET', '/:id(\\d+)/edit', this.updateAppointmentPage);
-        this.addRoute('POST', '/:id(\\d+)/edit', this.updateAppointmentAction); // to-do: Change to PUT
-        this.addRoute('GET', '/pacient/:pacient_id(\\d+)/new', this.createAppointmentPage);
+        
         this.addRoute('POST', '/new', this.createAppointmentAction);
+        this.addRoute('POST', '/:id(\\d+)/edit', this.updateAppointmentAction); // to-do: Change to PUT
         // to-do: Add delete route
     }
 
-    async getAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
-        res.redirect(301, `/appointment/${req.params.id}/edit`);
+    async createAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
+        const { pacientId } = CreateAppointmentDto.parse({userId: res.locals.userId, pacientId: req.params.pacient_id});
+
+        res.set('Content-Type', 'text/html');
+        res.send(this.renderer.render(CreateAppointmentPage(pacientId)));
     }
 
     // async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
@@ -43,6 +47,10 @@ export default class AppointmentRouter extends HTTPRouter {
     //     ));
     // }
 
+    async getAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
+        res.redirect(301, `/appointment/${req.params.id}/edit`);
+    }
+
     async updateAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
         const { userId, id } = UpdateAppointmentDto.parse({userId: res.locals.userId, id: req.params.id});
 
@@ -53,26 +61,19 @@ export default class AppointmentRouter extends HTTPRouter {
         ))
     }
 
-    async updateAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
-        // to-do: Use safeParse and set htto status code instead
-        const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
-
-        const appointment = await this.appointmentRepository.update(data);
-        res.redirect(`/appointment/${appointment.id}/edit`);
-    }
-
-    async createAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
-        const { pacientId } = CreateAppointmentDto.parse({userId: res.locals.userId, pacientId: req.params.pacient_id});
-
-        res.set('Content-Type', 'text/html');
-        res.send(this.renderer.render(CreateAppointmentPage(pacientId)));
-    }
-
     async createAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
         // to-do: Use safeParse and set htto status code instead
         const data = CreateAppointmentActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const appointment = await this.appointmentRepository.create(data);
+        res.redirect(`/appointment/${appointment.id}/edit`);
+    }
+
+    async updateAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const appointment = await this.appointmentRepository.update(data);
         res.redirect(`/appointment/${appointment.id}/edit`);
     }
 }

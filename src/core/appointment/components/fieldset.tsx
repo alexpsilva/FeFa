@@ -5,10 +5,10 @@ export default function AppointmentFieldset({appointment, ...props}: React.Compo
 }) {
     return (
         <fieldset className="padding-lg grid-flow-row grid-cols-2 gap-md" {...props}>
-            {/* to-do: Use pacient name (read-only) but make sure that the pacient_id is also included in the form request */}
+            <input name="pacient_id" type="text" value={appointment?.pacientId} readOnly className="hidden"/>
             <div className="flex-column">
-                <label htmlFor="pacient_id" className="content-faded text-sm">Paciente</label>
-                <input id="pacient_id" name="pacient_id" type="text" defaultValue={appointment?.pacientId}/>
+                <label className="content-faded text-sm">Paciente</label>
+                <span>{appointment?.pacientId}</span> {/* to-do: Display pacient name instead */}
             </div>
 
             <div className="flex-column">

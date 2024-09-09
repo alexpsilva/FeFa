@@ -178,6 +178,10 @@ a, button {
     grid-template-columns: repeat(2, 1fr);
 }
 
+.hidden {
+    display: none;
+}
+
 /* Utility: Box Model */
 
 .padding-sm {

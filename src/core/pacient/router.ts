@@ -19,13 +19,21 @@ export default class PacientRouter extends HTTPRouter {
     ) {
         super(logger, '/pacient');
 
+        this.addRoute('GET', '/new', this.createPacientPage);
         this.addRoute('GET', '/', this.listPacientsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getPacientPage);
         this.addRoute('GET', '/:id(\\d+)/edit', this.updatePacientPage);
-        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction); // to-do: Change to PUT
-        this.addRoute('GET', '/new', this.createPacientPage);
+
         this.addRoute('POST', '/new', this.createPacientAction);
+        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction); // to-do: Change to PUT
         // to-do: Add delete route
+    }
+
+    async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
+        CreatePacientDto.parse({userId: res.locals.userId});
+
+        res.set('Content-Type', 'text/html');
+        res.send(this.renderer.render(CreatePacientPage()));
     }
 
     async listPacientsPage(req: HTTPRequest, res: HTTPResponse) {
@@ -63,26 +71,19 @@ export default class PacientRouter extends HTTPRouter {
         ))
     }
 
-    async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
-        // to-do: Use safeParse and set htto status code instead
-        const data = UpdatePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
-
-        const pacient = await this.pacientRepository.update(data);
-        res.redirect(`/pacient/${pacient.id}`);
-    }
-
-    async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
-        CreatePacientDto.parse({userId: res.locals.userId});
-
-        res.set('Content-Type', 'text/html');
-        res.send(this.renderer.render(CreatePacientPage()));
-    }
-
     async createPacientAction(req: HTTPRequest, res: HTTPResponse) {
         // to-do: Use safeParse and set htto status code instead
         const data = CreatePacientActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const pacient = await this.pacientRepository.create(data);
+        res.redirect(`/pacient/${pacient.id}`);
+    }
+
+    async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = UpdatePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const pacient = await this.pacientRepository.update(data);
         res.redirect(`/pacient/${pacient.id}`);
     }
 }
