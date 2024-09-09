@@ -16,7 +16,7 @@ export default class AuthRouter extends HTTPRouter {
         super(logger);
 
         this.addRoute('GET', '/login', this.renderLogin);
-        this.addRoute('POST', '/login-receiver', this.redirectWithAccessToken, {urlEncoded: true});
+        this.addRoute('POST', '/login-receiver', this.redirectWithAccessToken);
         this.addRoute('GET', '/logout', this.logout);
     }
 
@@ -36,7 +36,7 @@ export default class AuthRouter extends HTTPRouter {
         
         // Validate the Verify the Cross-Site Request Forgery (CSRF) token as specified by Google in the following doc
         // https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
-        const bodyCsrfToken = body.g_csrf_token;        
+        const bodyCsrfToken = body.gCsrfToken;        
         const cookieCsrfToken = cookies.g_csrf_token;
         if (bodyCsrfToken === undefined || cookieCsrfToken === undefined || bodyCsrfToken !== cookieCsrfToken) {
             this.logger.error(`Invalid CSRF token: ${bodyCsrfToken} !== ${cookieCsrfToken}`);

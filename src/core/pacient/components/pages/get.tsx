@@ -6,11 +6,12 @@ import PenIcon from "../../../../shared/components/icons/pen";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
 import { Pacient } from "../../type";
-import PacientFieldset from "../pacient_fieldset";
+import PacientFieldset from "../fieldset";
 
 export default class GetPacientPage extends JSXWithSlots {
     constructor(
         protected logger: Logger,
+        private readonly pacientId: number,
         private readonly getPacient: () => Promise<Pacient>
     ) {
         super(logger);
@@ -31,6 +32,7 @@ export default class GetPacientPage extends JSXWithSlots {
                 <span>Voltar</span>
             </Button>
             {pacientDataSlot}
+            <Button htmlTag="a" href={`/appointment/pacient/${this.pacientId}/new`}>+ Nova Consulta</Button>
         </LoggedInPage>
     }
 
@@ -41,7 +43,7 @@ export default class GetPacientPage extends JSXWithSlots {
                 pacient={pacient} 
                 disabled
             />
-            <Button htmlTag="a" href={`/pacient/${pacient.id}/edit`} className="flex-self-end">
+            <Button htmlTag="a" href={`/pacient/${this.pacientId}/edit`} className="flex-self-end">
                 <PenIcon width="1rem" height="1rem"/>
                 Editar
             </Button>

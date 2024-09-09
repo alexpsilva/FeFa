@@ -1,11 +1,11 @@
 import Logger from "../log";
 import { DatabaseDriver } from "./driver";
 
-export type ColummnsOption<T> = (keyof T)[];
+// export type ColummnsOption<T> = (keyof T)[];
 export type WithCount<T> = { count: number, data: T };
 
-export abstract class BaseRepository<T> {
-    abstract readonly tableName: string;
+export abstract class BaseRepository {
+    static readonly tableName: string;
 
     constructor(
         protected readonly logger: Logger, 
@@ -49,10 +49,10 @@ export abstract class BaseRepository<T> {
     //     return result[0];
     // }
 
-    async delete(id: number): Promise<void> {
-        const sql = this.databaseDriver.format('DELETE FROM %I WHERE id = %L', this.tableName, id);
-        await this.databaseDriver.query<T>(sql);
-    }
+    // async delete(id: number): Promise<void> {
+    //     const sql = this.databaseDriver.format('DELETE FROM %I WHERE id = %L', this.tableName, id);
+    //     await this.databaseDriver.query<T>(sql);
+    // }
 
     computePagination(pageNumbe: number, pageSize: number): { limit: number, offset: number } {
         return {

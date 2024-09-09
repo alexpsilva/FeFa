@@ -4,6 +4,7 @@ import express from "express";
 import HTTPMiddleware from "./middleware";
 import { HTTPMethod, HTTPMiddlewareResult, HTTPRequest, HTTPResponse } from "./type";
 import { Readable } from "stream";
+import { toCamelCase } from "./utils";
 
 
 export default class HTTPRouter {
@@ -18,31 +19,27 @@ export default class HTTPRouter {
         return `${this.pathPrefix}${path}`;
     }
 
-    addRoute(method: HTTPMethod, path: string, handler: (req: HTTPRequest, res: HTTPResponse) => Promise<void>, options?: {urlEncoded?: boolean}) {
-        const handlers = [];
-        if(options?.urlEncoded) {
-            handlers.push(express.urlencoded({ extended: true }));
-        }
-        handlers.push(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    addRoute(method: HTTPMethod, path: string, handler: (req: HTTPRequest, res: HTTPResponse) => Promise<void>) {
+        const asyncSafeHandler = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
             try{
                 await handler.bind(this)(req, res)
             } catch (e) {
                 next(e)
             }
-        });
+        };
 
         switch(method) {
         case 'GET':
-            this.expressRouter.get(this.pathWithPrefix(path), ...handlers);
+            this.expressRouter.get(this.pathWithPrefix(path), asyncSafeHandler);
             break;
         case 'POST':
-            this.expressRouter.post(this.pathWithPrefix(path), ...handlers);
+            this.expressRouter.post(this.pathWithPrefix(path), asyncSafeHandler);
             break;
         case 'PUT':
-            this.expressRouter.put(this.pathWithPrefix(path), ...handlers);
+            this.expressRouter.put(this.pathWithPrefix(path), asyncSafeHandler);
             break;
         case 'DELETE':
-            this.expressRouter.delete(this.pathWithPrefix(path), ...handlers);
+            this.expressRouter.delete(this.pathWithPrefix(path), asyncSafeHandler);
             break;
         default:
             throw new Error('Unsupported HTTP method');
@@ -99,6 +96,18 @@ export default class HTTPRouter {
         next();
     }
 
+    private camelCaseBodyMiddleware(req: express.Request, res: express.Response, next: express.NextFunction): void {
+        if(req.body) {
+            const newBody: any = {};
+            for (const key in req.body) {
+                const newKey = toCamelCase(key);
+                newBody[newKey] = req.body[key];
+            }
+            req.body = newBody
+        }
+        next();
+    }
+
     private errorHandlerMiddleware(err: Error, req: express.Request, res: express.Response, next: express.NextFunction): void {
         this.logger.error(`${err.name}: ${err.message}`);
         res.status(500).send('Internal server error');
@@ -110,6 +119,9 @@ export default class HTTPRouter {
 
         expressApp.use(this.loggerMiddleware.bind(this));
         expressApp.use(this.addCookiesToRequestMiddleware.bind(this));
+
+        expressApp.use(express.urlencoded({ extended: true }))
+        expressApp.use(this.camelCaseBodyMiddleware.bind(this));
         
         expressApp.use(this.expressRouter);
 

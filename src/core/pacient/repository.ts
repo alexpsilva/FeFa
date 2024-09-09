@@ -3,10 +3,10 @@ import { BaseRepository, WithCount } from '../../infra/database/repository';
 import { User } from '../user/type';
 import { DbPacient, Pacient, UpdatePacientActionDto, CreatePacientActionDto } from './type';
 
-export default class PacientRepository extends BaseRepository<Pacient>{
-    readonly tableName = 'pacients';
+export default class PacientRepository extends BaseRepository{
+    static readonly tableName = 'pacients';
 
-    private dbPacientToPacient(dbPacient: DbPacient): Pacient {
+    static dbPacientToPacient(dbPacient: DbPacient): Pacient {
         return {
             id: dbPacient.id,
             userId: dbPacient.user_id,
@@ -18,20 +18,20 @@ export default class PacientRepository extends BaseRepository<Pacient>{
             createdAt: dbPacient.created_at,
         }
     }
-
-    private dbPacientsToPacients(dbPacients: DbPacient[]): Pacient[] {
-        return dbPacients.map(this.dbPacientToPacient);
+    
+    static dbPacientsToPacients(dbPacients: DbPacient[]): Pacient[] {
+        return dbPacients.map(PacientRepository.dbPacientToPacient);
     }
 
     async findById(userId: User['id'], id: Pacient['id']): Promise<Pacient> {
-        let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %s and id = %s', this.tableName, userId, id);
+        let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %s and id = %s', PacientRepository.tableName, userId, id);
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
 
         if (dbPacients.length === 0) {
             throw new Error('Entity not found');
         }
-        return this.dbPacientsToPacients(dbPacients)[0];
+        return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 
     async findAll(userId: User['id'], name: Pacient['name'], pagination?: { number: number, size: number }): Promise<WithCount<Pacient[]>> {
@@ -47,13 +47,13 @@ export default class PacientRepository extends BaseRepository<Pacient>{
             ORDER BY name
             ${limit ? this.databaseDriver.format('LIMIT %s', limit) : ''}
             ${offset ? this.databaseDriver.format('OFFSET %s', offset) : ''}
-        `, this.tableName, userId);
+        `, PacientRepository.tableName, userId);
 
         const result = await this.databaseDriver.query<DbPacient & {count: number}>(sql);
         const count = result.length ? result[0].count : 0;
         const dbPacients = z.array(DbPacient).parse(result);
         return {
-            data: this.dbPacientsToPacients(dbPacients),
+            data: PacientRepository.dbPacientsToPacients(dbPacients),
             count,
         };
     }
@@ -61,18 +61,18 @@ export default class PacientRepository extends BaseRepository<Pacient>{
     async create(entity: CreatePacientActionDto): Promise<Pacient> {
         const sql = this.databaseDriver.format(
             'INSERT INTO %I (user_id, name, birthday, cpf, address) VALUES (%L) RETURNING *', 
-            this.tableName, 
+            PacientRepository.tableName, 
             [entity.userId, entity.name, entity.birthday, entity.cpf, entity.address],
         );
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
-        return this.dbPacientsToPacients(dbPacients)[0];
+        return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 
     async update(entity: UpdatePacientActionDto): Promise<Pacient> {
         const sql = this.databaseDriver.format(
             'UPDATE %I SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L WHERE id = %L AND user_id = %L RETURNING *', 
-            this.tableName, 
+            PacientRepository.tableName, 
             entity.name, 
             entity.birthday, 
             entity.cpf, 
@@ -83,6 +83,6 @@ export default class PacientRepository extends BaseRepository<Pacient>{
         );
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
-        return this.dbPacientsToPacients(dbPacients)[0];
+        return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 };

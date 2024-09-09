@@ -18,7 +18,8 @@ export interface HTTPResponse extends NodeJS.WritableStream {
   set: (key: string, value: string) => void;
   status: (code: number) => void;
   send: (body: string) => void;
-  redirect: (url: string) => void;
+  redirect(url: string): void;
+  redirect(status: number, url: string): void;
   cookie: (name: string, value: string, options: {httpOnly: boolean, secure: boolean}) => void;
   clearCookie: (name: string) => void;
   locals: Record<string, any>;

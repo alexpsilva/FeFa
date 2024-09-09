@@ -22,9 +22,10 @@ export default class PacientRouter extends HTTPRouter {
         this.addRoute('GET', '/', this.listPacientsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getPacientPage);
         this.addRoute('GET', '/:id(\\d+)/edit', this.updatePacientPage);
-        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction, { urlEncoded: true });
+        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction); // to-do: Change to PUT
         this.addRoute('GET', '/new', this.createPacientPage);
-        this.addRoute('POST', '/new', this.createPacientAction, { urlEncoded: true });
+        this.addRoute('POST', '/new', this.createPacientAction);
+        // to-do: Add delete route
     }
 
     async listPacientsPage(req: HTTPRequest, res: HTTPResponse) {
@@ -47,6 +48,7 @@ export default class PacientRouter extends HTTPRouter {
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderAsync(
             GetPacientPage,
+            id,
             async () => this.pacientRepository.findById(userId, id),
         ))
     }

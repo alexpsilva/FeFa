@@ -6,13 +6,13 @@ import SaveIcon from "../../../../shared/components/icons/save";
 import TrashIcon from "../../../../shared/components/icons/trash";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
-import { Pacient } from "../../type";
-import PacientFieldset from "../fieldset";
+import { Appointment } from "../../type";
+import AppointmentFieldset from "../fieldset";
 
-export default class UpdatePacientPage extends JSXWithSlots {
+export default class UpdateAppointmentPage extends JSXWithSlots {
     constructor(
         protected logger: Logger,
-        private readonly getPacient: () => Promise<Pacient>
+        private readonly getAppointment: () => Promise<Appointment>
     ) {
         super(logger);
     }
@@ -25,24 +25,24 @@ export default class UpdatePacientPage extends JSXWithSlots {
         }
     ];
 
-    protected shell(pacientFormSlot: JSX.Element): JSX.Element {
-        return <LoggedInPage title="Editar Paciente" className="flex-column flex-items-center gap-md">
-            <h2 className="flex-self-start">Editar Paciente</h2>
-            {pacientFormSlot}
+    protected shell(appointmentFormSlot: JSX.Element): JSX.Element {
+        return <LoggedInPage title="Editar Consulta" className="flex-column flex-items-center gap-md">
+            <h2 className="flex-self-start">Editar Consulta</h2>
+            {appointmentFormSlot}
         </LoggedInPage>
     }
 
     protected async content() {
-        const pacient = await this.getPacient();
+        const appointment = await this.getAppointment();
         return <form
-            action={`/pacient/${pacient.id}/edit`}
+            action={`/appointment/${appointment.id}/edit`}
             method="post"
             className="content-wrapper card-lg flex-column"
         >
-            <PacientFieldset pacient={pacient}/>
+            <AppointmentFieldset appointment={appointment}/>
             <div className="flex-row">
                 {/* to-do: Alert before deleting */}
-                <Button htmlTag="a" href={`/pacient/${pacient.id}/delete`} className="content-faded">
+                <Button htmlTag="a" href={`/appointment/${appointment.id}/delete`} className="content-faded">
                     <TrashIcon width="1rem" height="1rem"/>
                     Deletar
                 </Button>
@@ -51,7 +51,7 @@ export default class UpdatePacientPage extends JSXWithSlots {
                     <SaveIcon width="1rem" height="1rem"/>
                     Salvar
                 </Button>
-                <Button htmlTag="a" href={`/pacient/${pacient.id}`}>
+                <Button htmlTag="a" href={`/pacient/${appointment.pacientId}`}>
                     <CrossIcon width="1rem" height="1rem"/>
                     Cancelar
                 </Button>

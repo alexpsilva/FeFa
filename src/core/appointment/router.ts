@@ -1,0 +1,78 @@
+import JSXRenderer from "../../infra/render/jsx";
+import Logger from "../../infra/log";
+
+import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
+
+import AppointmentRepository from "./repository";
+import { CreateAppointmentActionDto, CreateAppointmentDto, UpdateAppointmentActionDto, UpdateAppointmentDto } from "./type";
+import CreateAppointmentPage from "./components/pages/create";
+import UpdateAppointmentPage from "./components/pages/update";
+
+export default class AppointmentRouter extends HTTPRouter {
+    constructor(
+        protected readonly logger: Logger, 
+        private readonly renderer: JSXRenderer, 
+        private readonly appointmentRepository: AppointmentRepository
+    ) {
+        super(logger, '/appointment');
+
+        // this.addRoute('GET', '/', this.listAppointmentsPage);
+        this.addRoute('GET', '/:id(\\d+)', this.getAppointmentPage);
+        this.addRoute('GET', '/:id(\\d+)/edit', this.updateAppointmentPage);
+        this.addRoute('POST', '/:id(\\d+)/edit', this.updateAppointmentAction); // to-do: Change to PUT
+        this.addRoute('GET', '/pacient/:pacient_id(\\d+)/new', this.createAppointmentPage);
+        this.addRoute('POST', '/new', this.createAppointmentAction);
+        // to-do: Add delete route
+    }
+
+    async getAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
+        res.redirect(301, `/appointment/${req.params.id}/edit`);
+    }
+
+    // async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
+    //     const { userId, name, pageNumber, pageSize } = ListAppointmentsDto.parse({ userId: res.locals.userId, ...req.query });
+    //     const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
+        
+    //     res.set('Content-Type', 'text/html');
+    //     this.pipeStream(res, this.renderer.renderAsync(
+    //         ListAppointmentsPage,
+    //         async () => this.appointmentRepository.findAll(userId, name, pagination),
+    //         name,
+    //         pagination.number,
+    //         pagination.size,
+    //     ));
+    // }
+
+    async updateAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
+        const { userId, id } = UpdateAppointmentDto.parse({userId: res.locals.userId, id: req.params.id});
+
+        res.set('Content-Type', 'text/html');
+        this.pipeStream(res, this.renderer.renderAsync(
+            UpdateAppointmentPage,
+            async () => this.appointmentRepository.findById(userId, id),
+        ))
+    }
+
+    async updateAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const appointment = await this.appointmentRepository.update(data);
+        res.redirect(`/appointment/${appointment.id}/edit`);
+    }
+
+    async createAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
+        const { pacientId } = CreateAppointmentDto.parse({userId: res.locals.userId, pacientId: req.params.pacient_id});
+
+        res.set('Content-Type', 'text/html');
+        res.send(this.renderer.render(CreateAppointmentPage(pacientId)));
+    }
+
+    async createAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const data = CreateAppointmentActionDto.parse({...req.body, userId: res.locals.userId});  
+
+        const appointment = await this.appointmentRepository.create(data);
+        res.redirect(`/appointment/${appointment.id}/edit`);
+    }
+}

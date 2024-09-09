@@ -6,7 +6,7 @@ export default function PacientFieldset({pacient, ...props}: React.ComponentProp
     const age = pacient?.birthday ? new Date().getFullYear() - pacient.birthday.getFullYear() : 0;
 
     return (
-        <fieldset className="grid-flow-row grid-cols-2" {...props}>
+        <fieldset className="padding-lg grid-flow-row grid-cols-2 gap-md" {...props}>
             <div className="flex-column">
                 <label htmlFor="name" className="content-faded text-sm">Nome</label>
                 <input id="name" name="name" type="text" defaultValue={pacient?.name}/>

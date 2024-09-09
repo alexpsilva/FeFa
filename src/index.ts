@@ -7,12 +7,14 @@ import JSXRenderer from './infra/render/jsx';
 import PostgresDriver from './infra/database/driver/postgres';
 import UserRepository from './core/user/repository';
 import PacientRepository from './core/pacient/repository';
+import AppointmentRepository from './core/appointment/repository';
 
 import HTTPRouter from './infra/http/router';
 import AuthMiddleware from './core/auth/middleware';
 import AuthRouter from './core/auth/router';
 import HomeRouter from './core/home/router';
 import PacientRouter from './core/pacient/router';
+import AppointmentRouter from './core/appointment/router';
 
 //to-do: Add linting rule to prevent using console.log (should use the Logger class instead)
 
@@ -28,6 +30,7 @@ const databaseDriver = new PostgresDriver(logger, config.databaseUrl);
 
 const userRepository = new UserRepository(logger, databaseDriver);
 const pacientRepository = new PacientRepository(logger, databaseDriver);
+const appointmentRepository = new AppointmentRepository(logger, databaseDriver);
 
 
 /* ROUTERS */
@@ -42,6 +45,7 @@ protectedHttpRouter.addMiddleware(new AuthMiddleware(logger, jwtParser));
 protectedHttpRouter.addRouter(new HomeRouter(logger, renderer));
 
 protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository));
+protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, appointmentRepository));
 
 
 publicHttpRouter.listen(config.port, () => {

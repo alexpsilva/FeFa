@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const GoogleSSORedirectRequest = z.object({
     body: z.object({
-        g_csrf_token: z.string(),
+        gCsrfToken: z.string(),
         credential: z.string(),
     }),
     cookies: z.object({

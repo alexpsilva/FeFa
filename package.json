@@ -27,7 +27,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "cookie": "^0.6.0",
     "dot-env": "^0.0.1",
     "express": "^4.19.2",
