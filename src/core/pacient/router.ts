@@ -5,6 +5,7 @@ import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
 
 import PacientRepository from "./repository";
 import { CreatePacientActionDto, CreatePacientDto, GetPacientDto, ListPacientsDto, UpdatePacientActionDto, UpdatePacientDto } from "./type";
+import AppointmentRepository from "../appointment/repository";
 
 import CreatePacientPage from "./components/pages/create";
 import ListPacientsPage from "./components/pages/list";
@@ -15,7 +16,8 @@ export default class PacientRouter extends HTTPRouter {
     constructor(
         protected readonly logger: Logger, 
         private readonly renderer: JSXRenderer, 
-        private readonly pacientRepository: PacientRepository
+        private readonly pacientRepository: PacientRepository, 
+        private readonly appointmentRepository: AppointmentRepository,
     ) {
         super(logger, '/pacient');
 
@@ -51,13 +53,15 @@ export default class PacientRouter extends HTTPRouter {
     }
 
     async getPacientPage(req: HTTPRequest, res: HTTPResponse) {
-        const { userId, id } = GetPacientDto.parse({userId: res.locals.userId, id: req.params.id});
+        const { userId, id, pageNumber, pageSize } = GetPacientDto.parse({userId: res.locals.userId, id: req.params.id});
+        const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
 
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderAsync(
             GetPacientPage,
             id,
             async () => this.pacientRepository.findById(userId, id),
+            async () => this.appointmentRepository.findByPacientId(userId, id, pagination),
         ))
     }
 

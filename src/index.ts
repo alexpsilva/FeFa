@@ -44,8 +44,8 @@ protectedHttpRouter.addMiddleware(new AuthMiddleware(logger, jwtParser));
 
 protectedHttpRouter.addRouter(new HomeRouter(logger, renderer));
 
-protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository));
-protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, appointmentRepository, pacientRepository));
+protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository, appointmentRepository));
+protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, pacientRepository, appointmentRepository));
 
 
 publicHttpRouter.listen(config.port, () => {

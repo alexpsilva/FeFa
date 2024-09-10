@@ -22,7 +22,8 @@ const DbPacient = Pacient
 const GetPacientDto = Pacient.pick({
     userId: true,
     id: true,
-});
+})
+    .merge(PaginationDto.partial());
 
 const ListPacientsDto = Pacient.pick({ userId: true })
     .merge(z.object({name: Pacient.shape.name.default('') }))

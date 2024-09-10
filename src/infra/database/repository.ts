@@ -1,8 +1,8 @@
-import { z } from "zod";
 import Logger from "../log";
 import { DatabaseDriver } from "./driver";
 
 // export type ColummnsOption<T> = (keyof T)[];
+export type PaginationParams = { number: number, size: number };
 export type WithCount<T> = { count: number, data: T };
 
 export abstract class BaseRepository {
@@ -13,10 +13,10 @@ export abstract class BaseRepository {
         protected readonly databaseDriver: DatabaseDriver,
     ) {}
 
-    computePagination(pageNumbe: number, pageSize: number): { limit: number, offset: number } {
+    computePagination(pageNumber: PaginationParams['number'], pageSize: PaginationParams['size']): { limit: number, offset: number } {
         return {
             limit: pageSize,
-            offset: (pageNumbe - 1) * pageSize,
+            offset: (pageNumber - 1) * pageSize,
         }
     }
 }

@@ -1,10 +1,12 @@
 import { z } from 'zod';
-import { BaseRepository } from '../../infra/database/repository';
+import { BaseRepository, PaginationParams, WithCount } from '../../infra/database/repository';
 import { DbAppointment, Appointment, UpdateAppointmentActionDto, CreateAppointmentActionDto } from './type';
 
 import { User } from '../user/type';
 import PacientRepository from '../pacient/repository';
 import { DbPacient, Pacient } from '../pacient/type';
+
+type AppointmentWithPacient = Appointment & {pacient: Pacient};
 
 export default class AppointmentRepository extends BaseRepository{
     static readonly tableName = 'appointments';
@@ -24,7 +26,7 @@ export default class AppointmentRepository extends BaseRepository{
         return dbAppointments.map(AppointmentRepository.dbAppointmentToAppointment);
     }
 
-    async findById(userId: User['id'], id: Appointment['id']): Promise<Appointment & {pacient: Pacient}> {
+    async findById(userId: User['id'], id: Appointment['id']): Promise<AppointmentWithPacient> {
         const sql = this.databaseDriver.format(`
             SELECT *
             FROM ${AppointmentRepository.tableName} a 
@@ -51,29 +53,29 @@ export default class AppointmentRepository extends BaseRepository{
         }))[0];
     }
 
-    // async findAll(userId: User['id'], name: Appointment['name'], pagination?: { number: number, size: number }): Promise<WithCount<Appointment[]>> {
-    //     const { limit, offset } = this.computePagination(pagination?.number ?? 1, pagination?.size ?? 10);
+    async findByPacientId(userId: User['id'], pacientId: Pacient['id'], pagination?: PaginationParams): Promise<WithCount<Appointment[]>> {
+        const { limit, offset } = this.computePagination(pagination?.number ?? 1, pagination?.size ?? 10);
 
-    //     const sql = this.databaseDriver.format(`
-    //         SELECT *, COUNT(*) OVER() count 
-    //         FROM %I 
-    //         WHERE 
-    //             user_id = %L
-    //             ${name ? this.databaseDriver.format('AND LOWER(name) LIKE LOWER(%L)', `%${name}%`) : ''}
-    //         GROUP BY id 
-    //         ORDER BY name
-    //         ${limit ? this.databaseDriver.format('LIMIT %s', limit) : ''}
-    //         ${offset ? this.databaseDriver.format('OFFSET %s', offset) : ''}
-    //     `, this.tableName, userId);
+        const sql = this.databaseDriver.format(`
+            SELECT a.*, COUNT(*) OVER() count 
+            FROM ${AppointmentRepository.tableName} a
+                INNER JOIN ${PacientRepository.tableName} p ON a.pacient_id = p.id
+            WHERE 
+                p.user_id = %L AND p.id = %s
+            GROUP BY a.id 
+            ORDER BY a.created_at
+            LIMIT %s
+            OFFSET %s
+        `, userId, pacientId, limit, offset);
 
-    //     const result = await this.databaseDriver.query<DbAppointment & {count: number}>(sql);
-    //     const count = result.length ? result[0].count : 0;
-    //     const dbAppointments = z.array(DbAppointment).parse(result);
-    //     return {
-    //         data: AppointmentRepository.dbAppointmentsToAppointments(dbAppointments),
-    //         count,
-    //     };
-    // }
+        const result = await this.databaseDriver.query<DbAppointment & {count: number}>(sql);
+        const dbAppointments = z.array(DbAppointment.extend({ count: z.coerce.number() })).parse(result);
+        
+        return {
+            data: AppointmentRepository.dbAppointmentsToAppointments(dbAppointments),
+            count: dbAppointments.length ? dbAppointments[0].count : 0,
+        };
+    }
 
     async create(entity: CreateAppointmentActionDto): Promise<Appointment> {
         const sql = this.databaseDriver.format(`
