@@ -4,6 +4,7 @@ import { DbAppointment, Appointment, UpdateAppointmentActionDto, CreateAppointme
 
 import { User } from '../user/type';
 import PacientRepository from '../pacient/repository';
+import { DbPacient, Pacient } from '../pacient/type';
 
 export default class AppointmentRepository extends BaseRepository{
     static readonly tableName = 'appointments';
@@ -23,21 +24,31 @@ export default class AppointmentRepository extends BaseRepository{
         return dbAppointments.map(AppointmentRepository.dbAppointmentToAppointment);
     }
 
-    async findById(userId: User['id'], id: Appointment['id']): Promise<Appointment> {
-        let sql = this.databaseDriver.format(`
-            SELECT a.*
-            FROM %I a
-                INNER JOIN %I p ON a.pacient_id = p.id
+    async findById(userId: User['id'], id: Appointment['id']): Promise<Appointment & {pacient: Pacient}> {
+        const sql = this.databaseDriver.format(`
+            SELECT *
+            FROM ${AppointmentRepository.tableName} a 
+                INNER JOIN ${PacientRepository.tableName} p ON a.pacient_id = p.id
             WHERE a.id = %s and p.user_id = %s
-        `, AppointmentRepository.tableName, PacientRepository.tableName, id, userId);
+        `,
+            id, userId,
+        );
         
-        const result = await this.databaseDriver.query<DbAppointment>(sql);
-        const dbAppointments = z.array(DbAppointment).parse(result);
+        const dbEntity = z.object({
+            [AppointmentRepository.tableName]: DbAppointment,
+            [PacientRepository.tableName]: DbPacient,
+        })
+        const result = await this.databaseDriver.queryByTable<z.infer<typeof dbEntity>>(sql);
+        const dbEntities = z.array(dbEntity).parse(result);
 
-        if (dbAppointments.length === 0) {
+        if (dbEntities.length === 0) {
             throw new Error('Appointment not found');
         }
-        return AppointmentRepository.dbAppointmentsToAppointments(dbAppointments)[0];
+
+        return dbEntities.map(({appointments, pacients}) => ({
+            ...AppointmentRepository.dbAppointmentToAppointment(appointments), 
+            pacient: PacientRepository.dbPacientToPacient(pacients),
+        }))[0];
     }
 
     // async findAll(userId: User['id'], name: Appointment['name'], pagination?: { number: number, size: number }): Promise<WithCount<Appointment[]>> {
@@ -66,12 +77,14 @@ export default class AppointmentRepository extends BaseRepository{
 
     async create(entity: CreateAppointmentActionDto): Promise<Appointment> {
         const sql = this.databaseDriver.format(`
-            INSERT INTO %I (pacient_id, description, date) 
-            SELECT %L WHERE EXISTS (SELECT 1 FROM %I WHERE id = %L AND user_id = %L)
+            INSERT INTO ${AppointmentRepository.tableName} (pacient_id, description, date) 
+            SELECT %L WHERE EXISTS (
+                SELECT 1 FROM ${PacientRepository.tableName} WHERE id = %L AND user_id = %L
+            )
             RETURNING *
         `, 
-            AppointmentRepository.tableName, [entity.pacientId, entity.description, entity.date],
-            PacientRepository.tableName, entity.pacientId, entity.userId,
+            [entity.pacientId, entity.description, entity.date],
+            entity.pacientId, entity.userId,
         );  
 
         const result = await this.databaseDriver.query<DbAppointment>(sql);
@@ -85,19 +98,14 @@ export default class AppointmentRepository extends BaseRepository{
 
     async update(entity: UpdateAppointmentActionDto): Promise<Appointment> {
         const sql = this.databaseDriver.format(`
-            UPDATE %I a
+            UPDATE ${AppointmentRepository.tableName} a
             SET date = %L, description = %L, updated_at = %L 
-            FROM %I p
+            FROM ${PacientRepository.tableName} p
             WHERE a.id = %s AND a.pacient_id = p.id AND p.user_id = %s
             RETURNING a.*
         `,
-            AppointmentRepository.tableName, 
-            entity.date,
-            entity.description,
-            new Date(),
-            PacientRepository.tableName,
-            entity.id,
-            entity.userId,
+            entity.date, entity.description, new Date(),
+            entity.id, entity.userId,
         );
 
         const result = await this.databaseDriver.query<DbAppointment>(sql);

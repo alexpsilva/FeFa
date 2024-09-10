@@ -24,7 +24,14 @@ export default class PacientRepository extends BaseRepository{
     }
 
     async findById(userId: User['id'], id: Pacient['id']): Promise<Pacient> {
-        let sql = this.databaseDriver.format('SELECT * FROM %I WHERE user_id = %s and id = %s', PacientRepository.tableName, userId, id);
+        const sql = this.databaseDriver.format(`
+            SELECT * 
+            FROM ${PacientRepository.tableName}
+            WHERE user_id = %s and id = %s
+        `, 
+            userId, id,
+        );
+
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
 
@@ -39,7 +46,7 @@ export default class PacientRepository extends BaseRepository{
 
         const sql = this.databaseDriver.format(`
             SELECT *, COUNT(*) OVER() count 
-            FROM %I 
+            FROM ${PacientRepository.tableName} 
             WHERE 
                 user_id = %L
                 ${name ? this.databaseDriver.format('AND LOWER(name) LIKE LOWER(%L)', `%${name}%`) : ''}
@@ -47,7 +54,7 @@ export default class PacientRepository extends BaseRepository{
             ORDER BY name
             ${limit ? this.databaseDriver.format('LIMIT %s', limit) : ''}
             ${offset ? this.databaseDriver.format('OFFSET %s', offset) : ''}
-        `, PacientRepository.tableName, userId);
+        `, userId);
 
         const result = await this.databaseDriver.query<DbPacient & {count: number}>(sql);
         const count = result.length ? result[0].count : 0;
@@ -59,28 +66,30 @@ export default class PacientRepository extends BaseRepository{
     }
 
     async create(entity: CreatePacientActionDto): Promise<Pacient> {
-        const sql = this.databaseDriver.format(
-            'INSERT INTO %I (user_id, name, birthday, cpf, address) VALUES (%L) RETURNING *', 
-            PacientRepository.tableName, 
+        const sql = this.databaseDriver.format(`
+            INSERT INTO ${PacientRepository.tableName} (user_id, name, birthday, cpf, address) 
+            VALUES (%L) 
+            RETURNING *
+        `, 
             [entity.userId, entity.name, entity.birthday, entity.cpf, entity.address],
         );
+        
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 
     async update(entity: UpdatePacientActionDto): Promise<Pacient> {
-        const sql = this.databaseDriver.format(
-            'UPDATE %I SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L WHERE id = %L AND user_id = %L RETURNING *', 
-            PacientRepository.tableName, 
-            entity.name, 
-            entity.birthday, 
-            entity.cpf, 
-            entity.address, 
-            new Date(),
-            entity.id,
-            entity.userId,
+        const sql = this.databaseDriver.format(`
+            UPDATE ${PacientRepository.tableName} 
+            SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L 
+            WHERE id = %L AND user_id = %L 
+            RETURNING *
+        `, 
+            entity.name, entity.birthday, entity.cpf, entity.address, new Date(),
+            entity.id, entity.userId,
         );
+
         const result = await this.databaseDriver.query<DbPacient>(sql);
         const dbPacients = z.array(DbPacient).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];

@@ -6,13 +6,14 @@ import SaveIcon from "../../../../shared/components/icons/save";
 import TrashIcon from "../../../../shared/components/icons/trash";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
+import { Pacient } from "../../../pacient/type";
 import { Appointment } from "../../type";
 import AppointmentFieldset from "../fieldset";
 
 export default class UpdateAppointmentPage extends JSXWithSlots {
     constructor(
         protected logger: Logger,
-        private readonly getAppointment: () => Promise<Appointment>
+        private readonly getAppointment: () => Promise<Appointment & {pacient: Pacient}>
     ) {
         super(logger);
     }

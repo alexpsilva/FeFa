@@ -8,6 +8,7 @@ export default class Config {
     readonly staticFolder = path.join(__dirname, "..", "..", "..", "public");
     
     readonly databaseUrl = mandatoryEnv("POSTGRES_URL");
+    readonly databaseSchema = mandatoryEnv("POSTGRES_SCHEMA");
 
     readonly port = Number(mandatoryEnv("PORT"));
 

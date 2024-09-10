@@ -26,7 +26,7 @@ const jwtParser = new JwtParser(config.jwtSecret, config.jwtExpiresIn, config.go
 
 const renderer = new JSXRenderer(logger);
 
-const databaseDriver = new PostgresDriver(logger, config.databaseUrl);
+const databaseDriver = new PostgresDriver(logger, config.databaseUrl, config.databaseSchema);
 
 const userRepository = new UserRepository(logger, databaseDriver);
 const pacientRepository = new PacientRepository(logger, databaseDriver);
@@ -45,7 +45,7 @@ protectedHttpRouter.addMiddleware(new AuthMiddleware(logger, jwtParser));
 protectedHttpRouter.addRouter(new HomeRouter(logger, renderer));
 
 protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository));
-protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, appointmentRepository));
+protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, appointmentRepository, pacientRepository));
 
 
 publicHttpRouter.listen(config.port, () => {

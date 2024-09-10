@@ -7,12 +7,14 @@ import AppointmentRepository from "./repository";
 import { CreateAppointmentActionDto, CreateAppointmentDto, UpdateAppointmentActionDto, UpdateAppointmentDto } from "./type";
 import CreateAppointmentPage from "./components/pages/create";
 import UpdateAppointmentPage from "./components/pages/update";
+import PacientRepository from "../pacient/repository";
 
 export default class AppointmentRouter extends HTTPRouter {
     constructor(
         protected readonly logger: Logger, 
         private readonly renderer: JSXRenderer, 
-        private readonly appointmentRepository: AppointmentRepository
+        private readonly appointmentRepository: AppointmentRepository, 
+        private readonly pacientRepository: PacientRepository,
     ) {
         super(logger, '/appointment');
 
@@ -30,7 +32,10 @@ export default class AppointmentRouter extends HTTPRouter {
         const { pacientId } = CreateAppointmentDto.parse({userId: res.locals.userId, pacientId: req.params.pacient_id});
 
         res.set('Content-Type', 'text/html');
-        res.send(this.renderer.render(CreateAppointmentPage(pacientId)));
+        this.pipeStream(res, this.renderer.renderAsync(
+            CreateAppointmentPage,
+            async () => this.pacientRepository.findById(res.locals.userId, pacientId),
+        ));
     }
 
     // async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
