@@ -20,7 +20,7 @@ body {
     stroke: var(--color-base);
 }
 
-input {
+textarea, input {
     background: transparent;
     border: none;
 }
@@ -39,7 +39,7 @@ a:hover, button:hover {
 
 /* Global: Typography */
 
-body, header, label, input, button, span, a {
+body, header, label, textarea, input, button, span, a {
     font-family: Arial, sans-serif;
     font-weight: 400;
     line-height: 1.4;
@@ -79,22 +79,34 @@ fieldset {
     border: none;
 }
 
-input:disabled {
+textarea {
+    resize: none;
+    border-radius: 4px;
+    border: 2px solid;
+}
+input {
+    border-bottom: 2px solid;
+}
+
+textarea, input {
+    outline-style: none;
+    outline-width: 2px;
+}
+
+textarea:disabled, input:disabled {
     padding-left: 0;
     padding-right: 0;
-    border-bottom: 0;
+    outline-style: none;
+    border: 0;
+}
+
+textarea:enabled, input:enabled {
     outline-style: none;
 }
 
-input:enabled {
-    border-bottom: 2px solid;
-    outline-style: none;
-}
-
-input:focus-visible {
-    border-bottom: 0;
-    outline-width: 2px;
+textarea:focus-visible, input:focus-visible {
     outline-style: auto;
+    border-color: var(--color-base-background);
 }
 
 /* Global: Misc */
@@ -169,6 +181,10 @@ a, button {
     text-align: center;
 }
 
+.grid {
+    display: grid;
+}
+
 .grid-flow-row {
     grid-auto-flow: row;
 }
@@ -176,6 +192,15 @@ a, button {
 .grid-cols-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+}
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+            line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .hidden {

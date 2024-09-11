@@ -9,13 +9,16 @@ import LoggedInPage from "../../../../shared/components/logged_in_page";
 import { Appointment } from "../../../appointment/type";
 import { Pacient } from "../../type";
 import PacientFieldset from "../fieldset";
+import PaginationControls from "../../../../shared/components/pagination_controls";
 
 export default class GetPacientPage extends JSXWithSlots {
     constructor(
         protected logger: Logger,
-        private readonly pacientId: number,
         private readonly getPacient: () => Promise<Pacient>,
-        private readonly getAppointments: () => Promise<WithCount<Appointment[]>>
+        private readonly getAppointments: () => Promise<WithCount<Appointment[]>>,
+        private readonly pacientId: number,
+        private readonly pageNumber: number,
+        private readonly pageSize: number,
     ) {
         super(logger);
     }
@@ -41,7 +44,6 @@ export default class GetPacientPage extends JSXWithSlots {
             </Button>
             {pacientDataSlot}
             {appointmentDataSlot}
-            <Button htmlTag="a" href={`/appointment/pacient/${this.pacientId}/new`}>+ Nova Consulta</Button>
         </LoggedInPage>
     }
 
@@ -60,17 +62,35 @@ export default class GetPacientPage extends JSXWithSlots {
     }
 
     protected async appointmentContent() {
-        const appointments = await this.getAppointments();
-        const pacient = await this.getPacient();
+        const { data: appointments, count } = await this.getAppointments();
         return <div className="content-wrapper card-lg flex-column">
-            <PacientFieldset 
-                pacient={pacient} 
-                disabled
-            />
-            <Button htmlTag="a" href={`/pacient/${this.pacientId}/edit`} className="flex-self-end">
-                <PenIcon width="1rem" height="1rem"/>
-                Editar
-            </Button>
+            <header className="content-faded padding-md border-bottom">
+                Consultas
+            </header>
+
+            {appointments.map(appointment => (
+                <a 
+                    key={appointment.id} 
+                    href={`/appointment/${appointment.id}`}
+                    className="grid grid-flow-row padding-md gap-md"
+                    style={{gridTemplateColumns: '9ch auto'}}
+                >
+                    <span>{appointment.date.toLocaleDateString('pt-br')}</span>
+                    <span className="truncate">
+                        {appointment.description}
+                    </span>
+                </a>
+            ))}
+
+            <div className="flex-row flex-space-between">
+                <Button htmlTag="a" href={`/appointment/pacient/${this.pacientId}/new`}>+ Nova Consulta</Button>
+                <PaginationControls 
+                    pageNumber={this.pageNumber}
+                    pageSize={this.pageSize}
+                    totalCount={count}
+                    href={`/appointment/pacient/${this.pacientId}`}
+                />
+            </div>
         </div>
     }
 }

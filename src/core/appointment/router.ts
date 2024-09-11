@@ -70,7 +70,7 @@ export default class AppointmentRouter extends HTTPRouter {
         const data = CreateAppointmentActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const appointment = await this.appointmentRepository.create(data);
-        res.redirect(`/appointment/${appointment.id}/edit`);
+        res.redirect(`/pacient/${appointment.pacientId}`);
     }
 
     async updateAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
@@ -78,6 +78,6 @@ export default class AppointmentRouter extends HTTPRouter {
         const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
 
         const appointment = await this.appointmentRepository.update(data);
-        res.redirect(`/appointment/${appointment.id}/edit`);
+        res.redirect(`/pacient/${appointment.pacientId}`);
     }
 }

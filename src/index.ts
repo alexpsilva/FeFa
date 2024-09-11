@@ -16,8 +16,6 @@ import HomeRouter from './core/home/router';
 import PacientRouter from './core/pacient/router';
 import AppointmentRouter from './core/appointment/router';
 
-//to-do: Add linting rule to prevent using console.log (should use the Logger class instead)
-
 /* INFRA */
 const config = new Config();
 const logger = new Logger(config.logLevel);

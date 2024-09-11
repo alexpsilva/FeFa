@@ -54,14 +54,16 @@ export default class PacientRouter extends HTTPRouter {
 
     async getPacientPage(req: HTTPRequest, res: HTTPResponse) {
         const { userId, id, pageNumber, pageSize } = GetPacientDto.parse({userId: res.locals.userId, id: req.params.id});
-        const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
+        const pagination = { number: pageNumber ?? 1, size: pageSize ?? 5 }; // to-do: Move this default to the config module
 
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderAsync(
             GetPacientPage,
-            id,
             async () => this.pacientRepository.findById(userId, id),
             async () => this.appointmentRepository.findByPacientId(userId, id, pagination),
+            id,
+            pagination.number,
+            pagination.size,
         ))
     }
 

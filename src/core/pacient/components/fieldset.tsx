@@ -15,7 +15,7 @@ export default function PacientFieldset({pacient, ...props}: React.ComponentProp
             <div className="flex-column">
                 {(pacient?.birthday && props.disabled) ? (
                     <>
-                        <label className="content-faded text-sm">Idade</label>
+                        <span className="content-faded text-sm">Idade</span>
                         <span>{age} anos <span className="content-faded">({pacient.birthday.toLocaleDateString('pt-br')})</span></span>
                     </>
                 ) : (

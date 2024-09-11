@@ -7,8 +7,9 @@ export default function PaginationControls({ pageNumber, pageSize, totalCount, h
     href: string,
 }) {
     const numPages = Math.ceil(totalCount / pageSize)
-    const previousPageUrl = pageNumber === 1 ? null : buildUrl(href, pageNumber - 1, pageSize)
-    const nextPageUrl = pageNumber === numPages ? null : buildUrl(href, pageNumber + 1, pageSize)
+    const croppedPageNumber = pageNumber > numPages ? numPages : pageNumber;
+    const previousPageUrl = croppedPageNumber <= 1 ? null : buildUrl(href, croppedPageNumber - 1, pageSize)
+    const nextPageUrl = croppedPageNumber === numPages ? null : buildUrl(href, croppedPageNumber + 1, pageSize)
 
     return (
         <div className="flex-row">
@@ -17,7 +18,7 @@ export default function PaginationControls({ pageNumber, pageSize, totalCount, h
                     <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>
                 </a>
             )}
-            <span className="padding-x-md flex-items-center">{pageNumber}/{numPages}</span>
+            <span className="padding-x-md flex-items-center">{croppedPageNumber}/{numPages}</span>
             {!nextPageUrl ? null : (
                 <a href={nextPageUrl} className="padding-x-md border-radius content-evidence flex-items-center">
                     <ArrowIcon direction="right" width="1.5rem" height="1.5rem"/>
