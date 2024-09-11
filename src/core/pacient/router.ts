@@ -4,7 +4,7 @@ import Logger from "../../infra/log";
 import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
 
 import PacientRepository from "./repository";
-import { CreatePacientActionDto, CreatePacientDto, GetPacientDto, ListPacientsDto, UpdatePacientActionDto, UpdatePacientDto } from "./type";
+import { CreatePacientActionDto, CreatePacientDto, DeletePacientActionDto, GetPacientDto, ListPacientsDto, UpdatePacientActionDto, UpdatePacientDto } from "./type";
 import AppointmentRepository from "../appointment/repository";
 
 import CreatePacientPage from "./components/pages/create";
@@ -28,7 +28,7 @@ export default class PacientRouter extends HTTPRouter {
 
         this.addRoute('POST', '/new', this.createPacientAction);
         this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction); // to-do: Change to PUT
-        // to-do: Add delete route
+        this.addRoute('GET', '/:id(\\d+)/delete', this.deletePacientAction); // to-do: Change to DELETE
     }
 
     async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
@@ -83,6 +83,7 @@ export default class PacientRouter extends HTTPRouter {
 
         const pacient = await this.pacientRepository.create(data);
         res.redirect(`/pacient/${pacient.id}`);
+        // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 
     async updatePacientAction(req: HTTPRequest, res: HTTPResponse) {
@@ -91,5 +92,15 @@ export default class PacientRouter extends HTTPRouter {
 
         const pacient = await this.pacientRepository.update(data);
         res.redirect(`/pacient/${pacient.id}`);
+        // to-do: Trigger a error/success toast (small notification pop-up) on the client side
+    }
+
+    async deletePacientAction(req: HTTPRequest, res: HTTPResponse) {
+        // to-do: Use safeParse and set htto status code instead
+        const { userId, id } = DeletePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+
+        const pacient = await this.pacientRepository.delete(userId, id);
+        res.redirect(`/pacient`);
+        // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 }

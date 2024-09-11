@@ -23,7 +23,6 @@ const GetAppointmentDto = Appointment.pick({
     id: true,
 }).extend({ userId });
 
-
 const ListAppointmentsDto = z.object({ userId })
     .merge(PaginationDto.partial());
 
@@ -39,6 +38,9 @@ const CreateAppointmentDto = GetAppointmentDto.omit({ id: true })
 
 const CreateAppointmentActionDto = UpdateAppointmentActionDto.omit({ id: true });
 
+const DeleteAppointmentActionDto = Appointment.pick({ id: true })
+    .extend({ userId });
+
 
 export {
     Appointment,
@@ -49,6 +51,7 @@ export {
     UpdateAppointmentActionDto,
     CreateAppointmentDto,
     CreateAppointmentActionDto,
+    DeleteAppointmentActionDto,
 }
 
 export type Appointment = z.infer<typeof Appointment>;
@@ -59,3 +62,4 @@ export type UpdateAppointmentDto = z.infer<typeof UpdateAppointmentDto>;
 export type UpdateAppointmentActionDto = z.infer<typeof UpdateAppointmentActionDto>;
 export type CreateAppointmentDto = z.infer<typeof CreateAppointmentDto>;
 export type CreateAppointmentActionDto = z.infer<typeof CreateAppointmentActionDto>;
+export type DeleteAppointmentActionDto = z.infer<typeof DeleteAppointmentActionDto>;

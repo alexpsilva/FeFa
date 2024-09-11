@@ -150,4 +150,22 @@ export default class AppointmentRepository extends BaseRepository{
         const dbAppointments = z.array(DbAppointment).parse(result);
         return AppointmentRepository.dbAppointmentsToAppointments(dbAppointments)[0];
     }
+
+    async delete(userId: User['id'], id: Appointment['id']): Promise<Appointment> {
+        const sql = this.databaseDriver.format(`
+            DELETE
+            FROM ${AppointmentRepository.tableName} a
+                USING ${PacientRepository.tableName} p
+            WHERE a.id = %s AND p.user_id = %s AND a.pacient_id = p.id
+            RETURNING a.*
+        `, id, userId);
+
+        const result = await this.databaseDriver.query<DbAppointment>(sql);
+        if(result.length === 0) {
+            throw new Error('Appointment not found');
+        }
+
+        const dbAppointments = z.array(DbAppointment).parse(result);
+        return AppointmentRepository.dbAppointmentsToAppointments(dbAppointments)[0];
+    }
 };

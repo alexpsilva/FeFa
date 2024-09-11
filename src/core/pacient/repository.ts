@@ -94,4 +94,22 @@ export default class PacientRepository extends BaseRepository{
         const dbPacients = z.array(DbPacient).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
+
+    async delete(userId: User['id'], id: Pacient['id']): Promise<Pacient> {
+        const sql = this.databaseDriver.format(`
+            DELETE
+            FROM ${PacientRepository.tableName}
+            WHERE id = %s AND user_id = %s
+            RETURNING *
+        `, id, userId);
+
+        // to-do: Handle deletiong of pacients with associated appointments
+        const result = await this.databaseDriver.query<DbPacient>(sql);
+        if(result.length === 0) {
+            throw new Error('Appointment not found');
+        }
+
+        const dbPacients = z.array(DbPacient).parse(result);
+        return PacientRepository.dbPacientsToPacients(dbPacients)[0];
+    }
 };

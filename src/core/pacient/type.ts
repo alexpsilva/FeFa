@@ -42,6 +42,11 @@ const CreatePacientActionDto = UpdatePacientActionDto.omit({
     id: true,
 });
 
+const DeletePacientActionDto = Pacient.pick({
+    id: true,
+    userId: true,
+});
+
 
 export {
     Pacient,
@@ -52,6 +57,7 @@ export {
     UpdatePacientActionDto,
     CreatePacientDto,
     CreatePacientActionDto,
+    DeletePacientActionDto,
 }
 
 export type Pacient = z.infer<typeof Pacient>;
@@ -62,3 +68,4 @@ export type UpdatePacientDto = z.infer<typeof UpdatePacientDto>;
 export type UpdatePacientActionDto = z.infer<typeof UpdatePacientActionDto>;
 export type CreatePacientDto = z.infer<typeof CreatePacientDto>;
 export type CreatePacientActionDto = z.infer<typeof CreatePacientActionDto>;
+export type DeletePacientActionDto = z.infer<typeof DeletePacientActionDto>;
