@@ -23,7 +23,8 @@ const GetAppointmentDto = Appointment.pick({
     id: true,
 }).extend({ userId });
 
-const ListAppointmentsDto = GetAppointmentDto.omit({ id: true })
+
+const ListAppointmentsDto = z.object({ userId })
     .merge(PaginationDto.partial());
 
 const UpdateAppointmentDto = Appointment.pick({ id: true })

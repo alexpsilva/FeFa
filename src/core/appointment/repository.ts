@@ -63,7 +63,7 @@ export default class AppointmentRepository extends BaseRepository{
             WHERE 
                 p.user_id = %L AND p.id = %s
             GROUP BY a.id 
-            ORDER BY a.created_at
+            ORDER BY a.date DESC
             LIMIT %s
             OFFSET %s
         `, userId, pacientId, limit, offset);
@@ -77,37 +77,37 @@ export default class AppointmentRepository extends BaseRepository{
         };
     }
 
-    // async findAll(userId: User['id'], pagination?: PaginationParams): Promise<WithCount<AppointmentWithPacient[]>> {
-    //     const { limit, offset } = this.computePagination(pagination?.number ?? 1, pagination?.size ?? 10);
+    async findAll(userId: User['id'], pagination?: PaginationParams): Promise<WithCount<AppointmentWithPacient[]>> {
+        const { limit, offset } = this.computePagination(pagination?.number ?? 1, pagination?.size ?? 10);
 
-    //     const sql = this.databaseDriver.format(`
-    //         SELECT *, COUNT(*) OVER() count 
-    //         FROM ${AppointmentRepository.tableName} a
-    //             INNER JOIN ${PacientRepository.tableName} p ON a.pacient_id = p.id
-    //         WHERE 
-    //             p.user_id = %L
-    //         GROUP BY id 
-    //         ORDER BY name
-    //         LIMIT %s
-    //         OFFSET %s
-    //     `, userId, limit, offset);
+        const sql = this.databaseDriver.format(`
+            SELECT *, COUNT(*) OVER() count 
+            FROM ${AppointmentRepository.tableName} a
+                INNER JOIN ${PacientRepository.tableName} p ON a.pacient_id = p.id
+            WHERE 
+                p.user_id = %L
+            GROUP BY a.id, p.id
+            ORDER BY a.date DESC
+            LIMIT %s
+            OFFSET %s
+        `, userId, limit, offset);
 
-    //     const dbEntity = z.object({
-    //         [AppointmentRepository.tableName]: DbAppointment,
-    //         [PacientRepository.tableName]: DbPacient,
-    //         count: z.number(),
-    //     })
-    //     const result = await this.databaseDriver.queryByTable<z.infer<typeof dbEntity>>(sql);
-    //     const dbEntities = z.array(dbEntity).parse(result);
+        const dbEntity = z.object({
+            [AppointmentRepository.tableName]: DbAppointment,
+            [PacientRepository.tableName]: DbPacient,
+            count: z.coerce.number(),
+        })
+        const result = await this.databaseDriver.queryByTable<z.infer<typeof dbEntity>>(sql);
+        const dbEntities = z.array(dbEntity).parse(result);
         
-    //     return {
-    //         data: dbEntities.map(({appointments, pacients}) => ({
-    //             ...AppointmentRepository.dbAppointmentToAppointment(appointments), 
-    //             pacient: PacientRepository.dbPacientToPacient(pacients),
-    //         })),
-    //         count: result.length ? result[0].count : 0,
-    //     };
-    // }
+        return {
+            data: dbEntities.map(({appointments, pacients}) => ({
+                ...AppointmentRepository.dbAppointmentToAppointment(appointments), 
+                pacient: PacientRepository.dbPacientToPacient(pacients),
+            })),
+            count: result.length ? result[0].count : 0,
+        };
+    }
 
     async create(entity: CreateAppointmentActionDto): Promise<Appointment> {
         const sql = this.databaseDriver.format(`

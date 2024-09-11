@@ -4,10 +4,11 @@ import Logger from "../../infra/log";
 import { HTTPRouter, HTTPRequest, HTTPResponse } from "../../infra/http";
 
 import AppointmentRepository from "./repository";
-import { CreateAppointmentActionDto, CreateAppointmentDto, UpdateAppointmentActionDto, UpdateAppointmentDto } from "./type";
+import { CreateAppointmentActionDto, CreateAppointmentDto, ListAppointmentsDto, UpdateAppointmentActionDto, UpdateAppointmentDto } from "./type";
 import CreateAppointmentPage from "./components/pages/create";
 import UpdateAppointmentPage from "./components/pages/update";
 import PacientRepository from "../pacient/repository";
+import ListAppointmentsPage from "./components/pages/list";
 
 export default class AppointmentRouter extends HTTPRouter {
     constructor(
@@ -19,7 +20,7 @@ export default class AppointmentRouter extends HTTPRouter {
         super(logger, '/appointment');
 
         this.addRoute('GET', '/pacient/:pacient_id(\\d+)/new', this.createAppointmentPage);
-        // this.addRoute('GET', '/', this.listAppointmentsPage);
+        this.addRoute('GET', '/', this.listAppointmentsPage);
         this.addRoute('GET', '/:id(\\d+)', this.getAppointmentPage);
         this.addRoute('GET', '/:id(\\d+)/edit', this.updateAppointmentPage);
         
@@ -38,18 +39,18 @@ export default class AppointmentRouter extends HTTPRouter {
         ));
     }
 
-    // async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
-    //     const { userId, pacientId, pageNumber, pageSize } = ListAppointmentsDto.parse({ userId: res.locals.userId, ...req.query });
-    //     const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
+    async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
+        const { userId, pageNumber, pageSize } = ListAppointmentsDto.parse({ userId: res.locals.userId, ...req.query });
+        const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
         
-    //     res.set('Content-Type', 'text/html');
-    //     this.pipeStream(res, this.renderer.renderAsync(
-    //         ListAppointmentsPage,
-    //         async () => this.appointmentRepository.findAll(userId, pacientId, pagination),
-    //         pagination.number,
-    //         pagination.size,
-    //     ));
-    // }
+        res.set('Content-Type', 'text/html');
+        this.pipeStream(res, this.renderer.renderAsync(
+            ListAppointmentsPage,
+            async () => this.appointmentRepository.findAll(userId, pagination),
+            pagination.number,
+            pagination.size,
+        ));
+    }
 
     async getAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
         res.redirect(301, `/appointment/${req.params.id}/edit`);

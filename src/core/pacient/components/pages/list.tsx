@@ -58,7 +58,7 @@ export default class ListPacientsPage extends JSXWithSlots {
         const { count, data: pacients} = await this.getPacients();
         return <>
             <header className="content-faded padding-md border-bottom">
-                Nome
+                Pacientes
             </header>
             <div className="flex-column items-padding-md">
                 {pacients.map(pacient => (

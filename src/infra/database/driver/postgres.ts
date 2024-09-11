@@ -51,7 +51,7 @@ export default class PostgresDriver implements DatabaseDriver {
         }
     }
 
-    async queryByTable<T extends Record<string, object>>(sql: string): Promise<T[]> {
+    async queryByTable<T extends Record<string, object | string | number>>(sql: string): Promise<T[]> {
         let result: QueryArrayResult<T[]>;
         try {
             result = await this.pool.query({text: sql, rowMode: 'array'})
@@ -61,6 +61,11 @@ export default class PostgresDriver implements DatabaseDriver {
 
         await this.pendingSetup;
         const fields = result.fields.map(field => {
+            if(field.tableID === 0) {
+                // Computed fields like COUNT(*), MAX(), etc
+                return {name: field.name, table: null};
+            }
+
             const tableName = this.tableIdMap.get(field.tableID);
             if (!tableName) {
                 throw new Error(`Table ID ${field.tableID} not found in table id map`);
@@ -72,8 +77,13 @@ export default class PostgresDriver implements DatabaseDriver {
             const obj = {} as any;
             for (let i = 0; i < fields.length; i++) {
                 const field = fields[i];
-                obj[field.table] ??= {}
-                obj[field.table][field.name] = row[i];
+
+                if(field.table === null) {
+                    obj[field.name] = row[i];
+                } else {
+                    obj[field.table] ??= {}
+                    obj[field.table][field.name] = row[i];
+                }
             }
             return obj;
         }) as T[];
