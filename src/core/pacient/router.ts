@@ -27,8 +27,8 @@ export default class PacientRouter extends HTTPRouter {
         this.addRoute('GET', '/:id(\\d+)/edit', this.updatePacientPage);
 
         this.addRoute('POST', '/new', this.createPacientAction);
-        this.addRoute('POST', '/:id(\\d+)/edit', this.updatePacientAction); // to-do: Change to PUT
-        this.addRoute('GET', '/:id(\\d+)/delete', this.deletePacientAction); // to-do: Change to DELETE
+        this.addRoute('PUT', '/:id(\\d+)', this.updatePacientAction);
+        this.addRoute('DELETE', '/:id(\\d+)', this.deletePacientAction);
     }
 
     async createPacientPage(req: HTTPRequest, res: HTTPResponse) {
@@ -82,7 +82,7 @@ export default class PacientRouter extends HTTPRouter {
         const data = CreatePacientActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const pacient = await this.pacientRepository.create(data);
-        res.redirect(`/pacient/${pacient.id}`);
+        res.redirect(303, `/pacient/${pacient.id}`);
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 
@@ -91,7 +91,8 @@ export default class PacientRouter extends HTTPRouter {
         const data = UpdatePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
 
         const pacient = await this.pacientRepository.update(data);
-        res.redirect(`/pacient/${pacient.id}`);
+        res.header('HX-REDIRECT', `/pacient/${pacient.id}`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 
@@ -99,8 +100,9 @@ export default class PacientRouter extends HTTPRouter {
         // to-do: Use safeParse and set htto status code instead
         const { userId, id } = DeletePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
 
-        const pacient = await this.pacientRepository.delete(userId, id);
-        res.redirect(`/pacient`);
+        await this.pacientRepository.delete(userId, id);
+        res.header('HX-REDIRECT', `/pacient`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 }

@@ -35,14 +35,17 @@ export default class UpdatePacientPage extends JSXWithSlots {
     protected async content() {
         const pacient = await this.getPacient();
         return <form
-            action={`/pacient/${pacient.id}/edit`}
-            method="post"
+            hx-put={`/pacient/${pacient.id}`} // to-do Add a indicator that the request is being processed (and disable the submit button)
             className="content-wrapper card-lg flex-column"
         >
             <PacientFieldset pacient={pacient}/>
             <div className="flex-row">
                 {/* to-do: Alert before deleting */}
-                <Button htmlTag="a" href={`/pacient/${pacient.id}/delete`} className="content-faded">
+                <Button 
+                    htmlTag="button" 
+                    className="content-faded" 
+                    hx-delete={`/pacient/${pacient.id}`} hx-params="none" // to-do Add a indicator that the request is being processed (and disable the submit button)
+                >
                     <TrashIcon width="1rem" height="1rem"/>
                     Deletar
                 </Button>

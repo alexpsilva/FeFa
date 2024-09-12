@@ -36,14 +36,17 @@ export default class UpdateAppointmentPage extends JSXWithSlots {
     protected async content() {
         const appointment = await this.getAppointment();
         return <form
-            action={`/appointment/${appointment.id}/edit`}
-            method="post"
+            hx-put={`/appointment/${appointment.id}`} // to-do Add a indicator that the request is being processed (and disable the submit button)
             className="content-wrapper card-lg flex-column"
         >
             <AppointmentFieldset appointment={appointment}/>
             <div className="flex-row">
                 {/* to-do: Alert before deleting */}
-                <Button htmlTag="a" href={`/appointment/${appointment.id}/delete`} className="content-faded">
+                <Button 
+                    htmlTag="button" 
+                    className="content-faded" 
+                    hx-delete={`/appointment/${appointment.id}`} hx-params="none" // to-do Add a indicator that the request is being processed (and disable the submit button)
+                >
                     <TrashIcon width="1rem" height="1rem"/>
                     Deletar
                 </Button>

@@ -25,8 +25,8 @@ export default class AppointmentRouter extends HTTPRouter {
         this.addRoute('GET', '/:id(\\d+)/edit', this.updateAppointmentPage);
         
         this.addRoute('POST', '/new', this.createAppointmentAction);
-        this.addRoute('POST', '/:id(\\d+)/edit', this.updateAppointmentAction); // to-do: Change to PUT
-        this.addRoute('GET', '/:id(\\d+)/delete', this.deleteAppointmentAction); // to-do: Change to DELETE
+        this.addRoute('PUT', '/:id(\\d+)', this.updateAppointmentAction);
+        this.addRoute('DELETE', '/:id(\\d+)', this.deleteAppointmentAction);
     }
 
     async createAppointmentPage(req: HTTPRequest, res: HTTPResponse) {
@@ -71,16 +71,17 @@ export default class AppointmentRouter extends HTTPRouter {
         const data = CreateAppointmentActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const appointment = await this.appointmentRepository.create(data);
-        res.redirect(`/pacient/${appointment.pacientId}`);
+        res.redirect(303, `/pacient/${appointment.pacientId}`);
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 
     async updateAppointmentAction(req: HTTPRequest, res: HTTPResponse) {
         // to-do: Use safeParse and set htto status code instead
-        const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
+        const data = UpdateAppointmentActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});
 
         const appointment = await this.appointmentRepository.update(data);
-        res.redirect(`/pacient/${appointment.pacientId}`);
+        res.header('HX-REDIRECT', `/pacient/${appointment.pacientId}`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 
@@ -89,7 +90,8 @@ export default class AppointmentRouter extends HTTPRouter {
         const { userId, id } = DeleteAppointmentActionDto.parse({userId: res.locals.userId, id: req.params.id});  
 
         const appointment = await this.appointmentRepository.delete(userId, id);
-        res.redirect(`/pacient/${appointment.pacientId}`);
+        res.header('HX-REDIRECT', `/pacient/${appointment.pacientId}`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 }

@@ -9,7 +9,7 @@ export default function LoggedInPage({ title, head, children, ...props }: PagePr
             title={title} 
             head={<>
                 {head}
-                <script type="text/javascript" src="/statics/logged_in_page.js"/>
+                <script src="https://unpkg.com/htmx.org@2.0.2"></script>
             </>} 
             className="flex-row"
         >

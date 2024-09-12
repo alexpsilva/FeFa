@@ -15,9 +15,10 @@ export type HTTPRequest = {
 };
 
 export interface HTTPResponse extends NodeJS.WritableStream {
+  header: (field: string, value?: string | string[]) => void;
   set: (key: string, value: string) => void;
   status: (code: number) => void;
-  send: (body: string) => void;
+  send: (body?: string) => void;
   redirect(url: string): void;
   redirect(status: number, url: string): void;
   cookie: (name: string, value: string, options: {httpOnly: boolean, secure: boolean}) => void;
