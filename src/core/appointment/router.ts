@@ -71,7 +71,8 @@ export default class AppointmentRouter extends HTTPRouter {
         const data = CreateAppointmentActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const appointment = await this.appointmentRepository.create(data);
-        res.redirect(303, `/pacient/${appointment.pacientId}`);
+        res.header('HX-REDIRECT', `/pacient/${appointment.pacientId}`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 

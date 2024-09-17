@@ -1,8 +1,10 @@
 import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
+import Anchor from "../../../../shared/components/anchor";
 import Button from "../../../../shared/components/button";
 import CrossIcon from "../../../../shared/components/icons/cross";
 import SaveIcon from "../../../../shared/components/icons/save";
+import Spinner from "../../../../shared/components/icons/spinner";
 import TrashIcon from "../../../../shared/components/icons/trash";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
@@ -34,30 +36,39 @@ export default class UpdatePacientPage extends JSXWithSlots {
 
     protected async content() {
         const pacient = await this.getPacient();
+
         return <form
-            hx-put={`/pacient/${pacient.id}`} // to-do Add a indicator that the request is being processed (and disable the submit button)
+            hx-put={`/pacient/${pacient.id}`} 
+            hx-disabled-elt="find button[type=submit]"
+            hx-indicator="button[type=submit]"
             className="content-wrapper card-lg flex-column"
         >
             <PacientFieldset pacient={pacient}/>
             <div className="flex-row">
                 {/* to-do: Alert before deleting */}
                 <Button 
-                    htmlTag="button" 
-                    className="content-faded" 
-                    hx-delete={`/pacient/${pacient.id}`} hx-params="none" // to-do Add a indicator that the request is being processed (and disable the submit button)
+                    className="content-alert" 
+                    hx-delete={`/pacient/${pacient.id}`} 
+                    hx-params="none"
+                    hx-disabled-elt="this"
+                    hx-indicator="this"
+                    overlay={<Spinner width="1rem" height="1rem" className="htmx-indicator"/>}
                 >
                     <TrashIcon width="1rem" height="1rem"/>
                     Deletar
                 </Button>
                 <div className="flex-grow"/>
-                <Button htmlTag="button" type="submit">
+                <Button 
+                    type="submit"
+                    overlay={<Spinner width="1rem" height="1rem" className="htmx-indicator"/>}
+                >
                     <SaveIcon width="1rem" height="1rem"/>
                     Salvar
                 </Button>
-                <Button htmlTag="a" href={`/pacient/${pacient.id}`}>
+                <Anchor href={`/pacient/${pacient.id}`}>
                     <CrossIcon width="1rem" height="1rem"/>
                     Cancelar
-                </Button>
+                </Anchor>
             </div>
         </form>
     }

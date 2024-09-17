@@ -10,6 +10,7 @@ import { Appointment } from "../../../appointment/type";
 import { Pacient } from "../../type";
 import PacientFieldset from "../fieldset";
 import PaginationControls from "../../../../shared/components/pagination_controls";
+import Anchor from "../../../../shared/components/anchor";
 
 export default class GetPacientPage extends JSXWithSlots {
     constructor(
@@ -38,10 +39,10 @@ export default class GetPacientPage extends JSXWithSlots {
 
     protected shell(pacientDataSlot: JSX.Element, appointmentDataSlot: JSX.Element): JSX.Element {
         return <LoggedInPage title="Paciente" className="flex-column flex-items-center gap-md">
-            <Button htmlTag="a" href="/pacient" className="flex-self-start">
+            <Anchor href="/pacient" className="flex-self-start">
                 <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>
                 <span>Voltar</span>
-            </Button>
+            </Anchor>
             {pacientDataSlot}
             {appointmentDataSlot}
         </LoggedInPage>
@@ -54,10 +55,10 @@ export default class GetPacientPage extends JSXWithSlots {
                 pacient={pacient} 
                 disabled
             />
-            <Button htmlTag="a" href={`/pacient/${this.pacientId}/edit`} className="flex-self-end">
+            <Anchor href={`/pacient/${this.pacientId}/edit`} className="flex-self-end">
                 <PenIcon width="1rem" height="1rem"/>
                 Editar
-            </Button>
+            </Anchor>
         </div>
     }
 
@@ -83,7 +84,7 @@ export default class GetPacientPage extends JSXWithSlots {
             ))}
 
             <div className="flex-row flex-space-between">
-                <Button htmlTag="a" href={`/appointment/pacient/${this.pacientId}/new`}>+ Nova Consulta</Button>
+                <Anchor href={`/appointment/pacient/${this.pacientId}/new`}>+ Nova Consulta</Anchor>
                 <PaginationControls 
                     pageNumber={this.pageNumber}
                     pageSize={this.pageSize}

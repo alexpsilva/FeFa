@@ -10,6 +10,7 @@
     --color-base: rgb(68, 68, 68);
     --color-base-background: white;
     --color-evidence: rgb(8, 145, 178);
+    --color-alert: rgb(255, 85, 85);
 }
 
 body {
@@ -30,11 +31,20 @@ a, button {
     border: none;
 }
 
-a:hover, button:hover {
+a:hover, button:enabled:hover {
     --text-color: var(--color-base-background);
     stroke: var(--color-base-background);
     background-color: var(--color-evidence);
     background-clip: border-box;
+}
+
+a.content-alert:hover, button.content-alert:enabled:hover {
+    background-color: var(--color-alert);
+}
+
+button:disabled {
+    --text-color: var(--color-faded);
+    stroke: var(--color-faded);
 }
 
 /* Global: Typography */
@@ -113,6 +123,14 @@ textarea:focus-visible, input:focus-visible {
 
 a, button {
     cursor: pointer;
+}
+
+button:disabled {
+    cursor: unset;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
 }
 
 /* Utility: Typography */
@@ -194,6 +212,19 @@ a, button {
     grid-template-columns: repeat(2, 1fr);
 }
 
+.relative-container {
+    position: relative;
+}
+
+.absolute-center {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
 .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -208,6 +239,14 @@ a, button {
 }
 
 /* Utility: Box Model */
+
+.w-sm {
+    width: 3rem;
+}
+
+.h-sm {
+    height: 3rem;
+}
 
 .padding-sm {
     padding: var(--padding-sm);
@@ -273,12 +312,32 @@ input.border-none, .border-none {
     --text-color: var(--color-evidence);
     stroke: var(--color-evidence);
     border-color: var(--color-evidence);
+    fill: var(--color-evidence);
 }
 
 .content-faded {
     --text-color: var(--color-faded);
     stroke: var(--color-faded);
     border-color: var(--color-faded);
+    fill: var(--color-faded);
+}
+
+.content-alert {
+    --text-color: var(--color-alert);
+    stroke: var(--color-alert);
+    border-color: var(--color-alert);
+    fill: var(--color-alert);
+}
+
+/* Utility: Animation */
+
+.spinner {
+    animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Specifc: Page */

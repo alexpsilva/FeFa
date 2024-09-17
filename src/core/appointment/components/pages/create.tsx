@@ -1,8 +1,10 @@
 import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
+import Anchor from "../../../../shared/components/anchor";
 import Button from "../../../../shared/components/button";
 import CrossIcon from "../../../../shared/components/icons/cross";
 import SaveIcon from "../../../../shared/components/icons/save";
+import Spinner from "../../../../shared/components/icons/spinner";
 import Loading from "../../../../shared/components/loading";
 import LoggedInPage from "../../../../shared/components/logged_in_page";
 import { Pacient } from "../../../pacient/type";
@@ -35,18 +37,26 @@ export default class CreateAppointmentPage extends JSXWithSlots {
         const pacient = await this.getPacient();
 
         return (
-            <form action="/appointment/new" method="post" className="content-wrapper card-lg flex-column">
+            <form
+                hx-post={`/appointment/new`}
+                hx-disabled-elt="find button[type=submit]"
+                hx-indicator="button[type=submit]"
+                className="content-wrapper card-lg flex-column"
+            >
                 <AppointmentFieldset appointment={{ pacient }}/>
                 <div className="flex-row">
                     <div className="flex-grow"/>
-                    <Button htmlTag="button" type="submit">
+                    <Button 
+                        type="submit"
+                        overlay={<Spinner width="1rem" height="1rem" className="htmx-indicator"/>}
+                    >
                         <SaveIcon width="1rem" height="1rem"/>
                         Salvar
                     </Button>
-                    <Button htmlTag="a" href={`/pacient/${pacient.id}`}>
+                    <Anchor href={`/pacient/${pacient.id}`}>
                         <CrossIcon width="1rem" height="1rem"/>
                         Cancelar
-                    </Button>
+                    </Anchor>
                 </div>
             </form>
         )

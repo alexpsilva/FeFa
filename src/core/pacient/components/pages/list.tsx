@@ -1,6 +1,7 @@
 import { WithCount } from "../../../../infra/database/repository";
 import Logger from "../../../../infra/log";
 import JSXWithSlots from "../../../../infra/render/jsx/jsx_with_slots";
+import Anchor from "../../../../shared/components/anchor";
 import Button from "../../../../shared/components/button";
 import SearchIcon from "../../../../shared/components/icons/search";
 import Loading from "../../../../shared/components/loading";
@@ -48,15 +49,13 @@ export default class ListPacientsPage extends JSXWithSlots {
                     <SearchIcon width="1.5rem" height="1.5rem"/>
                 </button>
             </form>
-            <div className="content-wrapper card-lg flex-column">
-                {pacientListSlot}
-            </div>
+            {pacientListSlot}
         </LoggedInPage>
     }
 
     protected async content() {
         const { count, data: pacients} = await this.getPacients();
-        return <>
+        return <div className="content-wrapper card-lg flex-column">
             <header className="content-faded padding-md border-bottom">
                 Pacientes
             </header>
@@ -66,9 +65,9 @@ export default class ListPacientsPage extends JSXWithSlots {
                 ))}
             </div>
             <div className="flex-row flex-space-between">
-                <Button htmlTag="a" href="/pacient/new" >                    
+                <Anchor href="/pacient/new" >                    
                     + Novo Paciente
-                </Button>
+                </Anchor>
                 <PaginationControls 
                     pageNumber={this.pageNumber}
                     pageSize={this.pageSize}
@@ -76,6 +75,6 @@ export default class ListPacientsPage extends JSXWithSlots {
                     href={`/pacient?name=${this.searchTerm}`}
                 />
             </div>
-        </>
+        </div>
     }
 }

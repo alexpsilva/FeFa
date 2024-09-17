@@ -82,7 +82,8 @@ export default class PacientRouter extends HTTPRouter {
         const data = CreatePacientActionDto.parse({...req.body, userId: res.locals.userId});  
 
         const pacient = await this.pacientRepository.create(data);
-        res.redirect(303, `/pacient/${pacient.id}`);
+        res.header('HX-REDIRECT', `/pacient/${pacient.id}`);
+        res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
 

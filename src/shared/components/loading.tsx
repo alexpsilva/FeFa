@@ -1,3 +1,5 @@
+import Spinner from "./icons/spinner";
+
 export default function Loading() {
-    return <p className="text-center">Carregando...</p>
+    return <Spinner className="w-sm h-sm content-evidence"/>
 }
