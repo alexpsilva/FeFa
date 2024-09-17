@@ -16,6 +16,7 @@ export default class AppointmentRouter extends HTTPRouter {
         private readonly renderer: JSXRenderer, 
         private readonly pacientRepository: PacientRepository,
         private readonly appointmentRepository: AppointmentRepository, 
+        private readonly config: { appointmentListDefaultPageSize: number},
     ) {
         super(logger, '/appointment');
 
@@ -41,7 +42,7 @@ export default class AppointmentRouter extends HTTPRouter {
 
     async listAppointmentsPage(req: HTTPRequest, res: HTTPResponse) {
         const { userId, pageNumber, pageSize } = ListAppointmentsDto.parse({ userId: res.locals.userId, ...req.query });
-        const pagination = { number: pageNumber ?? 1, size: pageSize ?? 10 }; // to-do: Move this default to the config module
+        const pagination = { number: pageNumber ?? 1, size: pageSize ?? this.config.appointmentListDefaultPageSize };
         
         res.set('Content-Type', 'text/html');
         this.pipeStream(res, this.renderer.renderAsync(

@@ -17,4 +17,8 @@ export default class Config {
     readonly jwtSecret = mandatoryEnv("JWT_SECRET");
     readonly jwtExpiresIn = mandatoryEnv("JWT_EXPIRES_IN");
     readonly googleClientId = mandatoryEnv("GOOGLE_CLIENT_ID");
+
+    readonly pacientListDefaultPageSize = 10;
+    readonly pacientAppointmentsListDefaultPageSize = 5;
+    readonly appointmentListDefaultPageSize = 10;
 };

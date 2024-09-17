@@ -42,8 +42,14 @@ protectedHttpRouter.addMiddleware(new AuthMiddleware(logger, jwtParser));
 
 protectedHttpRouter.addRouter(new HomeRouter(logger, renderer));
 
-protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository, appointmentRepository));
-protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, pacientRepository, appointmentRepository));
+protectedHttpRouter.addRouter(new PacientRouter(logger, renderer, pacientRepository, appointmentRepository, { 
+    pacientListDefaultPageSize: config.pacientListDefaultPageSize, 
+    pacientAppointmentsListDefaultPageSize: config.pacientAppointmentsListDefaultPageSize,
+}));
+
+protectedHttpRouter.addRouter(new AppointmentRouter(logger, renderer, pacientRepository, appointmentRepository, {
+    appointmentListDefaultPageSize: config.appointmentListDefaultPageSize,
+}));
 
 
 publicHttpRouter.listen(config.port, () => {
