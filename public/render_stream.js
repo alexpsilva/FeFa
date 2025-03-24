@@ -1,4 +1,4 @@
-const contentSource = document.getElementById('content-source')
+var contentSource = document.getElementById('content-source')
 
 function removeAllChildren(node) {
     while (node.firstChild) {
@@ -41,7 +41,7 @@ function watchAddedChildren (mutationList) {
     }
 }
 
-const observer = new MutationObserver(watchAddedChildren)
+var observer = new MutationObserver(watchAddedChildren)
 observer.observe(contentSource, {childList: true })
 
 window.addEventListener('load', () => {

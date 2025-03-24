@@ -16,3 +16,4 @@
     "jsx": "react-jsx",                                  /* Specify what JSX code is generated. */
   }
 }
+// to-do: Add tsconfig-paths module to allow path aliases

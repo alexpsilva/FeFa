@@ -47,7 +47,7 @@ export default class UpdateAppointmentPage extends JSXWithSlots {
             <div className="flex-row">
                 {/* to-do: Alert before deleting */}
                 <Button 
-                    className="content-faded" 
+                    className="content-alert" 
                     hx-delete={`/appointment/${appointment.id}`}
                     hx-params="none"
                     hx-disabled-elt="this"

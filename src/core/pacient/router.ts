@@ -93,7 +93,8 @@ export default class PacientRouter extends HTTPRouter {
         const data = UpdatePacientActionDto.parse({...req.body, userId: res.locals.userId, id: req.params.id});  
 
         const pacient = await this.pacientRepository.update(data);
-        res.header('HX-REDIRECT', `/pacient/${pacient.id}`);
+        res.header('HX-TRIGGER', JSON.stringify({ showToast: { type: 'success', message: 'Paciente atualizado com sucesso'} }));
+        res.header('HX-LOCATION', `/pacient/${pacient.id}`);
         res.send();
         // to-do: Trigger a error/success toast (small notification pop-up) on the client side
     }
