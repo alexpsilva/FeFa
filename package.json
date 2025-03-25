@@ -1,42 +1,15 @@
 {
-  "name": "js-old-school-frontend",
-  "version": "1.0.0",
-  "description": "A NodeJS API that serves HTML pages. No Framework. Simple. Like in the old days.",
-  "main": "src/index.ts",
+  "name": "fefa",
+  "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "test": "jest",
-    "test:watch": "npm test -- --watchAll",
-    "dev:watch": "npx nodemon"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/cookie": "^0.6.0",
-    "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^22.2.0",
-    "@types/pg": "^8.11.6",
-    "@types/pg-format": "^1.0.5",
-    "@types/pg-pool": "^2.0.6",
-    "@types/react": "^18.3.4",
-    "@types/react-dom": "^18.3.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.4",
-    "typescript": "^5.5.4"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": ""
   },
   "dependencies": {
-    "cookie": "^0.6.0",
-    "dot-env": "^0.0.1",
-    "express": "^4.19.2",
-    "google-auth-library": "^9.14.0",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.12.0",
-    "pg-format": "^1.0.4",
-    "pg-pool": "^3.6.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zod": "^3.23.8"
+    "astro": "^5.5.4"
   }
 }
