@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Menu from "./menu.astro";
+import Page from "./page.astro";
+
+interface Props extends HTMLAttributes<'main'> {
+    title: string;
+}
+
+const { title, ...props } = Astro.props;
+
+---
+<Page 
+    title={title} 
+    class="flex-row"
+>
+    <slot slot="head" name="head"/>
+    <Menu/>
+    <main {...props}>
+        <slot/>
+    </main>
+</Page>

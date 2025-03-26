@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Head from './head.astro'
+import '../styles/global.css'
+
+interface Props extends HTMLAttributes<'body'> {
+    title: string;
+}
+
+const {title, ...props} = Astro.props;
+
+---
+<html lang="pt-br">
+    <Head title={title}>
+        <slot name="head" />
+    </Head>
+    <body {...props}>
+        <slot />
+    </body>
+</html>
