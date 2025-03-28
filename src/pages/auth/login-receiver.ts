@@ -19,7 +19,7 @@ export const POST: APIRoute = async ({ request, redirect, cookies }) => {
     
     // Validate the Verify the Cross-Site Request Forgery (CSRF) token as specified by Google in the following doc
     // https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
-    const bodyCsrfToken = body.g_csrf_token;        
+    const bodyCsrfToken = body.g_csrf_token;
     const cookieCsrfToken = cookies.get('g_csrf_token');
     if (bodyCsrfToken === undefined || cookieCsrfToken === undefined || bodyCsrfToken !== cookieCsrfToken.value) {
         logger.error(`Invalid CSRF token: ${bodyCsrfToken} !== ${cookieCsrfToken}`);
@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request, redirect, cookies }) => {
         email: user.email,
     });
     //to-do: This is not properly setting the cookie. Pending further investigation
-    cookies.set('accessToken', accessToken, {httpOnly: true, secure: true});
+    cookies.set('accessToken', accessToken, {httpOnly: true, secure: true, path: '/'});
 
     //to-do: Generate a refresh token, shorten access token expire time
     // and implement a automatic refresh mechanism. This way, we would be

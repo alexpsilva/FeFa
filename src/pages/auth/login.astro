@@ -1,6 +1,8 @@
 ---
 import Page from '../../components/page.astro';
 
+const loginReceiverUrl = new URL('/auth/login-receiver', Astro.url)
+
 ---
 
 <Page title="Login com Google">
@@ -11,7 +13,7 @@ import Page from '../../components/page.astro';
             data-client_id="865925412334-d1v9fpa2lcb113t35u604b8k148sum3r.apps.googleusercontent.com"
             data-context="signin"
             data-ux_mode="popup"
-            data-login_uri="http://localhost:4321/auth/login-receiver"
+            data-login_uri={loginReceiverUrl}
             data-auto_prompt="false">
         </div>
 
