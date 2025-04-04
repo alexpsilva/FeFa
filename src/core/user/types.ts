@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "astro:content";
 
 const User = z.object({
     id: z.number(),

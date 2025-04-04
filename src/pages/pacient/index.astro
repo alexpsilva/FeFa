@@ -1,0 +1,70 @@
+---
+import { z } from "astro:content";
+import SearchIcon from "@components/icons/search";
+import LoggedInPage from "@components/LoggedInPage.astro"
+import { PacientSchema } from "@core/pacient/types";
+import { config, pacientRepository } from "src"
+import Anchor from "@components/Anchor.astro";
+import PaginationControls from "@components/pagination_controls";
+import numberOrString from "@core/shared/schemas/number_or_string";
+import searchParam from "@core/shared/utils/searchParam";
+
+const ListPacientsDto = z.object({
+	userId: PacientSchema.shape.userId,
+	searchTerm: PacientSchema.shape.name.default(''),
+	pageNumber: numberOrString.default(1),
+	pageSize: numberOrString.default(config.pacientListDefaultPageSize)
+});
+
+const { userId, searchTerm, pageNumber, pageSize } = ListPacientsDto.parse({ 
+	userId: Astro.locals.userId, 
+	searchTerm: searchParam(Astro.url, 'searchTerm'),
+	pageNumber: searchParam(Astro.url, 'pageNumber'),
+	pageSize: searchParam(Astro.url, 'pageSize')
+});
+
+const pacients = await pacientRepository.findAll(userId, searchTerm, { number: pageNumber, size: pageSize });
+
+---
+<LoggedInPage title="Pacientes" class="flex-column flex-items-center gap-lg">
+	<form 
+		action="/pacient" 
+		method="get" 
+		class="content-wrapper card-md flex-row"
+	>
+		<input 
+			type="text" 
+			name="searchTerm" 
+			placeholder="Pesquisar" 
+			value={searchTerm} 
+			class="flex-grow padding-md border-none"
+		/>
+		<button 
+			type="submit" 
+			class="padding-x-md border-radius content-evidence"
+		>
+			<SearchIcon width="1.5rem" height="1.5rem"/>
+		</button>
+	</form>
+	<div class="content-wrapper card-lg flex-column">
+		<header class="content-faded padding-md border-bottom">
+			Pacientes
+		</header>
+		<div class="flex-column items-padding-md">
+			{pacients.data.map(pacient => (
+				<a href={`/pacient/${pacient.id}`}>{pacient.name}</a>
+			))}
+		</div>
+		<div class="flex-row flex-space-between">
+			<Anchor href="/pacient/create" >                    
+				+ Novo Paciente
+			</Anchor>
+			<PaginationControls 
+				pageNumber={pageNumber}
+				pageSize={pageSize}
+				totalCount={pacients.count}
+				href={`/pacient?searchTerm=${searchTerm}`}
+			/>
+		</div>
+	</div>
+</LoggedInPage>

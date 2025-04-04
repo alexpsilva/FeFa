@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<'a'> {}
+
+const { class: _class, ...props } = Astro.props;
+
+const mergedClass = `padding-md border-radius content-evidence flex-row flex-items-center gap-sm ${_class ?? ''}`;
+
+---
+<a class={mergedClass} {...props}>
+    <slot />
+</a>

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "astro:content";
 
 // to-do: Validate CPF rules
 const CpfString = z.string()

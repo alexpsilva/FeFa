@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { z } from "astro:content";
 
 import { urlEncodedToJson } from "@infra/http/urlEncodedToJson";
-import { jwtParser, logger, userRepository } from "src/index";
+import { jwtParser, logger, userRepository } from "src";
 
 const GoogleSSORedirectRequestBody = z.object({
     g_csrf_token: z.string(),

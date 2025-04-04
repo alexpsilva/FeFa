@@ -3,7 +3,7 @@ import { defineMiddleware } from "astro:middleware";
 import { jwtParser, logger } from "src";
 
 export const onRequest = defineMiddleware((context, next) => {
-    if (context.url.pathname.startsWith('/auth')) {
+    if (context.url.pathname.startsWith('/auth') || context.url.pathname.startsWith('/api/auth')) {
         return next();
     }
 

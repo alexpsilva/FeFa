@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<'button'> {
+    onClickPath?: string;
+    onClickMethod?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+}
+
+const { class: _class, onClickMethod, onClickPath, ...props } = Astro.props;
+
+let mergedClass = `padding-md border-radius content-evidence flex-row flex-items-center gap-sm ${_class ?? ''}`;
+
+---
+<button 
+    class={mergedClass}
+    data-path={onClickPath}
+    data-method={onClickMethod}
+    {...props}
+>
+    <slot/>
+</button>
+
+<script>
+    const buttons = document.querySelectorAll('button[data-path]');
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', async (e) => {
+            const path = button.dataset.path;
+            if (!path) {
+                return;
+            }
+
+            e.preventDefault();
+
+            const method = button.dataset.method || 'GET';
+
+            const response = await fetch(
+                new URL(path, window.location.origin), 
+                { method: method }
+            );
+
+            if (response.headers.has('X-Redirect-To')) {
+                window.location.href = response.headers.get('X-Redirect-To') as string;
+            }
+        })
+    })
+</script>

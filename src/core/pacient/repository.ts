@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { BaseRepository } from '@infra/database/repository';
 import type { WithCount } from '@infra/database/repository';
 
-import { DbPacient, Pacient, UpdatePacientActionDto, CreatePacientActionDto } from './types';
+import { DbPacientSchema, type CreatePacient, type DbPacient, type DeletePacient, type Pacient, type UpdatePacient } from './types';
 import { User } from '../user/types';
 
 export default class PacientRepository extends BaseRepository{
@@ -36,7 +36,7 @@ export default class PacientRepository extends BaseRepository{
         );
 
         const result = await this.databaseDriver.query<DbPacient>(sql);
-        const dbPacients = z.array(DbPacient).parse(result);
+        const dbPacients = z.array(DbPacientSchema).parse(result);
 
         if (dbPacients.length === 0) {
             throw new Error('Entity not found');
@@ -60,15 +60,15 @@ export default class PacientRepository extends BaseRepository{
         `, userId);
 
         const result = await this.databaseDriver.query<DbPacient & {count: number}>(sql);
-        const count = result.length ? result[0].count : 0;
-        const dbPacients = z.array(DbPacient).parse(result);
+        const count = result.length ? z.coerce.number().parse(result[0].count) : 0;
+        const dbPacients = z.array(DbPacientSchema).parse(result);
         return {
             data: PacientRepository.dbPacientsToPacients(dbPacients),
             count,
         };
     }
 
-    async create(entity: CreatePacientActionDto): Promise<Pacient> {
+    async create(entity: CreatePacient): Promise<Pacient> {
         const sql = this.databaseDriver.format(`
             INSERT INTO ${PacientRepository.tableName} (user_id, name, birthday, cpf, address) 
             VALUES (%L) 
@@ -78,11 +78,11 @@ export default class PacientRepository extends BaseRepository{
         );
         
         const result = await this.databaseDriver.query<DbPacient>(sql);
-        const dbPacients = z.array(DbPacient).parse(result);
+        const dbPacients = z.array(DbPacientSchema).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 
-    async update(entity: UpdatePacientActionDto): Promise<Pacient> {
+    async update(entity: UpdatePacient): Promise<Pacient> {
         const sql = this.databaseDriver.format(`
             UPDATE ${PacientRepository.tableName} 
             SET name = %L, birthday = %L, cpf = %L, address = %L, updated_at = %L 
@@ -94,11 +94,11 @@ export default class PacientRepository extends BaseRepository{
         );
 
         const result = await this.databaseDriver.query<DbPacient>(sql);
-        const dbPacients = z.array(DbPacient).parse(result);
+        const dbPacients = z.array(DbPacientSchema).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 
-    async delete(userId: User['id'], id: Pacient['id']): Promise<Pacient> {
+    async delete({ id, userId }: DeletePacient): Promise<Pacient> {
         const sql = this.databaseDriver.format(`
             DELETE
             FROM ${PacientRepository.tableName}
@@ -109,10 +109,10 @@ export default class PacientRepository extends BaseRepository{
         // to-do: Handle deletiong of pacients with associated appointments
         const result = await this.databaseDriver.query<DbPacient>(sql);
         if(result.length === 0) {
-            throw new Error('Appointment not found');
+            throw new Error('Pacient not found');
         }
 
-        const dbPacients = z.array(DbPacient).parse(result);
+        const dbPacients = z.array(DbPacientSchema).parse(result);
         return PacientRepository.dbPacientsToPacients(dbPacients)[0];
     }
 };

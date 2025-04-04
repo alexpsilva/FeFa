@@ -1,0 +1,41 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends HTMLAttributes<'form'> {
+  path: string, 
+  method: "GET" | "POST" | "PUT" | "DELETE" 
+}
+
+const { path, method, ...props } = Astro.props;
+
+---
+<form data-path={path} data-method={method} {...props}>
+  <slot/>
+</form>
+
+<script>
+  const forms = document.querySelectorAll('form[data-path]');
+
+  forms.forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      const path = form.dataset.path;
+      if (!path) {
+        return;
+      }
+
+      e.preventDefault();
+
+      const method = form.dataset.method || 'GET';
+      const formData = new FormData(e.target as HTMLFormElement);
+
+      const response = await fetch(
+        new URL(path, window.location.origin), 
+        { method: method, body: formData }
+      );
+      
+      if (response.headers.has('X-Redirect-To')) {
+        window.location.href = response.headers.get('X-Redirect-To') as string;
+      }
+    })
+  })
+</script>

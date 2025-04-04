@@ -1,7 +1,6 @@
 import Logger from "../log";
-import { DatabaseDriver } from "./driver";
+import type { DatabaseDriver } from "./driver";
 
-// export type ColummnsOption<T> = (keyof T)[];
 export type PaginationParams = { number: number, size: number };
 export type WithCount<T> = { count: number, data: T };
 
