@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { Appointment } from '@core/appointment/types';
+import type { Pacient } from '@core/pacient/types';
+
+export interface Props extends HTMLAttributes<'fieldset'> {
+    appointment: Partial<Appointment> & {pacient: Pacient}
+}
+
+const { appointment, ...props } = Astro.props
+---
+
+<fieldset class="padding-lg grid-flow-row grid-cols-2 gap-md" {...props}>
+    <input name="pacient_id" type="text" value={appointment.pacient.id} readonly class="hidden"/>
+    <div class="flex-column">
+        <span class="content-faded text-sm">Paciente</span>
+        <span>{appointment.pacient.name}</span>
+    </div>
+
+    <div class="flex-column">
+        <label for="date" class="content-faded text-sm">Data</label>
+        <input id="date" name="date" type="date" value={appointment?.date?.toISOString().split('T')[0]}/>
+    </div>
+
+    <div class="flex-column" style={{gridColumn: 'auto / span 2'}}>
+        <label for="description" class="content-faded text-sm">Descrição</label>
+        <textarea id="description" name="description" rows={10}>{appointment.description}</textarea>
+    </div>
+</fieldset>

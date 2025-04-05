@@ -1,23 +1,23 @@
 ---
+import { z } from "astro:content";
+
 import Anchor from "@components/Anchor.astro";
 import Button from "@components/Button.astro";
-import PacientFieldset from "@components/fieldsets/PacientFieldset.astro";
+import AppointmentFieldset from "@components/fieldsets/AppointmentFieldset.astro";
 import Form from "@components/Form.astro";
 import CrossIcon from "@components/icons/cross";
 import SaveIcon from "@components/icons/save";
-import TrashIcon from "@components/icons/trash";
 import LoggedInPage from "@components/LoggedInPage.astro";
 import { PacientSchema } from "@core/pacient/types";
 import { UserSchema } from "@core/user/types";
-import { z } from "astro:content";
 import { pacientRepository } from "src";
 
-const GetPacientDto = z.object({
+const CreateAppointmentDto = z.object({
 	userId: UserSchema.shape.id,
 	pacientId: PacientSchema.shape.id,
 });
 
-const { userId, pacientId } = GetPacientDto.parse({ 
+const { userId, pacientId } = CreateAppointmentDto.parse({ 
 	userId: Astro.locals.userId, 
     pacientId: Astro.params.pacientId,
 });
@@ -25,28 +25,17 @@ const { userId, pacientId } = GetPacientDto.parse({
 const pacient = await pacientRepository.findById(userId, pacientId);
 
 ---
-<LoggedInPage title="Editar Paciente" class="flex-column flex-items-center gap-md">
-    <h2 class="flex-self-start">Editar Paciente</h2>
+<LoggedInPage title="Criar Consulta" class="flex-column flex-items-center gap-md">
+    <h2 class="flex-self-start">Criar Consulta</h2>
     <Form
-        path={`/api/pacient/${pacient.id}`}
-        method="PUT"
+        path={`/api/appointment`}
+        method="POST"
         class="content-wrapper card-lg flex-column"
     >
-        <PacientFieldset pacient={pacient}/>
+        <AppointmentFieldset appointment={{ pacient, date: new Date() }}/>
         <div class="flex-row">
-            {/* to-do: Alert before deleting */}
-            <Button 
-                class="content-alert" 
-                onClickPath={`/api/pacient/${pacient.id}`} 
-                onClickMethod="DELETE"
-            >
-                <TrashIcon width="1rem" height="1rem"/>
-                Deletar
-            </Button>
             <div class="flex-grow"/>
-            <Button 
-                type="submit"
-            >
+            <Button type="submit">
                 <SaveIcon width="1rem" height="1rem"/>
                 Salvar
             </Button>

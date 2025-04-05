@@ -4,7 +4,7 @@ import { BaseRepository } from '@infra/database/repository';
 import type { WithCount } from '@infra/database/repository';
 
 import { DbPacientSchema, type CreatePacient, type DbPacient, type DeletePacient, type Pacient, type UpdatePacient } from './types';
-import { User } from '../user/types';
+import { UserSchema } from '../user/types';
 
 export default class PacientRepository extends BaseRepository{
     static readonly tableName = 'pacients';

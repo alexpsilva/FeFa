@@ -1,56 +1,56 @@
 ---
+import { z } from "astro:content";
+
 import Anchor from "@components/Anchor.astro";
 import Button from "@components/Button.astro";
-import PacientFieldset from "@components/fieldsets/PacientFieldset.astro";
+import AppointmentFieldset from "@components/fieldsets/AppointmentFieldset.astro";
 import Form from "@components/Form.astro";
 import CrossIcon from "@components/icons/cross";
 import SaveIcon from "@components/icons/save";
 import TrashIcon from "@components/icons/trash";
 import LoggedInPage from "@components/LoggedInPage.astro";
-import { PacientSchema } from "@core/pacient/types";
+import { AppointmentSchema } from "@core/appointment/types";
 import { UserSchema } from "@core/user/types";
-import { z } from "astro:content";
-import { pacientRepository } from "src";
+import { appointmentRepository } from "src";
 
-const GetPacientDto = z.object({
+const GetAppointmentDto = z.object({
 	userId: UserSchema.shape.id,
-	pacientId: PacientSchema.shape.id,
+	appointmentId: AppointmentSchema.shape.id,
 });
 
-const { userId, pacientId } = GetPacientDto.parse({ 
+const { userId, appointmentId } = GetAppointmentDto.parse({ 
 	userId: Astro.locals.userId, 
-    pacientId: Astro.params.pacientId,
+    appointmentId: Astro.params.appointmentId,
 });
 
-const pacient = await pacientRepository.findById(userId, pacientId);
+const appointment = await appointmentRepository.findById(userId, appointmentId);
 
 ---
-<LoggedInPage title="Editar Paciente" class="flex-column flex-items-center gap-md">
-    <h2 class="flex-self-start">Editar Paciente</h2>
+<LoggedInPage title="Editar Consulta" class="flex-column flex-items-center gap-md">
+    <h2 class="flex-self-start">Editar Consulta</h2>
     <Form
-        path={`/api/pacient/${pacient.id}`}
+        path={`/api/appointment/${appointment.id}`}
         method="PUT"
         class="content-wrapper card-lg flex-column"
     >
-        <PacientFieldset pacient={pacient}/>
+        <AppointmentFieldset appointment={appointment}/>
         <div class="flex-row">
             {/* to-do: Alert before deleting */}
             <Button 
                 class="content-alert" 
-                onClickPath={`/api/pacient/${pacient.id}`} 
+                onClickPath={`/api/appointment/${appointment.id}`}
                 onClickMethod="DELETE"
             >
                 <TrashIcon width="1rem" height="1rem"/>
                 Deletar
             </Button>
             <div class="flex-grow"/>
-            <Button 
-                type="submit"
-            >
+            <Button type="submit">
                 <SaveIcon width="1rem" height="1rem"/>
                 Salvar
             </Button>
-            <Anchor href={`/pacient/${pacient.id}`}>
+            {/* to-do: Make it go back on the history instead of a hard-coded url */}
+            <Anchor href={`/pacient/${appointment.pacientId}`}>
                 <CrossIcon width="1rem" height="1rem"/>
                 Cancelar
             </Anchor>

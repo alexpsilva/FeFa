@@ -1,6 +1,6 @@
 import { z } from "astro:content";
 
-const User = z.object({
+const UserSchema = z.object({
     id: z.number(),
     
     name: z.string(),
@@ -10,5 +10,6 @@ const User = z.object({
     created_at: z.date(),
 });
 
-export { User };
-export type User = z.infer<typeof User>;
+export { UserSchema };
+
+export type User = z.infer<typeof UserSchema>;

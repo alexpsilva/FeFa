@@ -1,0 +1,56 @@
+---
+import { z } from "astro:content";
+import { appointmentRepository, config } from "src"
+import PaginationControls from "@components/pagination_controls";
+import numberOrString from "@core/shared/schemas/number_or_string";
+import searchParam from "@core/shared/utils/searchParam";
+import LoggedInPage from "@components/LoggedInPage.astro";
+import { UserSchema } from "@core/user/types";
+
+const ListAppointmentsDto = z.object({
+	userId: UserSchema.shape.id,
+	pageNumber: numberOrString.default(1),
+	pageSize: numberOrString.default(config.appointmentListDefaultPageSize)
+});
+
+const { userId, pageNumber, pageSize } = ListAppointmentsDto.parse({ 
+	userId: Astro.locals.userId, 
+	pageNumber: searchParam(Astro.url, 'pageNumber'),
+	pageSize: searchParam(Astro.url, 'pageSize')
+});
+
+const appointments = await appointmentRepository.findAll(userId, { number: pageNumber, size: pageSize });
+
+---
+<LoggedInPage title="Consultas" class="flex-column flex-items-center gap-lg">
+    {/* to-do: Add date filter */}
+    <div class="content-wrapper card-lg flex-column">
+        <header class="content-faded padding-md border-bottom">
+            Consultas
+        </header>
+        <div class="flex-column items-padding-md">
+            {appointments.data.map(appointment => (       
+                <a 
+                    href={`/appointment/${appointment.id}`}
+                    class="grid grid-flow-row padding-md gap-md"
+                    style={{gridTemplateColumns: '9ch 15rem auto'}}
+                >
+                    <span>{appointment.date.toLocaleDateString('pt-br')}</span>
+                    <span>{appointment.pacient.name}</span>
+                    <span class="truncate">
+                        {appointment.description}
+                    </span>
+                </a>
+            ))}
+        </div>
+        <div class="flex-row flex-space-between">
+            <div class="flex-grow"/>
+            <PaginationControls 
+                pageNumber={pageNumber}
+                pageSize={pageSize}
+                totalCount={appointments.count}
+                href={`/appointment`}
+            />
+        </div>
+    </div>
+</LoggedInPage>

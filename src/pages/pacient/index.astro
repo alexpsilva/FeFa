@@ -8,9 +8,10 @@ import Anchor from "@components/Anchor.astro";
 import PaginationControls from "@components/pagination_controls";
 import numberOrString from "@core/shared/schemas/number_or_string";
 import searchParam from "@core/shared/utils/searchParam";
+import { UserSchema } from "@core/user/types";
 
 const ListPacientsDto = z.object({
-	userId: PacientSchema.shape.userId,
+	userId: UserSchema.shape.id,
 	searchTerm: PacientSchema.shape.name.default(''),
 	pageNumber: numberOrString.default(1),
 	pageSize: numberOrString.default(config.pacientListDefaultPageSize)
