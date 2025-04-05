@@ -2,6 +2,7 @@
 import Anchor from "@components/Anchor.astro";
 import Button from "@components/Button.astro";
 import PacientFieldset from "@components/fieldsets/PacientFieldset.astro";
+import Form from "@components/Form.astro";
 import CrossIcon from "@components/icons/cross";
 import SaveIcon from "@components/icons/save";
 import TrashIcon from "@components/icons/trash";
@@ -25,10 +26,9 @@ const pacient = await pacientRepository.findById(userId, pacientId);
 ---
 <LoggedInPage title="Editar Paciente" class="flex-column flex-items-center gap-md">
     <h2 class="flex-self-start">Editar Paciente</h2>
-    <form
-        hx-put={`/pacient/${pacient.id}`} 
-        hx-disabled-elt="find button[type=submit]"
-        hx-indicator="button[type=submit]"
+    <Form
+        path={`/api/pacient/${pacient.id}`}
+        method="PUT"
         class="content-wrapper card-lg flex-column"
     >
         <PacientFieldset pacient={pacient}/>
@@ -54,5 +54,5 @@ const pacient = await pacientRepository.findById(userId, pacientId);
                 Cancelar
             </Anchor>
         </div>
-    </form>
+    </Form>
 </LoggedInPage>
