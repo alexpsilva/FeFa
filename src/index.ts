@@ -7,6 +7,7 @@ import PostgresDriver from "@infra/database/driver/postgres";
 import AppointmentRepository from "@core/appointment/repository";
 import PacientRepository from "@core/pacient/repository";
 import UserRepository from "@core/user/repository";
+import TreatmentRepository from "@core/treatment/repository";
 
 export const config = new Config();
 
@@ -18,3 +19,4 @@ export const postgresDriver = new PostgresDriver(logger, config.databaseUrl, con
 export const userRepository = new UserRepository(logger, postgresDriver);
 export const pacientRepository = new PacientRepository(logger, postgresDriver);
 export const appointmentRepository = new AppointmentRepository(logger, postgresDriver);
+export const treatmentRepository = new TreatmentRepository(logger, postgresDriver);

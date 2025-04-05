@@ -1,6 +1,6 @@
 import { BaseRepository } from '@infra/database/repository';
 
-import { UserSchema } from './types';
+import type { User } from './types';
 
 export default class UserRepository extends BaseRepository{
     static readonly tableName = 'users';

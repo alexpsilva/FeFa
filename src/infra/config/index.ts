@@ -18,4 +18,5 @@ export default class Config {
     readonly pacientListDefaultPageSize = 10;
     readonly pacientAppointmentsListDefaultPageSize = 5;
     readonly appointmentListDefaultPageSize = 10;
+    readonly treatmentListDefaultPageSize = 10;
 };

@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { Treatment } from '@core/treatment/types'
+
+export interface Props extends HTMLAttributes<'fieldset'> {
+    treatment?: Partial<Treatment>
+}
+
+const { treatment, ...props } = Astro.props
+---
+
+<fieldset class="padding-lg grid-flow-row grid-cols-2 gap-md" {...props}>
+    <div class="flex-column">
+        <label for="name" class="content-faded text-sm">Nome</label>
+        <input id="name" name="name" type="text" value={treatment?.name}/>
+    </div>
+</fieldset>

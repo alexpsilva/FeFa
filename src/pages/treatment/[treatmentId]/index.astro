@@ -1,0 +1,41 @@
+---
+import { z } from "astro:content";
+
+import Anchor from "@components/Anchor.astro";
+import ArrowIcon from "@components/icons/Arrow.astro";
+import PenIcon from "@components/icons/Pen.astro";
+import LoggedInPage from "@components/LoggedInPage.astro";
+import TreatmentFieldset from "@components/fieldsets/TreatmentFieldset.astro";
+import { UserSchema } from "@core/user/types";
+import { TreatmentSchema } from "@core/treatment/types";
+import { treatmentRepository } from "src";
+
+const GetTreatmentDto = z.object({
+	userId: UserSchema.shape.id,
+	treatmentId: TreatmentSchema.shape.id,
+});
+
+const { userId, treatmentId } = GetTreatmentDto.parse({ 
+	userId: Astro.locals.userId, 
+    treatmentId: Astro.params.treatmentId
+});
+
+const treatment = await treatmentRepository.findById(userId, treatmentId);
+
+---
+<LoggedInPage title="Tratamento" class="flex-column flex-items-center gap-md">
+    <Anchor href="/treatment" class="flex-self-start">
+        <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>
+        <span>Voltar</span>
+    </Anchor>
+    <div class="content-wrapper card-lg flex-column">
+        <TreatmentFieldset
+            treatment={treatment} 
+            disabled
+        />
+        <Anchor href={`/treatment/${treatmentId}/edit`} class="flex-self-end">
+            <PenIcon width="1rem" height="1rem"/>
+            Editar
+        </Anchor>
+    </div>
+</LoggedInPage>
