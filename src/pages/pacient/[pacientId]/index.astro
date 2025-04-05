@@ -3,15 +3,15 @@ import { z } from "astro:content";
 
 import Anchor from "@components/Anchor.astro";
 import PacientFieldset from "@components/fieldsets/PacientFieldset.astro";
-import ArrowIcon from "@components/icons/arrow";
-import PenIcon from "@components/icons/pen";
+import ArrowIcon from "@components/icons/Arrow.astro";
+import PenIcon from "@components/icons/Pen.astro";
 import LoggedInPage from "@components/LoggedInPage.astro";
-import PaginationControls from "@components/pagination_controls";
 import { PacientSchema } from "@core/pacient/types";
 import numberOrString from "@core/shared/schemas/number_or_string";
 import searchParam from "@core/shared/utils/searchParam";
 import { UserSchema } from "@core/user/types";
 import { appointmentRepository, config, pacientRepository } from "src";
+import PaginationControls from "@components/PaginationControls.astro";
 
 const GetPacientDto = z.object({
 	userId: UserSchema.shape.id,

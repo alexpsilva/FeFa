@@ -1,0 +1,43 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import ArrowIcon from "./icons/Arrow.astro";
+
+export interface Props extends HTMLAttributes<'div'> {
+    pageNumber: number, 
+    pageSize: number,
+    totalCount: number,
+    href: string,
+}
+
+const { pageNumber, pageSize, totalCount, href, ...props } = Astro.props as Props
+
+const numPages = Math.ceil(totalCount / pageSize)
+const croppedPageNumber = pageNumber > numPages ? numPages : pageNumber;
+const previousPageUrl = croppedPageNumber <= 1 ? null : buildUrl(href, croppedPageNumber - 1, pageSize)
+const nextPageUrl = croppedPageNumber === numPages ? null : buildUrl(href, croppedPageNumber + 1, pageSize)
+
+function buildUrl(href: string, pageNumber: number, pageSize: number) {
+    let url = new String(href)
+    if (url.includes('?')) {
+        url += '&'
+    } else {
+        url += '?'
+    }
+
+    return `${url}pageNumber=${pageNumber}&pageSize=${pageSize}`
+}
+
+---
+<div class="flex-row" {...props}>
+    {!previousPageUrl ? null : (
+        <a href={previousPageUrl} class="padding-md border-radius content-evidence flex-items-center">
+            <ArrowIcon direction="left" width="1.5rem" height="1.5rem"/>
+        </a>
+    )}
+    <span class="padding-md flex-items-center">{croppedPageNumber}/{numPages}</span>
+    {!nextPageUrl ? null : (
+        <a href={nextPageUrl} class="padding-md border-radius content-evidence flex-items-center">
+            <ArrowIcon direction="right" width="1.5rem" height="1.5rem"/>
+        </a>
+    )}
+</div>

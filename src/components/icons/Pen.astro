@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<'svg'> {}
+
+const { ...props } = Astro.props;
+---
+
+<svg
+    viewBox='0 0 24 24'
+    stroke-width='2'
+    {...props}
+>
+    <polygon
+        points='19,1 2,18 1,23 6,22 23,5'
+        stroke-linecap='round'
+        stroke-linejoin='round'
+        fill='none'
+    />
+    <path
+        d='M16 4 L20 8'
+        fill='none'
+    />
+</svg>
