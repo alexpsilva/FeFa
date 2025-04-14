@@ -8,29 +8,29 @@ import PaginationControls from "@components/PaginationControls.astro";
 import numberOrString from "@core/shared/schemas/number_or_string";
 import searchParam from "@core/shared/utils/searchParam";
 import { UserSchema } from "@core/user/types";
-import { TreatmentSchema } from "@core/treatment/types";
-import { config, treatmentRepository } from "src"
+import { MedicationSchema } from "@core/medication/types";
+import { config, medicationRepository } from "src"
 
-const ListTreatmentsDto = z.object({
+const ListMedicationDto = z.object({
 	userId: UserSchema.shape.id,
-	searchTerm: TreatmentSchema.shape.name.default(''),
+	searchTerm: MedicationSchema.shape.name.default(''),
 	pageNumber: numberOrString.default(1),
-	pageSize: numberOrString.default(config.treatmentListDefaultPageSize)
+	pageSize: numberOrString.default(config.medicationListDefaultPageSize)
 });
 
-const { userId, searchTerm, pageNumber, pageSize } = ListTreatmentsDto.parse({ 
+const { userId, searchTerm, pageNumber, pageSize } = ListMedicationDto.parse({ 
 	userId: Astro.locals.userId, 
 	searchTerm: searchParam(Astro.url, 'searchTerm'),
 	pageNumber: searchParam(Astro.url, 'pageNumber'),
 	pageSize: searchParam(Astro.url, 'pageSize')
 });
 
-const treatments = await treatmentRepository.findAll(userId, searchTerm, { number: pageNumber, size: pageSize });
+const medication = await medicationRepository.findAll(userId, searchTerm, { number: pageNumber, size: pageSize });
 
 ---
-<LoggedInPage title="Tratamentos" class="flex-column flex-items-center gap-lg">
+<LoggedInPage title="Medicações" class="flex-column flex-items-center gap-lg">
 	<form 
-		action="/treatment" 
+		action="/medication" 
 		method="get" 
 		class="content-wrapper card-md flex-row"
 	>
@@ -50,22 +50,22 @@ const treatments = await treatmentRepository.findAll(userId, searchTerm, { numbe
 	</form>
 	<div class="content-wrapper card-lg flex-column">
 		<header class="content-faded padding-md border-bottom">
-			Tratamentos
+			Medicações
 		</header>
 		<div class="flex-column items-padding-md">
-			{treatments.data.map(treatment => (
-				<a href={`/treatment/${treatment.id}`}>{treatment.name}</a>
+			{medication.data.map(medication => (
+				<a href={`/medication/${medication.id}`}>{medication.name}</a>
 			))}
 		</div>
 		<div class="flex-row flex-space-between">
-			<Anchor href="/treatment/create" >                    
-				+ Novo Tratamento
+			<Anchor href="/medication/create" >                    
+				+ Nova Medicação
 			</Anchor>
 			<PaginationControls 
 				pageNumber={pageNumber}
 				pageSize={pageSize}
-				totalCount={treatments.count}
-				href={`/treatment?searchTerm=${searchTerm}`}
+				totalCount={medication.count}
+				href={`/medication?searchTerm=${searchTerm}`}
 			/>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ const PrescriptionSchema = z.object({
     startedOnAppointmentId: z.coerce.number(),
     endedOnAppointmentId: z.coerce.number().optional(),
     
-    treatmentId: z.coerce.number(),
+    medicationId: z.coerce.number(),
     dose: z.coerce.string().optional(),
     frequency: z.coerce.string(),
 
@@ -20,14 +20,14 @@ const DbPrescriptionSchema = PrescriptionSchema
     .omit({
         startedOnAppointmentId: true, 
         endedOnAppointmentId: true,
-        treatmentId: true,
+        medicationId: true,
         updatedAt: true, 
         createdAt: true
     })
     .extend({
         started_on_appointment_id: PrescriptionSchema.shape.startedOnAppointmentId, 
         ended_on_appointment_id: PrescriptionSchema.shape.endedOnAppointmentId,
-        treatment_id: PrescriptionSchema.shape.treatmentId,
+        medication_id: PrescriptionSchema.shape.medicationId,
         created_at: PrescriptionSchema.shape.createdAt, 
         updated_at: PrescriptionSchema.shape.updatedAt,
     });
@@ -35,7 +35,7 @@ const DbPrescriptionSchema = PrescriptionSchema
 const UpdatePrescriptionSchema = PrescriptionSchema.omit({
     updatedAt: true,
     createdAt: true,
-}).extend({ userId });;
+}).extend({ userId });
 
 const CreatePrescriptionSchema = UpdatePrescriptionSchema.omit({
     id: true,

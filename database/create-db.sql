@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS appointments(
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS treatments(
+CREATE TABLE IF NOT EXISTS medications(
   id SERIAL PRIMARY KEY,
   
   user_id INTEGER REFERENCES users (id) NOT NULL,
@@ -60,12 +60,24 @@ CREATE TABLE IF NOT EXISTS treatments(
 CREATE TABLE IF NOT EXISTS prescriptions(
   id SERIAL PRIMARY KEY,
   
-  started_on_appointment_id INTEGER NOT NULL REFERENCES appointments (id),
-  ended_on_appointment_id INTEGER REFERENCES appointments (id),
+  start_appointment_id INTEGER NOT NULL REFERENCES appointments (id),
+  end_appointment_id INTEGER REFERENCES appointments (id),
   
-  treatment_id INTEGER NOT NULL REFERENCES treatments (id),
-  dose VARCHAR(255),
+  medication_id INTEGER NOT NULL REFERENCES medications (id),
+  dosage VARCHAR(255) NOT NULL,
   frequency VARCHAR(255) NOT NULL,
+  
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS observations(
+  id SERIAL PRIMARY KEY,
+  
+  start_appointment_id INTEGER NOT NULL REFERENCES appointments (id),
+  end_appointment_id INTEGER REFERENCES appointments (id),
+  
+  description VARCHAR(255) NOT NULL,
   
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
   created_at TIMESTAMP NOT NULL DEFAULT NOW()

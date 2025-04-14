@@ -94,4 +94,19 @@ export default class PostgresDriver implements DatabaseDriver {
     format(sql: string, ...params: FormatParam[]): string {
         return format(sql, ...params);
     }
+
+    async transaction<T>(callback: () => Promise<T>): Promise<T> {
+        const client = await this.pool.connect();
+        try {
+            await client.query('BEGIN');
+            const result = await callback();
+            await client.query('COMMIT');
+            return result;
+        } catch (e) {
+            await client.query('ROLLBACK');
+            throw e;
+        } finally {
+            client.release();
+        }
+    }
 }

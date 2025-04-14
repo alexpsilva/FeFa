@@ -22,12 +22,10 @@ const UpdateAppointmentSchema = AppointmentSchema.omit({
     createdAt: true,
 }).extend({ userId });
 
-
 const CreateAppointmentSchema = UpdateAppointmentSchema.omit({ id: true });
 
 const DeleteAppointmentSchema = AppointmentSchema.pick({ id: true })
     .extend({ userId });
-
 
 export {
     AppointmentSchema,

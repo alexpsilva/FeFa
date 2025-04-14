@@ -5,24 +5,24 @@ import CrossIcon from "@components/icons/Cross.astro";
 import SaveIcon from "@components/icons/Save.astro";
 import Button from "@components/Button.astro";
 import Form from "@components/Form.astro";
-import TreatmentFieldset from "@components/fieldsets/TreatmentFieldset.astro";
+import MedicationFieldset from "@components/fieldsets/MedicationFieldset.astro";
 
 ---
 <LoggedInPage title="Criar Tratamento" class="flex-column flex-items-center gap-md">
 	<h2 class="flex-self-start">Criar Tratamento</h2>
 	<Form
-		path="/api/treatment"
+		path="/api/medication"
 		method="POST"
 		class="content-wrapper card-lg flex-column"
 	>
-		<TreatmentFieldset />
+		<MedicationFieldset />
 		<div class="flex-row">
 			<div class="flex-grow"/>
 			<Button type="submit">
 				<SaveIcon width="1rem" height="1rem"/>
 				Salvar
 			</Button>
-			<Anchor href="/treatment">
+			<Anchor href="/medication">
 				<CrossIcon width="1rem" height="1rem"/>
 				Cancelar
 			</Anchor>
