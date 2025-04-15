@@ -1,31 +1,24 @@
 {
-  "name": "fefa",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "test": ""
-  },
-  "dependencies": {
-    "@astrojs/netlify": "^6.2.4",
-    "@astrojs/react": "^4.2.2",
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
-    "astro": "^5.5.4",
-    "dotenv": "^16.4.7",
-    "google-auth-library": "^9.15.1",
-    "jsonwebtoken": "^9.0.2",
-    "pg": "^8.14.1",
-    "pg-format": "^1.0.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/pg": "^8.11.11",
-    "@types/pg-format": "^1.0.5"
-  }
+	"name": "fefa",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"test": "",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^6.2.5"
+	}
 }
