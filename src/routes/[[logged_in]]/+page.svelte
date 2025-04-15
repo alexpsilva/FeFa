@@ -1,0 +1,1 @@
+<h1 class="flex-center">Bem vindo</h1>

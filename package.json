@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --port=4321",
 		"build": "vite build",
 		"test": "",
 		"preview": "vite preview",
@@ -12,10 +12,20 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
+	"dependencies": {
+		"google-auth-library": "^9.15.1",
+		"jsonwebtoken": "^9.0.2",
+		"pg": "^8.14.1",
+		"pg-format": "^1.0.4",
+		"zod": "^3.24.2"
+	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@types/jsonwebtoken": "^9.0.9",
+		"@types/pg": "^8.11.13",
+		"@types/pg-format": "^1.0.5",
 		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"typescript": "^5.0.0",

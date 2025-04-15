@@ -1,0 +1,371 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Global: Colors */
+
+:root {
+    --color-off-white: rgb(240, 242, 245);
+    --color-faded: rgb(190, 190, 190);
+    --color-base: rgb(68, 68, 68);
+    --color-base-background: white;
+    --color-evidence: rgb(8, 145, 178);
+    --color-alert: rgb(255, 85, 85);
+}
+
+body {
+    background-color: var(--color-off-white);
+    
+    border-color: var(--color-base);
+
+    stroke: var(--color-base);
+}
+
+textarea, input {
+    background: transparent;
+    border: none;
+}
+
+a, button {
+    background: transparent;
+    border: none;
+}
+
+a:hover, button:enabled:hover {
+    --text-color: var(--color-base-background);
+    stroke: var(--color-base-background);
+    background-color: var(--color-evidence);
+    background-clip: border-box;
+}
+
+a.content-alert:hover, button.content-alert:enabled:hover {
+    background-color: var(--color-alert);
+}
+
+button:disabled {
+    --text-color: var(--color-faded);
+    stroke: var(--color-faded);
+}
+
+/* Global: Typography */
+
+body, header, label, textarea, input, button, span, a {
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+
+    --_text-size: var(--text-size, 18px);
+    font-size: var(--_text-size);
+
+    --_text-color: var(--text-color, var(--color-base));
+    color: var(--_text-color);
+
+    outline-color: var(--color-evidence);
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Global: Box Model */
+
+:root {
+    --padding-x-sm: 0.5rem;
+    --padding-y-sm: 0.25rem;
+    --padding-sm: var(--padding-y-sm) var(--padding-x-sm);
+
+    --padding-x-md: 1rem;
+    --padding-y-md: 0.75rem;
+    --padding-md: var(--padding-y-md) var(--padding-x-md);
+    --border-radius-md: 0.5rem;
+
+    --padding-x-lg: 2rem;
+    --padding-y-lg: 1.5rem;
+    --padding-lg: var(--padding-y-lg) var(--padding-x-lg);
+}
+
+fieldset {
+    margin: 0;
+    border: none;
+}
+
+textarea {
+    resize: none;
+    border-radius: 4px;
+    border: 2px solid;
+}
+input {
+    border-bottom: 2px solid;
+}
+
+textarea, input {
+    outline-style: none;
+    outline-width: 2px;
+}
+
+textarea:disabled, input:disabled {
+    padding-left: 0;
+    padding-right: 0;
+    outline-style: none;
+    border: 0;
+}
+
+textarea:enabled, input:enabled {
+    outline-style: none;
+}
+
+textarea:focus-visible, input:focus-visible {
+    outline-style: auto;
+    border-color: var(--color-base-background);
+}
+
+/* Global: Misc */
+
+a, button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: unset;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+/* Utility: Typography */
+
+.text-sm {
+    --text-size: 16px;
+}
+
+.text-lg {
+    --text-size: 20px;
+}
+
+/* Utility: Positioning */
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-items-center {
+    display: flex;
+    align-items: center;
+}
+
+.flex-self-start{
+    align-self: start;
+}
+
+.flex-self-end{
+    align-self: end;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.gap-sm {
+    gap: 0.5rem;
+}
+
+.gap-md {
+    gap: 1.5rem;
+}
+
+.gap-lg {
+    gap: 3rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid-flow-row {
+    grid-auto-flow: row;
+}
+
+.grid-cols-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.relative-container {
+    position: relative;
+}
+
+.absolute-center {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+            line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Utility: Box Model */
+
+.w-sm {
+    width: 3rem;
+}
+
+.h-sm {
+    height: 3rem;
+}
+
+.padding-sm {
+    padding: var(--padding-sm);
+}
+
+.padding-x-sm {
+    padding-left: var(--padding-x-sm);
+    padding-right: var(--padding-x-sm);
+}
+
+.padding-md {
+    padding: var(--padding-md);
+}
+
+.padding-x-md {
+    padding-left: var(--padding-x-md);
+    padding-right: var(--padding-x-md);
+}
+
+.items-padding-md > * {
+    padding: var(--padding-md);
+}
+
+.padding-lg {
+    padding: var(--padding-lg);
+}
+
+.card-md {
+    max-width: 32rem;
+    width: 100%;
+    border-radius: var(--border-radius-md);
+}
+
+.card-lg {
+    max-width: 64rem;
+    width: 100%;
+    border-radius: var(--border-radius-md);
+}
+
+.border-radius {
+    border-radius: var(--border-radius-md);
+}
+
+input.border-none, .border-none {
+    border: none;
+}
+
+.border-bottom {
+    border-bottom: 1px solid;
+}
+
+/* Utility: Color */
+
+.content-wrapper {
+    --text-color: var(--color-base);
+    stroke: var(--color-base);
+    border-color: var(--color-base);
+    background-color: var(--color-base-background);
+    box-shadow: 4px 4px 10px 0 rgb(0 0 0 / 0.1);
+}
+
+.content-evidence {
+    --text-color: var(--color-evidence);
+    stroke: var(--color-evidence);
+    border-color: var(--color-evidence);
+    fill: var(--color-evidence);
+}
+
+.content-faded {
+    --text-color: var(--color-faded);
+    stroke: var(--color-faded);
+    border-color: var(--color-faded);
+    fill: var(--color-faded);
+}
+
+.content-alert {
+    --text-color: var(--color-alert);
+    stroke: var(--color-alert);
+    border-color: var(--color-alert);
+    fill: var(--color-alert);
+}
+
+/* Utility: Animation */
+
+.spinner {
+    animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Specifc: Page */
+
+/* Svelte forces us to have 2 extra divs between the body and main tags */
+html, body, body > div, body > div > div {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+main {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+}
+
+/* Specific: Menu */
+
+menu {
+    margin: 0;
+    padding: 0;
+    min-width: 15rem;
+}
+
+menu a {
+    display: block;
+
+    font-weight: 700;
+    padding: var(--padding-md);
+}
