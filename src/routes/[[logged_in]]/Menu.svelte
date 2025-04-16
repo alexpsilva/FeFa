@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LogoutIcon from './icons/Logout.svelte';
+    import LogoutIcon from '$lib/components/icons/Logout.svelte';
 </script>
 
 <menu class="content-wrapper flex-column text-lg content-evidence">

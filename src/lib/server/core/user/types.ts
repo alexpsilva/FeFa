@@ -1,4 +1,4 @@
-import { z } from "astro:content";
+import { z } from 'zod';
 
 const UserSchema = z.object({
     id: z.number(),

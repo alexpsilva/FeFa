@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CpfString } from '../shared/schemas/cpf';
+import { CpfString } from '$lib/schemas/cpf';
 
 const PacientSchema = z.object({
     id: z.coerce.number(),
