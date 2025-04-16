@@ -8,7 +8,7 @@ import searchParam from "$lib/utils/searchParam";
 
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ url, locals }) => {
+export const load: PageServerLoad = ({ url, locals }) => {
     const ListPacientsDto = z.object({
         userId: UserSchema.shape.id,
         searchTerm: z.string().default(''),
@@ -24,6 +24,6 @@ export const load: PageServerLoad = async ({ url, locals }) => {
     });
     
     return {
-        pacients: await pacientRepository.findAll(userId, searchTerm, { number: pageNumber, size: pageSize })
+        pacients: pacientRepository.findAll(userId, searchTerm, { number: pageNumber, size: pageSize })
     };
 }

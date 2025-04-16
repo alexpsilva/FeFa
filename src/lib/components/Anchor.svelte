@@ -1,10 +1,12 @@
 <script lang="ts">
     import type { SvelteHTMLElements } from 'svelte/elements';
 
-    let { class: _class, children, ...props}: SvelteHTMLElements['a'] = $props();
-    let mergedClass = `padding-md border-radius content-evidence flex-row flex-items-center gap-sm ${_class ?? ''}`;
+    let props: SvelteHTMLElements['a'] = $props();
 </script>
 
-<a class={mergedClass} {...props}>
-    {@render children?.()}
+<a 
+    {...props} 
+    class={['padding-md border-radius content-evidence flex-row flex-items-center gap-sm', props.class]}
+>
+    {@render props.children?.()}
 </a>
