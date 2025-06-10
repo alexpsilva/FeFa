@@ -3,8 +3,10 @@ import { z } from 'zod';
 import { BaseRepository } from '$lib/server/infra/database/repository';
 import type { WithCount } from '$lib/server/infra/database/repository';
 
-import { DbPacientSchema, type CreatePacient, type DbPacient, type DeletePacient, type Pacient, type UpdatePacient } from './types';
-import type { User } from '../user/types';
+import type { CreatePacient, DeletePacient, Pacient, UpdatePacient } from '$lib/schemas/core/pacient';
+import type { User } from '$lib/schemas/core/user';
+
+import { DbPacientSchema, type DbPacient } from './types';
 
 export default class PacientRepository extends BaseRepository{
     static readonly tableName = 'pacients';

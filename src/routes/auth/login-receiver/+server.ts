@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { redirect } from "@sveltejs/kit";
 
-import { urlEncodedToJson } from "$lib/server/infra/http/urlEncodedToJson";
+import { urlEncodedToJson } from "$lib/utils/http/urlEncodedToJson";
 import { jwtParser, logger, userRepository } from "$lib/server";
 
 const GoogleSSORedirectRequestBody = z.object({

@@ -6,7 +6,5 @@
 
 <div class="flex-row">
     <Menu/>
-    <main>
         {@render children?.()}
-    </main>
 </div>

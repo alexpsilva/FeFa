@@ -1,6 +1,6 @@
 import { BaseRepository } from '$lib/server/infra/database/repository';
 
-import type { User } from './types';
+import type { User } from '$lib/schemas/core/user';
 
 export default class UserRepository extends BaseRepository{
     static readonly tableName = 'users';

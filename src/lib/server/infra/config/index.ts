@@ -9,9 +9,4 @@ export default class Config {
     readonly jwtSecret = JWT_SECRET;
     readonly jwtExpiresIn = JWT_EXPIRES_IN;
     readonly googleClientId = GOOGLE_CLIENT_ID;
-
-    readonly pacientListDefaultPageSize = 10;
-    readonly pacientAppointmentsListDefaultPageSize = 5;
-    readonly appointmentListDefaultPageSize = 10;
-    readonly medicationListDefaultPageSize = 10;
 };

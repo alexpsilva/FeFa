@@ -1,10 +1,11 @@
 import { z } from 'zod';
 
-import { BaseRepository } from '@infra/database/repository';
-import type { WithCount } from '@infra/database/repository';
+import { BaseRepository } from '$lib/server/infra/database/repository';
+import type { WithCount } from '$lib/server/infra/database/repository';
 
-import type { User } from '../user/types';
-import { DbPrescriptionSchema, type CreatePrescription, type DbPrescription, type DeletePrescription, type Prescription, type UpdatePrescription } from './types';
+import { DbPrescriptionSchema, type DbPrescription } from './types';
+import type { CreatePrescription, DeletePrescription, Prescription, UpdatePrescription } from '$lib/schemas/core/prescription';
+import type { User } from '$lib/schemas/core/user';
 
 export default class PrescriptionRepository extends BaseRepository{
     static readonly tableName = 'prescriptions';

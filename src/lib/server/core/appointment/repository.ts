@@ -2,11 +2,14 @@ import { z } from 'zod';
 
 import { BaseRepository, type WithCount } from '$lib/server/infra/database/repository';
 
-import type { User } from '$lib/server/core/user/types';
 import PacientRepository from '$lib/server/core/pacient/repository';
-import { DbPacientSchema, type Pacient } from '$lib/server/core/pacient/types';
+import { DbPacientSchema } from '$lib/server/core/pacient/types';
 
-import { DbAppointmentSchema, type DbAppointment, type Appointment, type CreateAppointment, type UpdateAppointment } from './types';
+import type { Appointment, CreateAppointment, UpdateAppointment } from '$lib/schemas/core/appointment';
+import type { Pacient } from '$lib/schemas/core/pacient';
+import type { User } from '$lib/schemas/core/user';
+
+import { DbAppointmentSchema, type DbAppointment } from './types';
 
 type AppointmentWithPacient = Appointment & {pacient: Pacient};
 

@@ -1,10 +1,11 @@
 import { z } from "zod";
 
-import { UserSchema } from "$lib/server/core/user/types";
-import { config, pacientRepository } from "$lib/server";
+import { pacientRepository } from "$lib/server";
 
 import numberOrString from "$lib/schemas/number_or_string";
-import searchParam from "$lib/utils/searchParam";
+import { UserSchema } from "$lib/schemas/core/user";
+import searchParam from "$lib/utils/http/searchParam";
+import { config } from "$lib/config";
 
 import type { PageServerLoad } from "./$types";
 

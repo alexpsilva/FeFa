@@ -1,4 +1,4 @@
-import snakeToCamelCase from "./snakeToCamelCase";
+import snakeToCamelCase from "../snakeToCamelCase";
 
 export default function formDataToJson(formData: FormData): Record<string, unknown> {
     const json: Record<string, unknown> = {};
