@@ -13,7 +13,7 @@
 
 <form 
     {...props}
-    class={['content-wrapper card-md flex-row', props.class]}
+    class={['content-wrapper card-sm flex-row', props.class]}
 >
     <input 
         type="text" 

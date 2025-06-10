@@ -5,7 +5,7 @@ import { redirect, type Handle } from '@sveltejs/kit';
 import { jwtParser, logger } from '$lib/server';
 
 export const handle: Handle = async ({ event, resolve }) => {
-    if (event.url.pathname.startsWith('/auth')) {
+    if (event.url.pathname.startsWith('/auth') || event.url.pathname.startsWith('/calculator')) {
         return await resolve(event);
     }
     
